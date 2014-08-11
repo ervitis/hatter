@@ -8,8 +8,8 @@ from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext, loader
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
-
-import datetime
+from datetime import datetime
+from django.utils import timezone
 
 from hatter.models import Greeting
 
@@ -18,7 +18,7 @@ class IndexView(generic.ListView):
     template_name = 'index.html'
     context_object_name = 'latest_greeting_list'
     paginate_by = 5
-    queryset = Greeting.objects.order_by('-date')
+    queryset = Greeting.objects.order_by('date')
 
 
 class DetailView(generic.DetailView):
@@ -44,7 +44,7 @@ def savenew(request):
         greeting = Greeting()
         greeting.author = search_user(request.POST['users'])
         greeting.content = request.POST['content']
-        greeting.date = datetime.datetime.now()
+        greeting.date = timezone.make_aware(datetime.now(), timezone.get_current_timezone())
 
         greeting.save()
 
