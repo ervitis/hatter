@@ -105,15 +105,21 @@ else:
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
 
-LANGUAGE_CODE = 'es-es'
+LANGUAGE_CODE = 'es-ES'
 
 TIME_ZONE = 'Europe/Madrid'
+
+DATETIME_FORMAT = 'd/m/Y H:i:sO'
+
+DATE_FORMAT = 'd/m/Y'
+
+DEFAULT_CHARSET = 'utf-8'
 
 USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 SITE_ID = 1
 
@@ -153,3 +159,8 @@ LOGGING = {
         },
     }
 }
+
+# To import 3rd party libraries GAE has to include them in a folder inside the root
+
+import sys
+sys.path.insert(0, 'libs')
