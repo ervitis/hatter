@@ -6,7 +6,7 @@ import datetime
 
 class Greeting(models.Model):
     author = models.ForeignKey(User, null=True, blank=True)
-    content = models.SlugField('Contenido')
+    content = models.CharField('Contenido')
     date = models.DateTimeField('Fecha publicada')
     utc = models.SlugField('utc')
 
