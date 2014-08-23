@@ -1,33 +1,7 @@
 {% include 'base.html' %}
 
-{% if latest_greeting_list %}
-    <div class="col-xs-2">
-        <ul>
-            {% for greeting in latest_greeting_list %}
-            <li class="list-group"><a href="{% url 'detail' greeting.id %}">You have {{ greeting.content }}</a> in {{ greeting.date }}</li>
-            {% endfor %}
-        </ul>
-    </div>
+{% include 'layout/side.html' %}
 
-    <div class="col-xs-12">
-        <div class="pagination">
-            {% if page_obj.has_previous %}
-                <a class="btn btn-sm btn-info" href="?page={{ page_obj.previous_page_number }}">Ant</a>
-            {% endif %}
-            <span>
-                Page {{ page_obj.number }} of {{ paginator.num_pages }}
-            </span>
-            {% if page_obj.has_next %}
-                <a class="btn btn-sm btn-info" href="?page={{ page_obj.next_page_number }}">Sig</a>
-            {% endif %}
-        </div>
-    </div>
-{% else %}
-    <div class="alert-danger">
-        <p>No content</p>
-    </div>
-{% endif %}
+{% include 'layout/frontup.html' %}
 
-<div class="col-md-2">
-    <a class="btn btn-default" href="{% url 'new' %}">Nuevo</a>
-</div>
+{% include 'layout/frontdown.html' %}

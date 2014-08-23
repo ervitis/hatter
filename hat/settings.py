@@ -52,6 +52,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.auth',
+    'django.contrib.sites',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
@@ -90,6 +91,9 @@ if os.getenv('SERVER_SOFTWARE', '').startswith('Google App Engine'):
             'NAME': 'hat_dev',
             'USER': 'hatDev',
             'PASSWORD': 'hatDev.14',
+            'OPTIONS': {
+                'init_command': 'SET storage_engine=INNODB;',
+            },
         }
     }
 else:
@@ -99,6 +103,9 @@ else:
             'NAME': 'hat_dev',
             'USER': 'root',
             'PASSWORD': 'root',
+            'OPTIONS': {
+                'init_command': 'SET storage_engine=INNODB;',
+            },
         }
     }
 
@@ -122,6 +129,8 @@ USE_L10N = True
 USE_TZ = False
 
 SITE_ID = 1
+
+SESSION_SAVE_EVERY_REQUEST = False
 
 
 # Static files (CSS, JavaScript, Images)
