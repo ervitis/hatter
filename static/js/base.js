@@ -14,6 +14,8 @@ $(function(){
     var compruebaWidthVentana = function(elemento) {
         var WIDTH = 499;
 
+        return false;
+
         if (elemento.width() <= WIDTH) {
             $('.nombreLink').hide();
         } else {

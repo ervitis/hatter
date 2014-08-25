@@ -235,6 +235,7 @@ class DetalleActuacion(models.Model):
     fecha_fin = models.DateTimeField('fecha fin')
     actuacion = models.OneToOneField(Actuacion, db_column='actuacion_id')
     utc = models.CharField('utc', max_length=75)
+    detalle_actuacion = models.TextField('detalle', max_length=65536)
 
     class Meta:
         db_table = 'detalle_actuacion'

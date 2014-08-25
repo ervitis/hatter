@@ -74,13 +74,12 @@
 }
 
 .sidebar-nav li:hover {
-    background: rgba(242,97,240,0.7);
+    background: rgba(255,255,255,0.2);
 }
 
 .sidebar-nav li a:active,
 .sidebar-nav li a:focus {
     text-decoration: none;
-    background: rgba(242,97,240,0.7);
 }
 
 .sidebar-nav > .sidebar-brand {
@@ -149,11 +148,5 @@
     #wrapper.toggled #page-content-wrapper {
         position: relative;
         margin-right: 0;
-    }
-
-    .sidebar-nav > .sidebar-brand {
-        height: 60px;
-        font-size: 35px;
-        line-height: 60px;
     }
 }
