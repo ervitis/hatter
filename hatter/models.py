@@ -163,6 +163,19 @@ class Subzona(models.Model):
         return self.nombre
 
 
+class Emplazamiento(models.Model):
+    """
+    Clase emplazamiento actuaciones
+    """
+
+    nombre = models.CharField('nombre', max_length=100)
+    latitud = models.FloatField('latitud')
+    longitud = models.FloatField('longitud')
+
+    class Meta:
+        db_table = 'emplazamiento'
+
+
 class Actuacion(models.Model):
     """
     Clase actuacion
@@ -186,6 +199,7 @@ class Actuacion(models.Model):
     estado = models.ForeignKey(Estado, db_column='estado_id')
     cliente = models.ForeignKey(Cliente, db_column='cliente_id')
     provincia = models.ForeignKey(Provincia, db_column='provincia_id')
+    emplazamiento = models.ForeignKey(Emplazamiento, db_column='emplazamiento_id')
 
     class Meta:
         db_table = 'actuacion'
@@ -240,16 +254,3 @@ class DetalleActuacion(models.Model):
     class Meta:
         db_table = 'detalle_actuacion'
 
-
-class Emplazamiento(models.Model):
-    """
-    Clase emplazamiento actuaciones
-    """
-
-    nombre = models.CharField('nombre', max_length=100)
-    latitud = models.FloatField('latitud')
-    longitud = models.FloatField('longitud')
-    actuacion = models.ForeignKey(Actuacion, db_column='actuacion_id')
-
-    class Meta:
-        db_table = 'emplazamiento'
