@@ -1,10 +1,219 @@
-<!DOCTYPE html>
-<html>
-<head lang="en">
-    <meta charset="UTF-8">
-    <title></title>
-</head>
-<body>
+{% include 'index.html' %}
 
-</body>
-</html>
+<div class="container-main container-top">
+    <div class="col-xs-12">
+        <form action="{% url 'new_actuacion' %}" method="post">
+            {% csrf_token %}
+
+            <div class="col-xs-10 text-center">
+                {% if form.nombre.error_messages %}
+                    <p class="alert alert-danger">Error en el campo nombre</p>
+                {% endif %}
+                <div class="form-group">
+                    <div class="col-xs-4 text-right">
+                    <label>{{ form.nombre.label }}</label>
+                    </div>
+                    <div class="col-xs-8">
+                    {{ form.nombre }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 margin-between-divs">
+
+                <fieldset>
+                    <legend>Dirección:</legend>
+
+                    <div class="col-xs-12 margin-between-elements">
+                        <div class="col-xs-4">
+                            {% if form.tipo_via.error_messages %}
+                                <p class="alert alert-danger">Error en el campo tipo via</p>
+                            {% endif %}
+                            <div class="form-group">
+                                <div class="col-xs-6 text-right">
+                                <label>{{ form.tipo_via.label }}</label>
+                                </div>
+                                <div class="col-xs-6">
+                                {{ form.tipo_via }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-8">
+                            {% if form.direccion.error_messages %}
+                                <p class="alert alert-danger">Error en el campo dirección</p>
+                            {% endif %}
+                            <div class="form-group">
+                                <div class="col-xs-12">
+                                {{ form.direccion }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 margin-between-elements">
+                        <div class="col-xs-4">
+                            {% if form.codigo_postal.error_messages %}
+                                <p class="alert alert-danger">Error en el campo código postal</p>
+                            {% endif %}
+                            <div class="form-group">
+                                <div class="col-xs-6 text-right">
+                                <label>{{ form.codigo_postal.label }}</label>
+                                </div>
+                                <div class="col-xs-6">
+                                {{ form.codigo_postal }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-8">
+                            {% if form.provincia.error_messages %}
+                                <p class="alert alert-danger">Error en el campo provincia</p>
+                            {% endif %}
+                            <div class="form-group">
+                                <div class="col-xs-4 text-right">
+                                <label>{{ form.provincia.label }}</label>
+                                </div>
+                                <div class="col-xs-8">
+                                {{ form.provincia }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 margin-between-elements">
+                        <div class="col-xs-3">
+                            {% if form.latitud.error_messages %}
+                                <p class="alert alert-danger">Error en el campo latitud</p>
+                            {% endif %}
+                            <div class="form-group">
+                                <div class="col-xs-4 text-right">
+                                <label>{{ form.latitud.label }}</label>
+                                </div>
+                                <div class="col-xs-8">
+                                {{ form.latitud }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-3">
+                            {% if form.longitud.error_messages %}
+                                <p class="alert alert-danger">Error en el campo longitud</p>
+                            {% endif %}
+                            <div class="form-group">
+                                <div class="col-xs-4 text-right">
+                                <label>{{ form.longitud.label }}</label>
+                                </div>
+                                <div class="col-xs-8">
+                                {{ form.longitud }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-6">
+                            {% if form.emplazamiento.error_messages %}
+                                <p class="alert alert-danger">Error en el campo emplazamiento</p>
+                            {% endif %}
+                            <div class="form-group">
+                                <div class="col-xs-4 text-right">
+                                <label>{{ form.emplazamiento.label }}</label>
+                                </div>
+                                <div class="col-xs-8">
+                                {{ form.emplazamiento }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </fieldset>
+            </div>
+
+            <div class="col-xs-12 margin-between-divs">
+                <fieldset>
+                    <legend>Características de la actuación</legend>
+
+                    <div class="col-xs-12 margin-between-elements">
+                        <div class="col-xs-6">
+                            {% if form.estado.error_messages %}
+                                <p class="alert alert-danger">Error en el campo estado</p>
+                            {% endif %}
+                            <div class="form-group">
+                                <div class="col-xs-2">
+                                <label>{{ form.estado.label }}</label>
+                                </div>
+                                <div class="col-xs-8">
+                                {{ form.estado }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-6">
+                            {% if form.cliente.error_messages %}
+                                <p class="alert alert-danger">Error en el campo cliente</p>
+                            {% endif %}
+                            <div class="form-group">
+                                <div class="col-xs-2">
+                                <label>{{ form.cliente.label }}</label>
+                                </div>
+                                <div class="col-xs-8">
+                                {{ form.cliente }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 margin-between-elements">
+                        <div class="col-xs-4">
+                            {% if form.prioridad.error_messages %}
+                                <p class="alert alert-danger">Error en el campo prioridad</p>
+                            {% endif %}
+                            <div class="form-group">
+                                <div class="col-xs-4">
+                                <label>{{ form.prioridad.label }}</label>
+                                </div>
+                                <div class="col-xs-4">
+                                {{ form.prioridad }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-4">
+                            {% if form.severidad.error_messages %}
+                                <p class="alert alert-danger">Error en el campo severidad</p>
+                            {% endif %}
+                            <div class="form-group">
+                                <div class="col-xs-4">
+                                <label>{{ form.severidad.label }}</label>
+                                </div>
+                                <div class="col-xs-4">
+                                {{ form.severidad }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-4">
+                            {% if form.alerta.error_messages %}
+                                <p class="alert alert-danger">Error en el campo alerta</p>
+                            {% endif %}
+                            <div class="form-group">
+                                <div class="col-xs-4">
+                                <label>{{ form.alerta.label }}</label>
+                                </div>
+                                <div class="col-xs-4">
+                                {{ form.alerta }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </fieldset>
+            </div>
+
+            <div class="col-xs-12 text-right margin-between-divs">
+                <a href="{% url 'listado_actuaciones' %}" class="btn btn-warning">Volver al listado</a>
+                <button type="button" class="btn btn-default">Guardar</button>
+            </div>
+
+        </form>
+    </div>
+</div>

@@ -1,25 +1,7 @@
 $(function(){
-    $(window).resize(function(event){
-        var $this = $(this);
+    $('.only-numbers').keypress(function(event) {
+        var key = event.keyCode || event.which;
 
-        compruebaWidthVentana($this);
+        return (37 === key || 39 === key || 9 === key || 8 === key || 46 === key || (key >= 48 && key <= 57)) ? true : false;
     });
-
-    $(window).ready(function(){
-        var $this = $(this);
-
-        compruebaWidthVentana($this);
-    });
-
-    var compruebaWidthVentana = function(elemento) {
-        var WIDTH = 499;
-
-        return false;
-
-        if (elemento.width() <= WIDTH) {
-            $('.nombreLink').hide();
-        } else {
-            $('.nombreLink').show('normal');
-        }
-    };
 });

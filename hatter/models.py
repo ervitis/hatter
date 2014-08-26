@@ -1,3 +1,5 @@
+# coding=utf-8
+
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -148,21 +150,6 @@ class Zona(models.Model):
         return self.nombre
 
 
-class Subzona(models.Model):
-    """
-    Clase subzona
-    """
-
-    nombre = models.CharField('nombre', max_length=150)
-    zona = models.ForeignKey(Zona, db_column='zona_id')
-
-    class Meta:
-        db_table = 'subzona'
-
-    def __str__(self):
-        return self.nombre
-
-
 class Emplazamiento(models.Model):
     """
     Clase emplazamiento actuaciones
@@ -200,6 +187,9 @@ class Actuacion(models.Model):
     cliente = models.ForeignKey(Cliente, db_column='cliente_id')
     provincia = models.ForeignKey(Provincia, db_column='provincia_id')
     emplazamiento = models.ForeignKey(Emplazamiento, db_column='emplazamiento_id')
+    prioridad = models.ForeignKey(Prioridad, db_column='prioridad_id')
+    severidad = models.ForeignKey(Severidad, db_column='severidad_id')
+    alerta = models.ForeignKey(Alerta, db_column='alerta_id')
 
     class Meta:
         db_table = 'actuacion'
