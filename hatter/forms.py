@@ -38,24 +38,24 @@ class ActuacionForm(forms.Form):
     tipo_via = forms.ChoiceField(label='Tipo de vía', choices=TIPO_VIA_CHOICES, initial=CALLE, widget=forms.Select(attrs={
         'class': 'form-control',
     }))
-    estado = forms.ModelChoiceField(label='Estado', queryset=models.Estado.objects.all(), widget=forms.Select(attrs={
+    estado = forms.ModelChoiceField(empty_label='Escoja un estado', label='Estado', queryset=models.Estado.objects.all(), widget=forms.Select(attrs={
         'class': 'form-control',
     }))
-    cliente = forms.ModelChoiceField(label='Cliente', queryset=models.Cliente.objects.all(), widget=forms.Select(attrs={
+    cliente = forms.ModelChoiceField(empty_label='Escoja el tipo de cliente', label='Cliente', queryset=models.Cliente.objects.all(), widget=forms.Select(attrs={
         'class': 'form-control',
     }))
-    provincia = forms.ModelChoiceField(label='Provincia', queryset=models.Provincia.objects.all(), widget=forms.Select(attrs={
+    provincia = forms.ModelChoiceField(empty_label='Escoja una provincia', label='Provincia', queryset=models.Provincia.objects.all(), widget=forms.Select(attrs={
         'class': 'form-control',
     }))
-    prioridad = forms.ModelChoiceField(label='Prioridad', queryset=models.Prioridad.objects.all(), widget=forms.Select(attrs={
+    prioridad = forms.ModelChoiceField(empty_label='Escoja el nivel', label='Prioridad', queryset=models.Prioridad.objects.all(), widget=forms.Select(attrs={
         'class': 'form-control',
     }))
-    severidad = forms.ModelChoiceField(label='Severidad', queryset=models.Severidad.objects.all(), widget=forms.Select(attrs={
+    severidad = forms.ModelChoiceField(empty_label='Escoja el nivel', label='Severidad', queryset=models.Severidad.objects.all(), widget=forms.Select(attrs={
         'class': 'form-control',
     }))
-    alerta = forms.ModelChoiceField(label='Alerta', queryset=models.Alerta.objects.all(), widget=forms.Select(attrs={
+    alerta = forms.ModelChoiceField(empty_label='Escoja el nivel', label='Alerta', queryset=models.Alerta.objects.all(), widget=forms.Select(attrs={
         'class': 'form-control',
     }))
-    emplazamiento = forms.ModelChoiceField(label='Emplazamiento', queryset=models.Emplazamiento.objects.all(), widget=forms.Select(attrs={
+    emplazamiento = forms.ModelChoiceField(empty_label='Escoja el emplazamiento', label='Emplazamiento', queryset=models.Emplazamiento.objects.all(), widget=forms.Select(attrs={
         'class': 'form-control',
     }))

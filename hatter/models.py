@@ -17,6 +17,9 @@ class Estado(models.Model):
     def __str__(self):
         return self.nombre
 
+    def __unicode__(self):
+        return self.nombre
+
 
 class Cliente(models.Model):
     """
@@ -30,6 +33,9 @@ class Cliente(models.Model):
         db_table = 'cliente'
 
     def __str__(self):
+        return self.nombre
+
+    def __unicode__(self):
         return self.nombre
 
 
@@ -48,6 +54,9 @@ class Turno(models.Model):
     def __str__(self):
         return self.nombre
 
+    def __unicode__(self):
+        return self.nombre
+
 
 class Comunidad(models.Model):
     """
@@ -62,6 +71,9 @@ class Comunidad(models.Model):
     def __str__(self):
         return self.nombre
 
+    def __unicode__(self):
+        return self.nombre
+
 
 class Provincia(models.Model):
     """
@@ -70,11 +82,15 @@ class Provincia(models.Model):
 
     nombre = models.CharField('nombre', max_length=200)
     comunidad = models.ForeignKey(Comunidad, db_column='comunidad_id')
+    codigo = models.IntegerField('codigo', max_length=10)
 
     class Meta:
         db_table = 'provincia'
 
     def __str__(self):
+        return self.nombre
+
+    def __unicode__(self):
         return self.nombre
 
 
@@ -91,6 +107,9 @@ class Tecnologia(models.Model):
     def __str__(self):
         return self.nombre
 
+    def __unicode__(self):
+        return self.nombre
+
 
 class Severidad(models.Model):
     """
@@ -103,6 +122,9 @@ class Severidad(models.Model):
         db_table = 'severidad'
 
     def __str__(self):
+        return self.nombre
+
+    def __unicode__(self):
         return self.nombre
 
 
@@ -120,6 +142,9 @@ class Prioridad(models.Model):
     def __str__(self):
         return self.nombre
 
+    def __unicode__(self):
+        return self.nombre
+
 
 class Alerta(models.Model):
     """
@@ -135,18 +160,7 @@ class Alerta(models.Model):
     def __str__(self):
         return self.nombre
 
-
-class Zona(models.Model):
-    """
-    Clase Zona
-    """
-
-    nombre = models.CharField('nombre', max_length=150)
-
-    class Meta:
-        db_table = 'zona'
-
-    def __str__(self):
+    def __unicode__(self):
         return self.nombre
 
 
@@ -161,6 +175,9 @@ class Emplazamiento(models.Model):
 
     class Meta:
         db_table = 'emplazamiento'
+
+    def __unicode__(self):
+        return self.nombre
 
 
 class Actuacion(models.Model):
@@ -194,6 +211,9 @@ class Actuacion(models.Model):
     class Meta:
         db_table = 'actuacion'
 
+    def __unicode__(self):
+        return self.nombre
+
 
 class Instrumentacion(models.Model):
     """
@@ -210,6 +230,8 @@ class Instrumentacion(models.Model):
     def __str__(self):
         return self.nombre
 
+    def __unicode__(self):
+        return self.nombre
 
 
 class Tecnico(models.Model):
@@ -228,6 +250,9 @@ class Tecnico(models.Model):
 
     class Meta:
         db_table = 'tecnico'
+
+    def __unicode__(self):
+        return self.nombre
 
 
 class DetalleActuacion(models.Model):
