@@ -23,7 +23,7 @@ class ActuacionesView(generic.ListView):
 
     template_name = 'layout/actuaciones/listado.html'
     context_object_name = 'listado_actuaciones'
-    paginate_by = 10
+    paginate_by = 4
     queryset = models.Actuacion.objects.order_by('id')
 
 

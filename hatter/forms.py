@@ -19,6 +19,8 @@ class ActuacionForm(forms.Form):
     Clase formulario actuacion
     """
 
+    from hatter.functions import validators
+
     VOID = ''
     CALLE = 'C\\'
     AVENIDA = 'Avda'
@@ -42,7 +44,7 @@ class ActuacionForm(forms.Form):
 
     codigo_postal = forms.CharField(label='C.P', max_length=5, required=False, widget=forms.TextInput(attrs={
         'class': 'only-numbers form-control',
-    }), error_messages=DEFAULT_ERROR_MESSAGES_NON_REQUIRED)
+    }), validators=[validators.validate_codigo_postal], error_messages=DEFAULT_ERROR_MESSAGES_NON_REQUIRED)
 
     longitud = forms.FloatField(label='Longitud', max_value=180, min_value=-180, required=False, widget=forms.TextInput(attrs={
         'class': 'only-numbers form-control',

@@ -186,6 +186,8 @@ class Actuacion(models.Model):
     Clase actuacion
     """
 
+    from hatter.functions import validators
+
     VOID = ''
     CALLE = 'Calle'
     AVENIDA = 'Avda'
@@ -199,7 +201,7 @@ class Actuacion(models.Model):
 
     nombre = models.CharField('nombre', max_length=20)
     direccion = models.CharField('direccion', max_length=150, default=None, null=True)
-    codigo_postal = models.CharField('codigo postal', max_length=5, default=None, null=True)
+    codigo_postal = models.CharField('codigo postal', max_length=5, default=None, null=True, validators=[validators.validate_codigo_postal])
     longitud = models.FloatField('longitud', default=None, null=True)
     latitud = models.FloatField('latitud', default=None, null=True)
     tipo_via = models.CharField('tipo de via', max_length=5, choices=TIPO_VIA_CHOICES, default=VOID)
