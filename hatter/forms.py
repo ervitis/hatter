@@ -4,58 +4,87 @@ from django import forms
 
 from hatter import models
 
+DEFAULT_ERROR_MESSAGES_REQUIRED = {
+    'required': 'Este campo es obligatorio',
+    'invalid':  'Compruebe este campo',
+}
+
+DEFAULT_ERROR_MESSAGES_NON_REQUIRED = {
+    'invalid':  'Compruebe este campo'
+}
+
 
 class ActuacionForm(forms.Form):
     """
     Clase formulario actuacion
     """
 
+    VOID = ''
     CALLE = 'C\\'
     AVENIDA = 'Avda'
     PLAZA = 'Pza'
     TIPO_VIA_CHOICES = (
+        (VOID, 'Escoja'),
         (CALLE, 'Calle'),
         (AVENIDA, 'Avenida'),
         (PLAZA, 'Plaza'),
     )
 
     nombre = forms.CharField(label='Nombre de la actuación', max_length=20, required=True, widget=forms.TextInput(attrs={
-        'class': 'form-control',
-    }))
-    direccion = forms.CharField(label='Dirección', max_length=150, widget=forms.TextInput(attrs={
+        'class':    'form-control',
+        'required': 'true',
+    }), error_messages=DEFAULT_ERROR_MESSAGES_REQUIRED)
+
+    direccion = forms.CharField(label='Dirección', max_length=150, required=False, widget=forms.TextInput(attrs={
         'class':        'form-control',
         'placeholder':  'Introduzca la dirección',
-    }))
-    codigo_postal = forms.CharField(label='C.P', max_length=5, widget=forms.TextInput(attrs={
+    }), error_messages=DEFAULT_ERROR_MESSAGES_NON_REQUIRED)
+
+    codigo_postal = forms.CharField(label='C.P', max_length=5, required=False, widget=forms.TextInput(attrs={
         'class': 'only-numbers form-control',
-    }))
-    longitud = forms.FloatField(label='Longitud', max_value=180, min_value=-180, widget=forms.TextInput(attrs={
+    }), error_messages=DEFAULT_ERROR_MESSAGES_NON_REQUIRED)
+
+    longitud = forms.FloatField(label='Longitud', max_value=180, min_value=-180, required=False, widget=forms.TextInput(attrs={
         'class': 'only-numbers form-control',
-    }))
-    latitud = forms.FloatField(label='Latitud', max_value=90, min_value=-90, widget=forms.TextInput(attrs={
+    }), error_messages=DEFAULT_ERROR_MESSAGES_NON_REQUIRED)
+
+    latitud = forms.FloatField(label='Latitud', max_value=90, min_value=-90, required=False, widget=forms.TextInput(attrs={
         'class': 'only-numbers form-control',
-    }))
-    tipo_via = forms.ChoiceField(label='Tipo de vía', choices=TIPO_VIA_CHOICES, initial=CALLE, widget=forms.Select(attrs={
+    }), error_messages=DEFAULT_ERROR_MESSAGES_NON_REQUIRED)
+
+    tipo_via = forms.ChoiceField(label='Tipo de vía', choices=TIPO_VIA_CHOICES, initial=VOID, required=False, widget=forms.Select(attrs={
         'class': 'form-control',
-    }))
-    estado = forms.ModelChoiceField(empty_label='Escoja un estado', label='Estado', queryset=models.Estado.objects.all(), widget=forms.Select(attrs={
+    }), error_messages=DEFAULT_ERROR_MESSAGES_NON_REQUIRED)
+
+    estado = forms.ModelChoiceField(empty_label='Escoja un estado', required=True, label='Estado', queryset=models.Estado.objects.all(), widget=forms.Select(attrs={
+        'class':    'form-control',
+        'required': 'true',
+    }), error_messages=DEFAULT_ERROR_MESSAGES_REQUIRED)
+
+    cliente = forms.ModelChoiceField(empty_label='Escoja el tipo de cliente', required=True, label='Cliente', queryset=models.Cliente.objects.all(), widget=forms.Select(attrs={
+        'class':    'form-control',
+        'required': 'true',
+    }), error_messages=DEFAULT_ERROR_MESSAGES_REQUIRED)
+
+    provincia = forms.ModelChoiceField(empty_label='Escoja una provincia', label='Provincia', required=False, queryset=models.Provincia.objects.all(), widget=forms.Select(attrs={
         'class': 'form-control',
-    }))
-    cliente = forms.ModelChoiceField(empty_label='Escoja el tipo de cliente', label='Cliente', queryset=models.Cliente.objects.all(), widget=forms.Select(attrs={
+    }), error_messages=DEFAULT_ERROR_MESSAGES_NON_REQUIRED)
+
+    prioridad = forms.ModelChoiceField(empty_label='Escoja el nivel', required=True, label='Prioridad', queryset=models.Prioridad.objects.all(), widget=forms.Select(attrs={
+        'class':    'form-control',
+        'required': 'true',
+    }), error_messages=DEFAULT_ERROR_MESSAGES_REQUIRED)
+
+    severidad = forms.ModelChoiceField(empty_label='Escoja el nivel', required=True, label='Severidad', queryset=models.Severidad.objects.all(), widget=forms.Select(attrs={
+        'class':    'form-control',
+        'required': 'true',
+    }), error_messages=DEFAULT_ERROR_MESSAGES_REQUIRED)
+
+    alerta = forms.ModelChoiceField(empty_label='Escoja el nivel', required=True, label='Alerta', queryset=models.Alerta.objects.all(), widget=forms.Select(attrs={
+        'class':    'form-control',
+        'required': 'true',
+    }), error_messages=DEFAULT_ERROR_MESSAGES_REQUIRED)
+
+    emplazamiento = forms.ModelChoiceField(empty_label='Escoja el emplazamiento', label='Emplazamiento', required=False, queryset=models.Emplazamiento.objects.all(), widget=forms.Select(attrs={
         'class': 'form-control',
-    }))
-    provincia = forms.ModelChoiceField(empty_label='Escoja una provincia', label='Provincia', queryset=models.Provincia.objects.all(), widget=forms.Select(attrs={
-        'class': 'form-control',
-    }))
-    prioridad = forms.ModelChoiceField(empty_label='Escoja el nivel', label='Prioridad', queryset=models.Prioridad.objects.all(), widget=forms.Select(attrs={
-        'class': 'form-control',
-    }))
-    severidad = forms.ModelChoiceField(empty_label='Escoja el nivel', label='Severidad', queryset=models.Severidad.objects.all(), widget=forms.Select(attrs={
-        'class': 'form-control',
-    }))
-    alerta = forms.ModelChoiceField(empty_label='Escoja el nivel', label='Alerta', queryset=models.Alerta.objects.all(), widget=forms.Select(attrs={
-        'class': 'form-control',
-    }))
-    emplazamiento = forms.ModelChoiceField(empty_label='Escoja el emplazamiento', label='Emplazamiento', queryset=models.Emplazamiento.objects.all(), widget=forms.Select(attrs={
-        'class': 'form-control',
-    }))
+    }), error_messages=DEFAULT_ERROR_MESSAGES_NON_REQUIRED)

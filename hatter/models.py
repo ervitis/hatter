@@ -172,6 +172,7 @@ class Emplazamiento(models.Model):
     nombre = models.CharField('nombre', max_length=100)
     latitud = models.FloatField('latitud')
     longitud = models.FloatField('longitud')
+    provincia = models.ForeignKey(Provincia, db_column='provincia_id')
 
     class Meta:
         db_table = 'emplazamiento'
@@ -185,25 +186,27 @@ class Actuacion(models.Model):
     Clase actuacion
     """
 
-    CALLE = 'C\\'
+    VOID = ''
+    CALLE = 'Calle'
     AVENIDA = 'Avda'
     PLAZA = 'Pza'
     TIPO_VIA_CHOICES = (
+        (VOID, ''),
         (CALLE, 'Calle'),
         (AVENIDA, 'Avenida'),
         (PLAZA, 'Plaza'),
     )
 
     nombre = models.CharField('nombre', max_length=20)
-    direccion = models.CharField('direccion', max_length=150)
-    codigo_postal = models.CharField('codigo postal', max_length=5)
-    longitud = models.FloatField('longitud')
-    latitud = models.FloatField('latitud')
-    tipo_via = models.CharField('tipo de via', max_length=4, choices=TIPO_VIA_CHOICES, default=CALLE)
+    direccion = models.CharField('direccion', max_length=150, default=None, null=True)
+    codigo_postal = models.CharField('codigo postal', max_length=5, default=None, null=True)
+    longitud = models.FloatField('longitud', default=None, null=True)
+    latitud = models.FloatField('latitud', default=None, null=True)
+    tipo_via = models.CharField('tipo de via', max_length=5, choices=TIPO_VIA_CHOICES, default=VOID)
     estado = models.ForeignKey(Estado, db_column='estado_id')
     cliente = models.ForeignKey(Cliente, db_column='cliente_id')
-    provincia = models.ForeignKey(Provincia, db_column='provincia_id')
-    emplazamiento = models.ForeignKey(Emplazamiento, db_column='emplazamiento_id')
+    provincia = models.ForeignKey(Provincia, db_column='provincia_id', null=True)
+    emplazamiento = models.ForeignKey(Emplazamiento, db_column='emplazamiento_id', null=True)
     prioridad = models.ForeignKey(Prioridad, db_column='prioridad_id')
     severidad = models.ForeignKey(Severidad, db_column='severidad_id')
     alerta = models.ForeignKey(Alerta, db_column='alerta_id')

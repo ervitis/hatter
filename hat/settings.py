@@ -138,6 +138,11 @@ SESSION_SAVE_EVERY_REQUEST = False
 
 STATIC_URL = '/static/'
 
+STATICFILES_DIR = (
+    os.path.join(BASE_DIR, 'static'),
+    os.path.join(BASE_DIR, 'static/js/actuaciones'),
+)
+
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
 
 # A sample logging configuration. The only tangible logging

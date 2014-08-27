@@ -2,12 +2,12 @@
 
 <div class="container-main container-top">
     <div class="col-xs-12">
-        <form action="{% url 'new_actuacion' %}" method="post">
+        <form action="{% url 'formulario_actuaciones' %}" method="post">
             {% csrf_token %}
 
             <div class="col-xs-10 text-center">
-                {% if form.nombre.error_messages %}
-                    <p class="alert alert-danger">Error en el campo nombre</p>
+                {% if form.errors.nombre %}
+                    <p class="alert alert-danger">{{ form.errors.nombre }}</p>
                 {% endif %}
                 <div class="form-group">
                     <div class="col-xs-4 text-right">
@@ -24,67 +24,110 @@
                 <fieldset>
                     <legend>Dirección:</legend>
 
-                    <div class="col-xs-12 margin-between-elements">
-                        <div class="col-xs-4">
-                            {% if form.tipo_via.error_messages %}
-                                <p class="alert alert-danger">Error en el campo tipo via</p>
+                    <div class="col-xs-12 margin-between-elements text-center">
+                        <div class="col-xs-6 text-right">
+                            Escoja una de las siguientes opciones:
+                        </div>
+
+                        <div class="col-xs-6">
+                            <div class="radio-inline">
+                                <input id="direccion" name="dir" type="radio" checked="checked" value="direccion" class="radDireccion">
+                                <label for="direccion">Dirección</label>
+                            </div>
+                            <div class="radio-inline">
+                                <input id="coordenadas" name="dir" type="radio" value="coordenadas" class="radDireccion">
+                                <label for="coordenadas">Coordenadas</label>
+                            </div>
+                            <div class="radio-inline">
+                                <input id="emplazamiento" name="dir" type="radio" value="emplazamiento" class="radDireccion">
+                                <label for="emplazamiento">Emplazamiento</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 margin-between-divs direccion">
+                        <div class="col-xs-12 margin-between-elements">
+                            <div class="col-xs-4">
+                                {% if form.errors.tipo_via %}
+                                <ul class="list-group">
+                                {% for error in form.errors.tipo_via %}
+                                    <li class="list-group-item list-group-item-danger">{{ error }}</li>
+                                {% endfor %}
+                                </ul>
                             {% endif %}
-                            <div class="form-group">
-                                <div class="col-xs-6 text-right">
-                                <label>{{ form.tipo_via.label }}</label>
+                                <div class="form-group">
+                                    <div class="col-xs-6 text-right">
+                                    <label>{{ form.tipo_via.label }}</label>
+                                    </div>
+                                    <div class="col-xs-6">
+                                    {{ form.tipo_via }}
+                                    </div>
                                 </div>
-                                <div class="col-xs-6">
-                                {{ form.tipo_via }}
+                            </div>
+
+                            <div class="col-xs-8">
+                                {% if form.errors.direccion %}
+                                <ul class="list-group">
+                                {% for error in form.errors.direccion %}
+                                    <li class="list-group-item list-group-item-danger">{{ error }}</li>
+                                {% endfor %}
+                                </ul>
+                            {% endif %}
+                                <div class="form-group">
+                                    <div class="col-xs-12">
+                                    {{ form.direccion }}
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="col-xs-8">
-                            {% if form.direccion.error_messages %}
-                                <p class="alert alert-danger">Error en el campo dirección</p>
+                        <div class="col-xs-12 margin-between-elements">
+                            <div class="col-xs-4">
+                                {% if form.errors.codigo_postal %}
+                                <ul class="list-group">
+                                {% for error in form.errors.codigo_postal %}
+                                    <li class="list-group-item list-group-item-danger">{{ error }}</li>
+                                {% endfor %}
+                                </ul>
                             {% endif %}
-                            <div class="form-group">
-                                <div class="col-xs-12">
-                                {{ form.direccion }}
+                                <div class="form-group">
+                                    <div class="col-xs-6 text-right">
+                                    <label>{{ form.codigo_postal.label }}</label>
+                                    </div>
+                                    <div class="col-xs-6">
+                                    {{ form.codigo_postal }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-xs-8">
+                                {% if form.errors.provincia %}
+                                <ul class="list-group">
+                                {% for error in form.errors.provincia %}
+                                    <li class="list-group-item list-group-item-danger">{{ error }}</li>
+                                {% endfor %}
+                                </ul>
+                            {% endif %}
+                                <div class="form-group">
+                                    <div class="col-xs-4 text-right">
+                                    <label>{{ form.provincia.label }}</label>
+                                    </div>
+                                    <div class="col-xs-8">
+                                    {{ form.provincia }}
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="col-xs-12 margin-between-elements">
-                        <div class="col-xs-4">
-                            {% if form.codigo_postal.error_messages %}
-                                <p class="alert alert-danger">Error en el campo código postal</p>
-                            {% endif %}
-                            <div class="form-group">
-                                <div class="col-xs-6 text-right">
-                                <label>{{ form.codigo_postal.label }}</label>
-                                </div>
-                                <div class="col-xs-6">
-                                {{ form.codigo_postal }}
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-xs-8">
-                            {% if form.provincia.error_messages %}
-                                <p class="alert alert-danger">Error en el campo provincia</p>
-                            {% endif %}
-                            <div class="form-group">
-                                <div class="col-xs-4 text-right">
-                                <label>{{ form.provincia.label }}</label>
-                                </div>
-                                <div class="col-xs-8">
-                                {{ form.provincia }}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-xs-12 margin-between-elements">
-                        <div class="col-xs-3">
-                            {% if form.latitud.error_messages %}
-                                <p class="alert alert-danger">Error en el campo latitud</p>
+                    <div class="col-xs-12 margin-between-elements coordenadas hidden">
+                        <div class="col-xs-6 text-center">
+                            {% if form.errors.latitud %}
+                                <ul class="list-group">
+                                {% for error in form.errors.latitud %}
+                                    <li class="list-group-item list-group-item-danger">{{ error }}</li>
+                                {% endfor %}
+                                </ul>
                             {% endif %}
                             <div class="form-group">
                                 <div class="col-xs-4 text-right">
@@ -96,9 +139,13 @@
                             </div>
                         </div>
 
-                        <div class="col-xs-3">
-                            {% if form.longitud.error_messages %}
-                                <p class="alert alert-danger">Error en el campo longitud</p>
+                        <div class="col-xs-6 text-center">
+                            {% if form.errors.longitud %}
+                                <ul class="list-group">
+                                {% for error in form.errors.longitud %}
+                                    <li class="list-group-item list-group-item-danger">{{ error }}</li>
+                                {% endfor %}
+                                </ul>
                             {% endif %}
                             <div class="form-group">
                                 <div class="col-xs-4 text-right">
@@ -109,10 +156,16 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
 
-                        <div class="col-xs-6">
-                            {% if form.emplazamiento.error_messages %}
-                                <p class="alert alert-danger">Error en el campo emplazamiento</p>
+                    <div class="col-xs-12 margin-between-divs emplazamiento hidden">
+                        <div class="col-xs-12 text-center">
+                            {% if form.errors.emplazamiento %}
+                                <ul class="list-group">
+                                {% for error in form.errors.emplazamiento %}
+                                    <li class="list-group-item list-group-item-danger">{{ error }}</li>
+                                {% endfor %}
+                                </ul>
                             {% endif %}
                             <div class="form-group">
                                 <div class="col-xs-4 text-right">
@@ -134,8 +187,12 @@
 
                     <div class="col-xs-12 margin-between-elements">
                         <div class="col-xs-6">
-                            {% if form.estado.error_messages %}
-                                <p class="alert alert-danger">Error en el campo estado</p>
+                            {% if form.errors.estado %}
+                                <ul class="list-group">
+                                {% for error in form.errors.estado %}
+                                    <li class="list-group-item list-group-item-danger">{{ error }}</li>
+                                {% endfor %}
+                                </ul>
                             {% endif %}
                             <div class="form-group">
                                 <div class="col-xs-2">
@@ -148,8 +205,12 @@
                         </div>
 
                         <div class="col-xs-6">
-                            {% if form.cliente.error_messages %}
-                                <p class="alert alert-danger">Error en el campo cliente</p>
+                            {% if form.errors.cliente %}
+                                <ul class="list-group">
+                                {% for error in form.errors.cliente %}
+                                    <li class="list-group-item list-group-item-danger">{{ error }}</li>
+                                {% endfor %}
+                                </ul>
                             {% endif %}
                             <div class="form-group">
                                 <div class="col-xs-2">
@@ -164,8 +225,12 @@
 
                     <div class="col-xs-12 margin-between-elements">
                         <div class="col-xs-4">
-                            {% if form.prioridad.error_messages %}
-                                <p class="alert alert-danger">Error en el campo prioridad</p>
+                           {% if form.errors.prioridad %}
+                                <ul class="list-group">
+                                {% for error in form.errors.prioridad %}
+                                    <li class="list-group-item list-group-item-danger">{{ error }}</li>
+                                {% endfor %}
+                                </ul>
                             {% endif %}
                             <div class="form-group">
                                 <div class="col-xs-4">
@@ -178,8 +243,12 @@
                         </div>
 
                         <div class="col-xs-4">
-                            {% if form.severidad.error_messages %}
-                                <p class="alert alert-danger">Error en el campo severidad</p>
+                            {% if form.errors.severidad %}
+                                <ul class="list-group">
+                                {% for error in form.errors.severidad %}
+                                    <li class="list-group-item list-group-item-danger">{{ error }}</li>
+                                {% endfor %}
+                                </ul>
                             {% endif %}
                             <div class="form-group">
                                 <div class="col-xs-4">
@@ -192,8 +261,12 @@
                         </div>
 
                         <div class="col-xs-4">
-                            {% if form.alerta.error_messages %}
-                                <p class="alert alert-danger">Error en el campo alerta</p>
+                            {% if form.errors.alerta %}
+                                <ul class="list-group">
+                                {% for error in form.errors.alerta %}
+                                    <li class="list-group-item list-group-item-danger">{{ error }}</li>
+                                {% endfor %}
+                                </ul>
                             {% endif %}
                             <div class="form-group">
                                 <div class="col-xs-4">
@@ -211,9 +284,16 @@
 
             <div class="col-xs-12 text-right margin-between-divs">
                 <a href="{% url 'listado_actuaciones' %}" class="btn btn-warning">Volver al listado</a>
-                <button type="button" class="btn btn-default">Guardar</button>
+                <button type="submit" class="btn btn-default">Guardar</button>
             </div>
 
         </form>
     </div>
 </div>
+
+{% load staticfiles %}
+
+{% block javascript %}
+    <script type="text/javascript" src="{% static 'js/actuaciones/actuacion.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/actuaciones/actuaciones.js' %}"></script>
+{% endblock %}
