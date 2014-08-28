@@ -1,20 +1,43 @@
+.margin-between-divs
+{
+    margin-top: 20px;
+    margin-bottom: 15px;
+}
+
+.margin-between-elements
+{
+    margin-top: 5px;
+    margin-bottom: 3px;
+}
+
 .container-main
 {
     margin: 0;
     padding: 0;
-    width: auto;
     position: absolute;
     left: 195px;
+    width: 75%;
+}
+
+.map
+{
+    margin: 15px;
+    height: 500px;
+    width: 80%;
+    top: 25px;
 }
 
 .container-top
 {
-    top: 0;
+    top: 10px;
+    margin-left: 60px;
+    padding: 10;
 }
 
 .container-bottom
 {
     top: 600px;
+    margin-left: 60px;
 }
 
 @media (min-width: 0px) and (max-width: 499px) {

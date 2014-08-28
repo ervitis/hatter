@@ -1,76 +1,75 @@
 {% include 'index.html' %}
 
+{% load staticfiles %}
+
 <div class="container-main container-top">
-    <ul class="nav nav-tabs" role="tablist">
-        <li class="active">
-            <a href="#listadoActuaciones" data-toggle="tab">Visualizar</a>
-        </li>
-        <li>
-            <a href="#crearActuacion" data-toggle="tab">Crear / Actualizar</a>
-        </li>
-    </ul>
+    <div class="col-xs-12">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Asignación</th>
+                    <th>Nombre</th>
+                    <th>Estado</th>
+                    <th>Técnico asignado</th>
+                    <th>Fecha inicio</th>
+                    <th>Fecha fin</th>
+                    <th>Opciones</th>
+                </tr>
+            </thead>
 
-    <div id="tabContent" class="tab-content">
-        <div class="tab-pane fade active in" id="listadoActuaciones">
-            <div class="col-xs-12">
-                <table class="table">
-                    <thead>
-                        <th>Nombre</th>
-                        <th>Estado</th>
-                        <th>Técnico asignado</th>
-                        <th>Fecha inicio</th>
-                        <th>Fecha fin</th>
-                    </thead>
-
-                    {% if listado_actuaciones %}
-                        {% for actuacion in listado_actuaciones %}
-                            <tr>
-                                <td>{{ actuacion.nombre }}</td>
-                                <td>{{ actuacion.estado }}</td>
-                                {% if actuacion.tecnico %}
-                                    <td>{{ actuacion.tecnico.nombre }}</td>
-                                {% else %}
-                                    <td>Sin técnico</td>
-                                {% endif %}
-                                <td>{{ actuacion.detalle_actuacion.fecha_inicio }}</td>
-                                <td>{{ actuacion.detalle_actuacion.fecha_fin }}</td>
-                            </tr>
-                        {% endfor %}
-                    {% else %}
-                        <tr>
-                            <td colspan="5" class="alert alert-warning text-center">No hay actuaciones</td>
-                        </tr>
-                    {% endif %}
-
-                </table>
-            </div>
-
-            <div class="col-xs-12">
-                <div class="text-center">
-                    <div class="pagination">
-                        {% if page_obj.has_previous %}
-                            <a class="btn btn-sm btn-info" href="?page={{ page_obj.previous_page_number }}">Ant</a>
+            {% if listado_actuaciones %}
+                {% for actuacion in listado_actuaciones %}
+                    <tr>
+                        <td><img src="{% static 'img/hand.jpg' %}" width="30px" height="30px"></td>
+                        <td>{{ actuacion.nombre }}</td>
+                        <td>{{ actuacion.estado }}</td>
+                        {% if actuacion.tecnico %}
+                            <td>{{ actuacion.tecnico.nombre }}</td>
+                        {% else %}
+                            <td>Sin técnico</td>
                         {% endif %}
-                        <span>
-                            Página {{ page_obj.number }} de {{ paginator.num_pages }}
-                        </span>
-                        {% if page_obj.has_next %}
-                            <a class="btn btn-sm btn-info" href="?page={{ page_obj.next_page_number }}">Sig</a>
+                        {% if actuacion.detalle_actuacion.fecha_inicio %}
+                            <td>{{ actuacion.detalle_actuacion.fecha_inicio }}</td>
+                        {% else %}
+                            <td>Sin fecha</td>
                         {% endif %}
-                    </div>
-                </div>
+                        {% if actuacion.detalle_actuacion.fecha_inicio %}
+                            <td>{{ actuacion.detalle_actuacion.fecha_fin }}</td>
+                        {% else %}
+                            <td>Sin fecha</td>
+                        {% endif %}
+                        <td><a class="btn btn-sm btn-info" href="{% url 'update_actuacion' actuacion.id %}">Actualizar</a></td>
+                    </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="7" class="alert alert-warning text-center">No hay actuaciones</td>
+                </tr>
+            {% endif %}
+
+        </table>
+    </div>
+
+    <div class="col-xs-12">
+        <div class="text-center">
+            <div class="pagination">
+                {% if page_obj.has_previous %}
+                    <a class="btn btn-sm btn-info" href="?page={{ page_obj.previous_page_number }}">Ant</a>
+                {% endif %}
+                <span>
+                    Página {{ page_obj.number }} de {{ paginator.num_pages }}
+                </span>
+                {% if page_obj.has_next %}
+                    <a class="btn btn-sm btn-info" href="?page={{ page_obj.next_page_number }}">Sig</a>
+                {% endif %}
             </div>
         </div>
+    </div>
 
-        <div class="tab-pane fade" id="crearActuacion">
-
-        </div>
+    <div class="col-xs-12 text-right margin-between-divs">
+        <a class="btn btn-default" href="{% url 'new_actuacion' %}">Crear actuación</a>
     </div>
 
 </div>
 
-{% load static %}
-
-{% block javascript %}
-    <script type="text/javascript" src="{% static 'js/actuaciones/actuaciones.js' %}"></script>
-{% endblock %}
+{% include 'layout/frontdown.html' %}

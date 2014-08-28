@@ -1,3 +1,5 @@
+# coding=utf-8
+
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -15,6 +17,9 @@ class Estado(models.Model):
     def __str__(self):
         return self.nombre
 
+    def __unicode__(self):
+        return self.nombre
+
 
 class Cliente(models.Model):
     """
@@ -28,6 +33,9 @@ class Cliente(models.Model):
         db_table = 'cliente'
 
     def __str__(self):
+        return self.nombre
+
+    def __unicode__(self):
         return self.nombre
 
 
@@ -46,6 +54,9 @@ class Turno(models.Model):
     def __str__(self):
         return self.nombre
 
+    def __unicode__(self):
+        return self.nombre
+
 
 class Comunidad(models.Model):
     """
@@ -60,6 +71,9 @@ class Comunidad(models.Model):
     def __str__(self):
         return self.nombre
 
+    def __unicode__(self):
+        return self.nombre
+
 
 class Provincia(models.Model):
     """
@@ -68,11 +82,15 @@ class Provincia(models.Model):
 
     nombre = models.CharField('nombre', max_length=200)
     comunidad = models.ForeignKey(Comunidad, db_column='comunidad_id')
+    codigo = models.IntegerField('codigo', max_length=10)
 
     class Meta:
         db_table = 'provincia'
 
     def __str__(self):
+        return self.nombre
+
+    def __unicode__(self):
         return self.nombre
 
 
@@ -89,6 +107,9 @@ class Tecnologia(models.Model):
     def __str__(self):
         return self.nombre
 
+    def __unicode__(self):
+        return self.nombre
+
 
 class Severidad(models.Model):
     """
@@ -101,6 +122,9 @@ class Severidad(models.Model):
         db_table = 'severidad'
 
     def __str__(self):
+        return self.nombre
+
+    def __unicode__(self):
         return self.nombre
 
 
@@ -118,6 +142,9 @@ class Prioridad(models.Model):
     def __str__(self):
         return self.nombre
 
+    def __unicode__(self):
+        return self.nombre
+
 
 class Alerta(models.Model):
     """
@@ -133,33 +160,7 @@ class Alerta(models.Model):
     def __str__(self):
         return self.nombre
 
-
-class Zona(models.Model):
-    """
-    Clase Zona
-    """
-
-    nombre = models.CharField('nombre', max_length=150)
-
-    class Meta:
-        db_table = 'zona'
-
-    def __str__(self):
-        return self.nombre
-
-
-class Subzona(models.Model):
-    """
-    Clase subzona
-    """
-
-    nombre = models.CharField('nombre', max_length=150)
-    zona = models.ForeignKey(Zona, db_column='zona_id')
-
-    class Meta:
-        db_table = 'subzona'
-
-    def __str__(self):
+    def __unicode__(self):
         return self.nombre
 
 
@@ -171,9 +172,13 @@ class Emplazamiento(models.Model):
     nombre = models.CharField('nombre', max_length=100)
     latitud = models.FloatField('latitud')
     longitud = models.FloatField('longitud')
+    provincia = models.ForeignKey(Provincia, db_column='provincia_id')
 
     class Meta:
         db_table = 'emplazamiento'
+
+    def __unicode__(self):
+        return self.nombre
 
 
 class Actuacion(models.Model):
@@ -181,28 +186,38 @@ class Actuacion(models.Model):
     Clase actuacion
     """
 
-    CALLE = 'C\\'
+    from hatter.functions import validators
+
+    VOID = ''
+    CALLE = 'Calle'
     AVENIDA = 'Avda'
     PLAZA = 'Pza'
     TIPO_VIA_CHOICES = (
+        (VOID, ''),
         (CALLE, 'Calle'),
         (AVENIDA, 'Avenida'),
         (PLAZA, 'Plaza'),
     )
 
     nombre = models.CharField('nombre', max_length=20)
-    direccion = models.CharField('direccion', max_length=150)
-    codigo_postal = models.CharField('codigo postal', max_length=5)
-    longitud = models.FloatField('longitud')
-    latitud = models.FloatField('latitud')
-    tipo_via = models.CharField('tipo de via', max_length=4, choices=TIPO_VIA_CHOICES, default=CALLE)
+    direccion = models.CharField('direccion', max_length=150, default=None, null=True)
+    codigo_postal = models.CharField('codigo postal', max_length=5, default=None, null=True, validators=[validators.validate_codigo_postal])
+    longitud = models.FloatField('longitud', default=None, null=True)
+    latitud = models.FloatField('latitud', default=None, null=True)
+    tipo_via = models.CharField('tipo de via', max_length=5, choices=TIPO_VIA_CHOICES, default=VOID)
     estado = models.ForeignKey(Estado, db_column='estado_id')
     cliente = models.ForeignKey(Cliente, db_column='cliente_id')
-    provincia = models.ForeignKey(Provincia, db_column='provincia_id')
-    emplazamiento = models.ForeignKey(Emplazamiento, db_column='emplazamiento_id')
+    provincia = models.ForeignKey(Provincia, db_column='provincia_id', null=True)
+    emplazamiento = models.ForeignKey(Emplazamiento, db_column='emplazamiento_id', null=True)
+    prioridad = models.ForeignKey(Prioridad, db_column='prioridad_id')
+    severidad = models.ForeignKey(Severidad, db_column='severidad_id')
+    alerta = models.ForeignKey(Alerta, db_column='alerta_id')
 
     class Meta:
         db_table = 'actuacion'
+
+    def __unicode__(self):
+        return self.nombre
 
 
 class Instrumentacion(models.Model):
@@ -220,6 +235,8 @@ class Instrumentacion(models.Model):
     def __str__(self):
         return self.nombre
 
+    def __unicode__(self):
+        return self.nombre
 
 
 class Tecnico(models.Model):
@@ -238,6 +255,9 @@ class Tecnico(models.Model):
 
     class Meta:
         db_table = 'tecnico'
+
+    def __unicode__(self):
+        return self.nombre
 
 
 class DetalleActuacion(models.Model):
