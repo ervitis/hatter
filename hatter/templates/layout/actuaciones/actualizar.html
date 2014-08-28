@@ -2,7 +2,7 @@
 
 <div class="container-main container-top">
     <div class="col-xs-12">
-        <form action="{% url 'new_actuacion' %}" method="post">
+        <form action="{% url 'update_actuacion' actuacion.id %}" method="post">
             {% csrf_token %}
 
             <div class="col-xs-10 text-center">
@@ -284,7 +284,7 @@
 
             <div class="col-xs-12 text-right margin-between-divs">
                 <a href="{% url 'listado_actuaciones' %}" class="btn btn-warning">Volver al listado</a>
-                <button type="submit" class="btn btn-default">Guardar</button>
+                <button type="submit" class="btn btn-default">Guardar cambios</button>
             </div>
 
         </form>

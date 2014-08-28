@@ -1,21 +1,26 @@
 {% include 'index.html' %}
 
+{% load staticfiles %}
+
 <div class="container-main container-top">
     <div class="col-xs-12">
         <table class="table">
             <thead>
                 <tr>
+                    <th>Asignación</th>
                     <th>Nombre</th>
                     <th>Estado</th>
                     <th>Técnico asignado</th>
                     <th>Fecha inicio</th>
                     <th>Fecha fin</th>
+                    <th>Opciones</th>
                 </tr>
             </thead>
 
             {% if listado_actuaciones %}
                 {% for actuacion in listado_actuaciones %}
                     <tr>
+                        <td><img src="{% static 'img/hand.jpg' %}" width="30px" height="30px"></td>
                         <td>{{ actuacion.nombre }}</td>
                         <td>{{ actuacion.estado }}</td>
                         {% if actuacion.tecnico %}
@@ -24,20 +29,21 @@
                             <td>Sin técnico</td>
                         {% endif %}
                         {% if actuacion.detalle_actuacion.fecha_inicio %}
-                        <td>{{ actuacion.detalle_actuacion.fecha_inicio }}</td>
+                            <td>{{ actuacion.detalle_actuacion.fecha_inicio }}</td>
                         {% else %}
-                        <td>Sin fecha</td>
+                            <td>Sin fecha</td>
                         {% endif %}
                         {% if actuacion.detalle_actuacion.fecha_inicio %}
-                        <td>{{ actuacion.detalle_actuacion.fecha_fin }}</td>
+                            <td>{{ actuacion.detalle_actuacion.fecha_fin }}</td>
                         {% else %}
-                        <td>Sin fecha</td>
+                            <td>Sin fecha</td>
                         {% endif %}
+                        <td><a class="btn btn-sm btn-info" href="{% url 'update_actuacion' actuacion.id %}">Actualizar</a></td>
                     </tr>
                 {% endfor %}
             {% else %}
                 <tr>
-                    <td colspan="5" class="alert alert-warning text-center">No hay actuaciones</td>
+                    <td colspan="7" class="alert alert-warning text-center">No hay actuaciones</td>
                 </tr>
             {% endif %}
 
@@ -61,7 +67,7 @@
     </div>
 
     <div class="col-xs-12 text-right margin-between-divs">
-        <a class="btn btn-default" href="{% url 'formulario_actuaciones' %}">Crear actuación</a>
+        <a class="btn btn-default" href="{% url 'new_actuacion' %}">Crear actuación</a>
     </div>
 
 </div>

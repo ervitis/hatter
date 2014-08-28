@@ -14,7 +14,7 @@ DEFAULT_ERROR_MESSAGES_NON_REQUIRED = {
 }
 
 
-class ActuacionForm(forms.Form):
+class ActuacionForm(forms.ModelForm):
     """
     Clase formulario actuacion
     """
@@ -22,7 +22,7 @@ class ActuacionForm(forms.Form):
     from hatter.functions import validators
 
     VOID = ''
-    CALLE = 'C\\'
+    CALLE = 'Calle'
     AVENIDA = 'Avda'
     PLAZA = 'Pza'
     TIPO_VIA_CHOICES = (
@@ -90,3 +90,6 @@ class ActuacionForm(forms.Form):
     emplazamiento = forms.ModelChoiceField(empty_label='Escoja el emplazamiento', label='Emplazamiento', required=False, queryset=models.Emplazamiento.objects.all(), widget=forms.Select(attrs={
         'class': 'form-control',
     }), error_messages=DEFAULT_ERROR_MESSAGES_NON_REQUIRED)
+
+    class Meta:
+        model = models.Actuacion

@@ -14,7 +14,12 @@ function Actuacion() {
     this.$alerta         = $('#id_alerta');
 }
 
-Actuacion.prototype._initialize_address = function() {
+/**
+ * Reset require property of address
+ *
+ * @private
+ */
+Actuacion.prototype._reset_required_address = function() {
     this.$tipo_via.prop('required', false);
     this.$direccion.prop('required', false);
     this.$direccion.prop('required', false);
@@ -22,15 +27,30 @@ Actuacion.prototype._initialize_address = function() {
     this.$provincia.prop('required', false);
 }
 
-Actuacion.prototype._initialize_coordinates = function() {
+/**
+ * Reset require property of coordinates
+ * @private
+ */
+Actuacion.prototype._reset_required_coordinates = function() {
     this.$latitud.prop('required', false);
     this.$longitud.prop('required', false);
 }
 
-Actuacion.prototype._initialize_placement = function() {
+/**
+ * Reset require property of placement
+ *
+ * @private
+ */
+Actuacion.prototype._reset_required_placement = function() {
     this.$emplazamiento.prop('required', false);
 }
 
+/**
+ * Set require property
+ *
+ * @param elemento
+ * @private
+ */
 Actuacion.prototype._set_required = function (elemento) {
     if ('direccion' === elemento) {
         this.$tipo_via.prop('required', true);
@@ -38,18 +58,72 @@ Actuacion.prototype._set_required = function (elemento) {
         this.$codigo_postal.prop('required', true);
         this.$provincia.prop('required', true);
 
-        this._initialize_coordinates();
-        this._initialize_placement();
+        this._reset_required_coordinates();
+        this._reset_required_placement();
     } else if ('coordenadas' === elemento) {
         this.$latitud.prop('required', true);
         this.$longitud.prop('required', true);
 
-        this._initialize_address();
-        this._initialize_placement();
+        this._reset_required_address();
+        this._reset_required_placement();
     } else {
         this.$emplazamiento.prop('required', true);
 
-        this._initialize_address();
-        this._initialize_coordinates();
+        this._reset_required_address();
+        this._reset_required_coordinates();
     }
+}
+
+/**
+ * Return which element should be shown in the form
+ *
+ * @returns {string}
+ * @private
+ */
+Actuacion.prototype._show_element_address = function() {
+    if (this._has_address()) {
+        return 'direccion';
+    } else if (this._has_coordinates()) {
+        return 'coordenadas';
+    } else if (this._has_placement()) {
+        return 'emplazamiento';
+    } else {
+        return 'nuevo';
+    }
+}
+
+/**
+ *
+ * @returns {boolean}
+ * @private
+ */
+Actuacion.prototype._has_name = function() {
+    return '' !== this.$nombre.val() ? true : false;
+}
+
+/**
+ *
+ * @returns {boolean}
+ * @private
+ */
+Actuacion.prototype._has_placement = function() {
+    return '' !== this.$emplazamiento.val() ? true : false;
+}
+
+/**
+ *
+ * @returns {boolean}
+ * @private
+ */
+Actuacion.prototype._has_coordinates = function() {
+    return ('' !== this.$latitud.val() && '' !== this.$longitud.val()) ? true : false;
+}
+
+/**
+ *
+ * @returns {boolean}
+ * @private
+ */
+Actuacion.prototype._has_address = function() {
+    return ('' !== this.$direccion.val() && '' !== this.$provincia.val() && '' !== this.$codigo_postal.val()) ? true : false;
 }
