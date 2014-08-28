@@ -1,0 +1,21 @@
+{% include 'index.html' %}
+
+<div class="container-main container-top">
+    <div class="map" id="mapa"></div>
+    <input type="hidden" id="dataurl" value="{% url 'get_actuaciones_ajax' %}">
+
+    <div class="col-xs-12 hidden" id="nodata">
+        <div class="alert alert-danger">
+            <p class="text-center">
+                Aún no hay datos con los que cargar en el mapa
+            </p>
+        </div>
+    </div>
+</div>
+
+{% load static %}
+
+{% block javascript %}
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
+    <script type="text/javascript" src="{% static 'js/mapa/mapa.js' %}"></script>
+{% endblock %}
