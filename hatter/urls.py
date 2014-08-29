@@ -1,6 +1,7 @@
 from django.conf.urls import patterns, url
 
 from hatter import views
+from hatter.ws import map
 
 
 urlpatterns = patterns('',
@@ -10,5 +11,6 @@ urlpatterns = patterns('',
     url(r'^(?P<pk>\d+)/updateactuacion/$', views.ActuacionesUpdateView.as_view(), name='update_actuacion'),
 
     url(r'^mapa/$', views.MapaView.as_view(), name='mapa_view'),
-    url(r'^getactuaciones/$', views.get_actuaciones, name='get_actuaciones_ajax'),
+
+    url(r'^getactuaciones/$', map.get_actuaciones, name='get_actuaciones_ws'),
 )

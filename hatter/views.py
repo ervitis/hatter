@@ -1,10 +1,8 @@
 # coding=utf-8
 
-from django.shortcuts import redirect, render
-from django.http import HttpResponse
+from django.shortcuts import redirect
 from django.views import generic
 from django.views.generic.edit import CreateView, UpdateView
-from django.views.decorators.csrf import ensure_csrf_cookie
 
 from hatter import models, forms
 
@@ -77,29 +75,3 @@ class ActuacionesUpdateView(UpdateView):
 
 class MapaView(generic.TemplateView):
     template_name = 'layout/mapa/mapa.html'
-
-
-@ensure_csrf_cookie
-def get_actuaciones(request):
-    actuaciones = models.Actuacion.objects.all()
-
-    dict_actuaciones = []
-    for actuacion in actuaciones:
-        if actuacion.latitud:
-            dict_actuacion = {
-                'lat': actuacion.latitud,
-                'lon': actuacion.longitud
-            }
-        elif actuacion.emplazamiento:
-            dict_actuacion = {
-                'lat': actuacion.emplazamiento.latitud,
-                'lon': actuacion.emplazamiento.longitud
-            }
-        else:
-            dict_actuacion = {
-                'address': actuacion.direccion + ', ' + actuacion.codigo_postal + ', ' + actuacion.provincia.nombre
-            }
-
-        dict_actuaciones.append(dict_actuacion)
-
-    return HttpResponse(json.dumps(dict_actuaciones), content_type='application/json')
