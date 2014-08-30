@@ -1,32 +1,39 @@
 # coding=utf-8
 
 from django.shortcuts import redirect
-from django.views import generic
 from django.views.generic.edit import CreateView, UpdateView
+from django.views.generic.list import ListView
+from django.views.generic.base import TemplateView
+from django.utils.decorators import method_decorator
+
+from functions.log import check_user
 
 from hatter import models, forms
 
 import logging
-import json
 
 
-class IndexView(generic.TemplateView):
+class IndexView(TemplateView):
     """
     Index
     """
 
-    template_name = 'index.html'
+    @method_decorator(check_user)
+    def dispatch(self, request, *args, **kwargs):
+        return super(IndexView, self).dispatch(request, *args, **kwargs)
 
 
-class ActuacionesView(generic.ListView):
+class ActuacionesView(ListView):
     """
     Get the list of tasks
     """
 
-    template_name = 'layout/actuaciones/listado.html'
     context_object_name = 'listado_actuaciones'
     paginate_by = 3
     queryset = models.Actuacion.objects.order_by('-id')
+
+    def dispatch(self, request, *args, **kwargs):
+        return super(ActuacionesView, self).dispatch(request, *args, **kwargs)
 
 
 class ActuacionesNewView(CreateView):
@@ -73,5 +80,32 @@ class ActuacionesUpdateView(UpdateView):
         return super(ActuacionesUpdateView, self).form_invalid(form)
 
 
-class MapaView(generic.TemplateView):
+class MapaView(TemplateView):
     template_name = 'layout/mapa/mapa.html'
+
+
+class TecnicosView(ListView):
+    template_name = 'layout/tecnicos/listado.html'
+    context_object_name = 'listado_tecnicos'
+    paginate_by = 20
+    queryset = models.Tecnico.objects.order_by('id')
+
+
+class TecnicosNewView(CreateView):
+    template_name = 'layout/tecnicos/crear.html'
+    models = models.Tecnico
+    form_class = forms.TecnicoForm
+
+    def form_invalid(self, form):
+        return super(TecnicosNewView, self).form_invalid(form)
+
+    def form_valid(self, form):
+        tecnico = models.Tecnico()
+
+        tecnico.nombre = form.cleaned_data['nombre']
+        tecnico.apellidos = form.cleaned_data['apellidos']
+        tecnico.dni = form.cleaned_data['dni']
+
+        tecnico.save()
+
+        return redirect('listado_tecnicos')

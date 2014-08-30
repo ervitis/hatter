@@ -1,7 +1,6 @@
 # coding=utf-8
 
 from django.db import models
-from django.contrib.auth.models import User
 
 
 class Estado(models.Model):
@@ -245,13 +244,10 @@ class Tecnico(models.Model):
     """
 
     nombre = models.CharField('nombre', max_length=50)
-    apellidos = models.CharField('apellidos', max_length=150)
-    dni = models.CharField('dni', max_length=10)
-    username = models.ForeignKey(User)
-    password = models.CharField('password', max_length=200)
-    salt = models.CharField('salt', max_length=200)
-    agenda = models.ManyToManyField(Turno, db_table='agenda')
-    evento = models.ManyToManyField(Actuacion, db_table='evento')
+    apellidos = models.CharField('apellidos', max_length=150, null=True)
+    dni = models.CharField('dni', max_length=9)
+    agenda = models.ManyToManyField(Turno, db_table='agenda', blank=True)
+    evento = models.ManyToManyField(Actuacion, db_table='evento', blank=True)
 
     class Meta:
         db_table = 'tecnico'

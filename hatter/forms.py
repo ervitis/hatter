@@ -3,6 +3,7 @@
 from django import forms
 
 from hatter import models
+from hatter.functions import validators
 
 DEFAULT_ERROR_MESSAGES_REQUIRED = {
     'required': 'Este campo es obligatorio',
@@ -18,8 +19,6 @@ class ActuacionForm(forms.ModelForm):
     """
     Clase formulario actuacion
     """
-
-    from hatter.functions import validators
 
     VOID = ''
     CALLE = 'Calle'
@@ -93,3 +92,20 @@ class ActuacionForm(forms.ModelForm):
 
     class Meta:
         model = models.Actuacion
+
+
+class TecnicoForm(forms.ModelForm):
+    nombre = forms.CharField(label='Nombre', max_length=50, widget=forms.TextInput(attrs={
+        'class': 'form-control'
+    }), error_messages=DEFAULT_ERROR_MESSAGES_REQUIRED)
+
+    apellidos = forms.CharField(label='Apellidos', max_length=150, required=False, widget=forms.TextInput(attrs={
+        'class': 'form-control'
+    }), error_messages=DEFAULT_ERROR_MESSAGES_NON_REQUIRED)
+
+    dni = forms.CharField(label='DNI', max_length=9, widget=forms.TextInput(attrs={
+        'class': 'form-control'
+    }), validators=[validators.validate_dni], error_messages=DEFAULT_ERROR_MESSAGES_REQUIRED)
+
+    class Meta:
+        model = models.Tecnico
