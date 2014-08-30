@@ -15,10 +15,10 @@
             {% if listado_tecnicos %}
                 {% for tecnico in listado_tecnicos %}
                     <tr>
-                        <td>{{ tecnico.dni }}</td>
-                        <td>{{ tecnico.nombre }}</td>
-                        <td>{{ tecnico.apellidos }}</td>
-                        <td><a class="btn btn-sm btn-info" href="{% url 'update_actuacion' actuacion.id %}">Actualizar</a></td>
+                        <td class="text-center">{{ tecnico.dni }}</td>
+                        <td class="text-center">{{ tecnico.nombre }}</td>
+                        <td class="text-center">{{ tecnico.apellidos }}</td>
+                        <td class="text-center"><a class="btn btn-sm btn-info" href="{% url 'update_tecnico' tecnico.id %}">Ver</a></td>
                     </tr>
                 {% endfor %}
             {% else %}

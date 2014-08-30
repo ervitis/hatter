@@ -1,0 +1,78 @@
+{% include 'index.html' %}
+
+<div class="container-main container-top">
+    <div class="col-xs-12">
+        <form action="{% url 'update_tecnico' tecnico.id %}" method="post">
+            {% csrf_token %}
+
+            <div class="col-xs-12">
+                <fieldset>
+                    <legend>Datos del técnico</legend>
+                    <div class="col-xs-12 margin-between-divs">
+                        <div class="col-xs-6 text-center">
+                            {% if form.errors.nombre %}
+                                <ul class="list-group">
+                                {% for error in form.errors.nombre %}
+                                    <li class="list-group-item list-group-item-danger">{{ error }}</li>
+                                {% endfor %}
+                                </ul>
+                            {% endif %}
+                            <div class="form-group">
+                                <div class="col-xs-4 text-right">
+                                <label>{{ form.nombre.label }}</label>
+                                </div>
+                                <div class="col-xs-8">
+                                {{ form.nombre }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-6 text-center">
+                            {% if form.errors.apellidos %}
+                                <ul class="list-group">
+                                {% for error in form.errors.apellidos %}
+                                    <li class="list-group-item list-group-item-danger">{{ error }}</li>
+                                {% endfor %}
+                                </ul>
+                            {% endif %}
+                            <div class="form-group">
+                                <div class="col-xs-4 text-right">
+                                <label>{{ form.apellidos.label }}</label>
+                                </div>
+                                <div class="col-xs-8">
+                                {{ form.apellidos }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 margin-between-elements">
+                        <div class="col-xs-6 text-center">
+                            {% if form.errors.dni %}
+                                <ul class="list-group">
+                                {% for error in form.errors.dni %}
+                                    <li class="list-group-item list-group-item-danger">{{ error }}</li>
+                                {% endfor %}
+                                </ul>
+                            {% endif %}
+                            <div class="form-group">
+                                <div class="col-xs-4 text-right">
+                                <label>{{ form.dni.label }}</label>
+                                </div>
+                                <div class="col-xs-8">
+                                {{ form.dni }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+
+            <div class="col-xs-12 text-right margin-between-divs">
+                <a href="{% url 'listado_tecnicos' %}" class="btn btn-warning">Volver al listado</a>
+                <button type="submit" class="btn btn-default">Guardar</button>
+            </div>
+
+        </form>
+    </div>
+</div>

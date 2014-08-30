@@ -16,6 +16,7 @@ urlpatterns = patterns('',
 
     url(r'^tecnicos/$', check_user(views.TecnicosView.as_view()), name='listado_tecnicos'),
     url(r'^newtecnico/$', check_user(views.TecnicosNewView.as_view()), name='new_tecnico'),
+    url(r'^(?P<pk>\d+)/updatetecnico/$', check_user(views.TecnicosUpdateView.as_view()), name='update_tecnico'),
 
     url(r'^getactuaciones/$', map.get_actuaciones, name='get_actuaciones_ws'),
 )
