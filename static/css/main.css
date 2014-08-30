@@ -19,6 +19,13 @@
     width: 75%;
 }
 
+.login
+{
+    text-align: right;
+    background-color: #dcdcdc;
+    padding-right: 100px;
+}
+
 .map
 {
     margin: 15px;
