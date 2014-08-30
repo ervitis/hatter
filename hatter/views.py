@@ -109,3 +109,16 @@ class TecnicosNewView(CreateView):
         tecnico.save()
 
         return redirect('listado_tecnicos')
+
+class TecnicosUpdateView(UpdateView):
+    template_name = 'layout/tecnicos/actualizar.html'
+    form_class = forms.TecnicoForm
+    model = models.Tecnico
+
+    def form_valid(self, form):
+        self.object.save()
+
+        return redirect('listado_tecnicos')
+
+    def form_invalid(self, form):
+        return super(TecnicosUpdateView, self).form_invalid(form)
