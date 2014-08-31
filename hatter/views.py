@@ -110,6 +110,7 @@ class TecnicosNewView(CreateView):
 
         return redirect('listado_tecnicos')
 
+
 class TecnicosUpdateView(UpdateView):
     template_name = 'layout/tecnicos/actualizar.html'
     form_class = forms.TecnicoForm

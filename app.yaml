@@ -8,7 +8,7 @@ inbound_services:
 - warmup
 
 handlers:
-- url: /favicon.ico
+- url: /static/img/ico/favicon.ico
   static_files: /static/img/ico/favicon.ico
   upload: /static/img/ico/favicon.ico
 

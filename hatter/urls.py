@@ -2,7 +2,7 @@ from django.conf.urls import patterns, url
 from functions.log import check_user
 
 from hatter import views
-from hatter.ws import map
+from hatter.ws import map, agenda
 
 
 urlpatterns = patterns('',
@@ -18,5 +18,6 @@ urlpatterns = patterns('',
     url(r'^newtecnico/$', check_user(views.TecnicosNewView.as_view()), name='new_tecnico'),
     url(r'^(?P<pk>\d+)/updatetecnico/$', check_user(views.TecnicosUpdateView.as_view()), name='update_tecnico'),
 
+    url(r'^getagendatecnico/$', agenda.search_agenda_tecnico, name='listado_agenda'),
     url(r'^getactuaciones/$', map.get_actuaciones, name='get_actuaciones_ws'),
 )

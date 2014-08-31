@@ -269,4 +269,3 @@ class DetalleActuacion(models.Model):
 
     class Meta:
         db_table = 'detalle_actuacion'
-

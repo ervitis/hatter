@@ -1,0 +1,12 @@
+{% block agenda %}
+
+    <div class="col-xs-12 margin-between-elements">
+        <form class="form-horizontal" name="fagenda" method="post" action="{% url 'listado_agenda' %}">
+            {% csrf_token %}
+            <label for="sName">Nombre:</label> <input class="form-horizontal" type="text" name="sDni" id="sDni">
+            <label for="sDni">DNI:</label> <input class="form-horizontal" type="text" name="sName" id="sName">
+            <button type="button" class="btn btn-default" id="bSearch">Buscar</button>
+        </form>
+    </div>
+
+{% endblock %}
