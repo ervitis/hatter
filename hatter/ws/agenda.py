@@ -8,38 +8,39 @@ from hatter import models
 
 import json
 
+
 @ensure_csrf_cookie
 def search_agenda_tecnico(request):
-    jsonTecnicos = []
+    json_tecnicos = []
 
-    if request.method == 'POST':
+    if request.is_ajax() and request.method == 'POST':
         dni = request.POST.get('sDni')
         nombre = request.POST.get('sName')
 
-        results = models.Tecnico.objects.select_related('agenda__evento').filter(
-            Q(evento__isnull=True) | Q(evento__tecnico__nombre__contains=nombre) | Q(evento__tecnico__dni__contains=dni))
+        results = models.Tecnico.objects.select_related('agenda__evento__actuacion__detalle_actuacion').filter(
+            Q(evento__isnull=True) | Q(evento__tecnico__nombre__contains=nombre) | Q(evento__tecnico__dni__contains=dni)
+        )[:5]
 
         for result in results:
-            jsonEvento = []
-            jsonAgenda = []
+            json_evento = []
+            json_agenda = []
 
             for evento in result.evento.all():
-                jsonEvento = {
+                json_evento = {
                     'evento_id':        evento.id
                 }
 
             for agenda in result.agenda.all():
-                jsonAgenda = {
+                json_agenda = {
                     'agenda_id':        agenda.id
                 }
 
-            jsonTecnico = {
+            json_tecnico = {
                 'tecnico_id':       result.id,
                 'tecnico_nom_ape':  result.nombre + ' ' + result.apellidos,
-                'tecnico_dni':      result.dni,
-                'eventos':          jsonEvento,
-                'agenda':           jsonAgenda
+                'eventos':          json_evento,
+                'agenda':           json_agenda
             }
-            jsonTecnicos.append(jsonTecnico)
+            json_tecnicos.append(json_tecnico)
 
-    return HttpResponse(json.dumps(jsonTecnicos))
+    return HttpResponse(json.dumps(json_tecnicos), content_type='application/json')

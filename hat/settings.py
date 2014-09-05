@@ -116,9 +116,11 @@ LANGUAGE_CODE = 'es-ES'
 
 TIME_ZONE = 'Europe/Madrid'
 
-DATETIME_FORMAT = 'd/m/Y H:i:sO'
+DATETIME_FORMAT = 'd/m/Y H:i'
 
 DATE_FORMAT = 'd/m/Y'
+
+DATETIME_INPUT_FORMATS = '%d/%m/%Y %H:%M'
 
 DEFAULT_CHARSET = 'utf-8'
 

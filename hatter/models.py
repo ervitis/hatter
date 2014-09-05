@@ -261,11 +261,11 @@ class DetalleActuacion(models.Model):
     Clase detalle actuacion
     """
 
-    fecha_inicio = models.DateTimeField('fecha inicio')
-    fecha_fin = models.DateTimeField('fecha fin')
-    actuacion = models.OneToOneField(Actuacion, db_column='actuacion_id')
-    utc = models.CharField('utc', max_length=75)
-    detalle_actuacion = models.TextField('detalle', max_length=65536)
+    fecha_inicio = models.DateTimeField('fecha_inicio')
+    fecha_fin = models.DateTimeField('fecha_fin', blank=True, null=True)
+    actuacion = models.OneToOneField(Actuacion, blank=True, null=True)
+    utc = models.CharField('utc', max_length=75, blank=True, null=True)
+    detalle = models.CharField('detalle', max_length=1023, blank=True, null=True)
 
     class Meta:
         db_table = 'detalle_actuacion'

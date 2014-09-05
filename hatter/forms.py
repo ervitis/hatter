@@ -14,6 +14,8 @@ DEFAULT_ERROR_MESSAGES_NON_REQUIRED = {
     'invalid':  'Compruebe este campo'
 }
 
+INPUT_FORMAT_DATETIME = '%d/%m/%Y %H:%M:%S'
+
 
 class ActuacionForm(forms.ModelForm):
     """
@@ -109,3 +111,23 @@ class TecnicoForm(forms.ModelForm):
 
     class Meta:
         model = models.Tecnico
+
+
+class DetalleActuacionForm(forms.ModelForm):
+    fecha_inicio = forms.DateTimeField(input_formats=(INPUT_FORMAT_DATETIME,), label='Fecha de inicio', required=True, widget=forms.DateTimeInput(attrs={
+        'class': 'form-control only-delete',
+    }), error_messages=DEFAULT_ERROR_MESSAGES_REQUIRED)
+
+    fecha_fin = forms.DateTimeField(input_formats=(INPUT_FORMAT_DATETIME,), label='Fecha de fin', required=False, widget=forms.DateTimeInput(attrs={
+        'class': 'form-control only-delete',
+    }), error_messages=DEFAULT_ERROR_MESSAGES_REQUIRED)
+
+    detalle = forms.CharField(label='Comentarios', required=False, max_length=1024, widget=forms.Textarea(attrs={
+        'class':    'form-control',
+        'rows':     '4',
+        'cols':     '20',
+        'style':    'resize:none;',
+    }))
+
+    class Meta:
+        model = models.DetalleActuacion

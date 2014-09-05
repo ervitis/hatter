@@ -12,6 +12,12 @@ function Actuacion() {
     this.$prioridad      = $('#id_prioridad');
     this.$severidad      = $('#id_severidad');
     this.$alerta         = $('#id_alerta');
+    this.$detalle        = $('#id_detalle');
+    this.$fecha_inicio   = $('#id_fecha_inicio');
+    this.$fecha_fin      = $('#id_fecha_fin');
+    /*this.$detalle        = $('#id_detalle-detalle');
+    this.$fecha_inicio   = $('#id_detalle-fecha_inicio');
+    this.$fecha_fin      = $('#id_detalle-fecha_fin');*/
 }
 
 /**
@@ -98,7 +104,7 @@ Actuacion.prototype._show_element_address = function() {
  * @private
  */
 Actuacion.prototype._has_name = function() {
-    return '' !== this.$nombre.val() ? true : false;
+    return '' !== this.$nombre.val();
 }
 
 /**
@@ -107,7 +113,7 @@ Actuacion.prototype._has_name = function() {
  * @private
  */
 Actuacion.prototype._has_placement = function() {
-    return '' !== this.$emplazamiento.val() ? true : false;
+    return '' !== this.$emplazamiento.val();
 }
 
 /**
@@ -116,7 +122,7 @@ Actuacion.prototype._has_placement = function() {
  * @private
  */
 Actuacion.prototype._has_coordinates = function() {
-    return ('' !== this.$latitud.val() && '' !== this.$longitud.val()) ? true : false;
+    return ('' !== this.$latitud.val() && '' !== this.$longitud.val());
 }
 
 /**
@@ -125,5 +131,5 @@ Actuacion.prototype._has_coordinates = function() {
  * @private
  */
 Actuacion.prototype._has_address = function() {
-    return ('' !== this.$direccion.val() && '' !== this.$provincia.val() && '' !== this.$codigo_postal.val()) ? true : false;
+    return ('' !== this.$direccion.val() && '' !== this.$provincia.val() && '' !== this.$codigo_postal.val());
 }

@@ -7,7 +7,7 @@ $(function(){
     var $previous;
     var $actuacion;
 
-    $(document).ready(function(){
+    $(window).ready(function(){
         $actuacion = new Actuacion();
 
         if (! $actuacion._has_name()) {
@@ -50,5 +50,28 @@ $(function(){
         }
 
         $previous = $arrDireccion[$this.val()];
+    });
+
+    $(document).on('mouseover', '#id_fecha_inicio,#id_fecha_fin', function(){
+        $(this).css({
+            'cursor': 'pointer'
+        });
+    });
+
+    $(document).on('click', '#id_fecha_inicio,#id_fecha_fin', function(event){
+        $(this).val('');
+        event.preventDefault();
+    });
+
+    $('#id_fecha_inicio').datetimepicker({
+        'language': 'es-ES',
+        'format': 'DD/MM/YYYY HH:mm:SS',
+        'pickTime': true
+    });
+
+    $('#id_fecha_fin').datetimepicker({
+        'language': 'es-ES',
+        'format': 'DD/MM/YYYY HH:mm:SS',
+        'pickTime': true
     });
 });
