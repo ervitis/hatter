@@ -1,10 +1,12 @@
 # coding=utf-8
 
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render_to_response, get_object_or_404
 from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic.list import ListView
 from django.views.generic.base import TemplateView
 from django.utils.decorators import method_decorator
+from django.http import HttpResponseRedirect
+from django.template import RequestContext
 
 from functions.log import check_user
 
@@ -36,48 +38,60 @@ class ActuacionesView(ListView):
         return super(ActuacionesView, self).dispatch(request, *args, **kwargs)
 
 
-class ActuacionesNewView(CreateView):
-    template_name = 'layout/actuaciones/crear.html'
-    form_class = forms.ActuacionForm
-    models = models.Actuacion
+def actuaciones_new_view(request):
+    if request.method == 'POST':
+        form_actuacion = forms.ActuacionForm(request.POST, instance=models.Actuacion())
+        form_detalle_actuacion = forms.DetalleActuacionForm(
+            request.POST, instance=models.DetalleActuacion(), prefix='detalle'
+        )
 
-    def form_invalid(self, form):
-        return super(ActuacionesNewView, self).form_invalid(form)
+        if form_actuacion.is_valid() and form_detalle_actuacion.is_valid():
+            actuacion = form_actuacion.save()
+            detalle_actuacion = form_detalle_actuacion.save(commit=False)
+            detalle_actuacion.actuacion = actuacion
+            detalle_actuacion.save()
 
-    def form_valid(self, form):
-        actuacion = models.Actuacion()
+            return redirect('listado_actuaciones')
+    else:
+        form_actuacion = forms.ActuacionForm(instance=models.Actuacion())
+        form_detalle_actuacion = forms.DetalleActuacionForm(instance=models.DetalleActuacion(), prefix='detalle')
 
-        actuacion.nombre = form.cleaned_data['nombre']
-        actuacion.alerta = form.cleaned_data['alerta']
-        actuacion.cliente = form.cleaned_data['cliente']
-        actuacion.codigo_postal = form.cleaned_data['codigo_postal']
-        actuacion.direccion = form.cleaned_data['direccion']
-        actuacion.emplazamiento = form.cleaned_data['emplazamiento']
-        actuacion.estado = form.cleaned_data['estado']
-        actuacion.latitud = form.cleaned_data['latitud']
-        actuacion.longitud = form.cleaned_data['longitud']
-        actuacion.prioridad = form.cleaned_data['prioridad']
-        actuacion.severidad = form.cleaned_data['severidad']
-        actuacion.provincia = form.cleaned_data['provincia']
-        actuacion.tipo_via = form.cleaned_data['tipo_via']
-
-        actuacion.save()
-
-        return redirect('listado_actuaciones')
+    return render_to_response('layout/actuaciones/crear.html', {
+        'form_actuacion':           form_actuacion,
+        'form_detalle_actuacion':   form_detalle_actuacion,
+        'urlaction':                'new_actuacion',
+    }, context_instance=RequestContext(request))
 
 
-class ActuacionesUpdateView(UpdateView):
-    template_name = 'layout/actuaciones/actualizar.html'
-    form_class = forms.ActuacionForm
-    model = models.Actuacion
+def actuaciones_update_view(request, actuacion_id):
+    if request.method == 'POST':
+        form_actuacion = forms.ActuacionForm(
+            request.POST, instance=get_object_or_404(models.Actuacion, pk=actuacion_id)
+        )
+        form_detalle_actuacion = forms.DetalleActuacionForm(
+            request.POST, instance=models.DetalleActuacion.objects.get(actuacion=actuacion_id)
+        )
 
-    def form_valid(self, form):
-        self.object.save()
+        if form_actuacion.is_valid() and form_detalle_actuacion.is_valid():
+            actuacion = form_actuacion.save()
+            detalle_actuacion = form_detalle_actuacion.save(commit=False)
+            detalle_actuacion.actuacion = actuacion
+            detalle_actuacion.utc = '+0200'
+            detalle_actuacion.save()
 
-        return redirect('listado_actuaciones')
+            return redirect('listado_actuaciones')
+    else:
+        form_actuacion = forms.ActuacionForm(instance=get_object_or_404(models.Actuacion, pk=actuacion_id))
+        form_detalle_actuacion = forms.DetalleActuacionForm(
+            instance=models.DetalleActuacion.objects.get(actuacion=actuacion_id)
+        )
 
-    def form_invalid(self, form):
-        return super(ActuacionesUpdateView, self).form_invalid(form)
+    return render_to_response('layout/actuaciones/actualizar.html', {
+        'form_actuacion':           form_actuacion,
+        'form_detalle_actuacion':   form_detalle_actuacion,
+        'urlaction':                'update_actuacion',
+        'id':                       actuacion_id,
+    }, context_instance=RequestContext(request))
 
 
 class MapaView(TemplateView):
@@ -109,6 +123,7 @@ class TecnicosNewView(CreateView):
         tecnico.save()
 
         return redirect('listado_tecnicos')
+
 
 class TecnicosUpdateView(UpdateView):
     template_name = 'layout/tecnicos/actualizar.html'
