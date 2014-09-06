@@ -10,6 +10,12 @@ import json
 
 @ensure_csrf_cookie
 def get_actuaciones(request):
+    """
+    Get all actuaciones
+    :param request:
+    :return: json
+    """
+
     actuaciones = models.Actuacion.objects.all()
 
     dict_actuaciones = []

@@ -11,6 +11,12 @@ import json
 
 @ensure_csrf_cookie
 def search_agenda_tecnico(request):
+    """
+    Get tecnicos and filter them
+    :param request:
+    :return: json
+    """
+
     json_tecnicos = []
 
     if request.is_ajax() and request.method == 'POST':

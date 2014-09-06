@@ -1,3 +1,7 @@
+/**
+ * Actuacion
+ * @constructor
+ */
 function Actuacion() {
     this.$nombre         = $('#id_nombre');
     this.$tipo_via       = $('#id_tipo_via');
@@ -15,14 +19,10 @@ function Actuacion() {
     this.$detalle        = $('#id_detalle');
     this.$fecha_inicio   = $('#id_fecha_inicio');
     this.$fecha_fin      = $('#id_fecha_fin');
-    /*this.$detalle        = $('#id_detalle-detalle');
-    this.$fecha_inicio   = $('#id_detalle-fecha_inicio');
-    this.$fecha_fin      = $('#id_detalle-fecha_fin');*/
 }
 
 /**
  * Reset require property of address
- *
  * @private
  */
 Actuacion.prototype._reset_required_address = function() {
@@ -44,7 +44,6 @@ Actuacion.prototype._reset_required_coordinates = function() {
 
 /**
  * Reset require property of placement
- *
  * @private
  */
 Actuacion.prototype._reset_required_placement = function() {
@@ -53,7 +52,6 @@ Actuacion.prototype._reset_required_placement = function() {
 
 /**
  * Set require property
- *
  * @param elemento
  * @private
  */
@@ -82,7 +80,6 @@ Actuacion.prototype._set_required = function (elemento) {
 
 /**
  * Return which element should be shown in the form
- *
  * @returns {string}
  * @private
  */
@@ -99,7 +96,7 @@ Actuacion.prototype._show_element_address = function() {
 }
 
 /**
- *
+ * title is written
  * @returns {boolean}
  * @private
  */
@@ -108,7 +105,7 @@ Actuacion.prototype._has_name = function() {
 }
 
 /**
- *
+ * placement is written
  * @returns {boolean}
  * @private
  */
@@ -117,7 +114,7 @@ Actuacion.prototype._has_placement = function() {
 }
 
 /**
- *
+ * coordinates are written
  * @returns {boolean}
  * @private
  */
@@ -126,7 +123,7 @@ Actuacion.prototype._has_coordinates = function() {
 }
 
 /**
- *
+ * address is written
  * @returns {boolean}
  * @private
  */
