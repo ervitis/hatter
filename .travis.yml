@@ -4,10 +4,11 @@ python:
   - "2.7"
 
 before_script:
-  - mkdir -p vendors
   - wget https://storage.googleapis.com/appengine-sdks/featured/google_appengine_1.9.10.zip -nv
-  - unzip -qd vendors google_appengine_1.9.10.zip
+  - unzip -q google_appengine_1.9.10.zip
+  - export PYTHONPATH=${PYTHONPATH}:google_appengine
   - mysql -e 'create database hat_dev;'
+  - echo "USE mysql;\nUPDATE user SET password=PASSWORD('root') WHERE user='root';\nFLUSH PRIVILEGES;\n" | mysql -u root
   - python manage.py syncdb --noinput
 
 install:
@@ -18,4 +19,4 @@ script: python manage.py test --with-coverage
 
 branches:
   only:
-    - dev
+    - testing
