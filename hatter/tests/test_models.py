@@ -1,40 +1,179 @@
 # coding=utf-8
 
 from django.test import TestCase
-from django.test import Client
 
 from hatter import models
+
+
+def create_comunidad():
+    return models.Comunidad.objects.create(nombre='Madrid')
+
+
+def create_estado():
+    return models.Estado.objects.create(nombre='Abierto')
+
+
+def create_provincia():
+    return models.Provincia.objects.create(comunidad=create_comunidad(), nombre='Madrid', codigo=28)
+
+
+def create_cliente():
+    return models.Cliente.objects.create(nombre='ClientePrueba', prioridad=5)
+
+
+def create_severidad():
+    return models.Severidad.objects.create(nombre='Normal')
+
+
+def create_alerta():
+    return models.Alerta.objects.create(nombre='Normal', nivel_alerta=5)
+
+
+def create_prioridad():
+    return models.Prioridad.objects.create(nombre='Normal', nivel_prioridad=5)
+
+
+def create_emplazamiento():
+    return models.Emplazamiento.objects.create(nombre='EMP_Prueba', latitud=45.12, longitud=8.25,
+                                               provincia=create_provincia())
+
+
+def create_turno():
+    return models.Turno.objects.create(nombre='tn1', hora_inicio='12:00:00', hora_fin='20:30:00')
+
+
+def create_tecnologia():
+    return models.Tecnologia.objects.create(nombre='tecnología1')
+
+
+def create_instrumentacion():
+    return models.Instrumentacion.objects.create(nombre='instrumentación1', tecnologia=create_tecnologia())
+
+
+class EstadoTestCase(TestCase):
+    """
+    Estado test case
+    """
+    def test_estado(self):
+        estado = create_estado()
+        self.assertTrue(isinstance(estado, models.Estado))
+        self.assertEqual(estado.__unicode__(), estado.nombre)
+        self.assertEqual(estado.__str__(), estado.nombre)
+
+
+class ClienteTestCase(TestCase):
+    """
+    Cliente test case
+    """
+    def test_cliente(self):
+        cliente = create_cliente()
+        self.assertTrue(isinstance(cliente, models.Cliente))
+        self.assertEqual(cliente.__unicode__(), cliente.nombre)
+        self.assertEqual(cliente.__str__(), cliente.nombre)
+
+
+class TurnoTestCase(TestCase):
+    """
+    Turno test case
+    """
+    def test_turno(self):
+        turno = create_turno()
+        self.assertTrue(isinstance(turno, models.Turno))
+        self.assertEqual(turno.__str__(), turno.nombre)
+        self.assertEqual(turno.__unicode__(), turno.nombre)
+
+
+class ComunidadTestCase(TestCase):
+    """
+    Comunidad test case
+    """
+    def test_comunidad(self):
+        comunidad = create_comunidad()
+        self.assertTrue(isinstance(comunidad, models.Comunidad))
+        self.assertEqual(comunidad.__str__(), comunidad.nombre)
+        self.assertEqual(comunidad.__unicode__(), comunidad.nombre)
+
+
+class ProvinciaTestCase(TestCase):
+    """
+    Provincia test case
+    """
+    def test_provincia(self):
+        provincia = create_provincia()
+        self.assertTrue(isinstance(provincia, models.Provincia))
+        self.assertEqual(provincia.__unicode__(), provincia.nombre)
+        self.assertEqual(provincia.__str__(), provincia.nombre)
+
+
+class TecnologiaTestCase(TestCase):
+    """
+    Tecnologia test case
+    """
+    def test_tecnologia(self):
+        tecnologia = create_tecnologia()
+        self.assertTrue(isinstance(tecnologia, models.Tecnologia))
+        self.assertEqual(tecnologia.__unicode__(), tecnologia.nombre)
+        self.assertEqual(tecnologia.__str__(), tecnologia.nombre)
+
+
+class SeveridadTestCase(TestCase):
+    """
+    Severidad test case
+    """
+    def test_severidad(self):
+        severidad = create_severidad()
+        self.assertTrue(isinstance(severidad, models.Severidad))
+        self.assertEqual(severidad.__unicode__(), severidad.nombre)
+        self.assertEqual(severidad.__str__(), severidad.nombre)
+
+
+class PrioridadTestCase(TestCase):
+    """
+    Prioridad test case
+    """
+    def test_prioridad(self):
+        prioridad = create_prioridad()
+        self.assertTrue(isinstance(prioridad, models.Prioridad))
+        self.assertEqual(prioridad.__unicode__(), prioridad.nombre)
+        self.assertEqual(prioridad.__str__(), prioridad.nombre)
+
+
+class AlertaTestCase(TestCase):
+    """
+    Alerta test case
+    """
+    def test_alerta(self):
+        alerta = create_alerta()
+        self.assertTrue(isinstance(alerta, models.Alerta))
+        self.assertEqual(alerta.__str__(), alerta.nombre)
+        self.assertEqual(alerta.__unicode__(), alerta.nombre)
+
+
+class EmplazamientoTestCase(TestCase):
+    """
+    Emplazamiento test case
+    """
+    def test_emplazamiento(self):
+        emplazamiento = create_emplazamiento()
+        self.assertTrue(isinstance(emplazamiento, models.Emplazamiento))
+        self.assertEqual(emplazamiento.__unicode__(), emplazamiento.nombre)
+
+
+class InstrumentacionTestCase(TestCase):
+    """
+    Instrumentacion test case
+    """
+    def test_instrumentacion(self):
+        instrumentacion = create_instrumentacion()
+        self.assertTrue(isinstance(instrumentacion, models.Instrumentacion))
+        self.assertEqual(instrumentacion.__unicode__(), instrumentacion.nombre)
+        self.assertEqual(instrumentacion.__str__(), instrumentacion.nombre)
 
 
 class ActuacionTestCase(TestCase):
     """
     Actuacion test case
     """
-
-    def create_comunidad(self):
-        return models.Comunidad.objects.create(nombre='Madrid')
-
-    def create_estado(self):
-        return models.Estado.objects.create(nombre='Abierto')
-
-    def create_provincia(self):
-        return models.Provincia.objects.create(comunidad=self.create_comunidad(), nombre='Madrid', codigo=28)
-
-    def create_cliente(self):
-        return models.Cliente.objects.create(nombre='ClientePrueba', prioridad=5)
-
-    def create_severidad(self):
-        return models.Severidad.objects.create(nombre='Normal')
-
-    def create_alerta(self):
-        return models.Alerta.objects.create(nombre='Normal', nivel_alerta=5)
-
-    def create_prioridad(self):
-        return models.Prioridad.objects.create(nombre='Normal', nivel_prioridad=5)
-
-    def create_emplazamiento(self):
-        return models.Emplazamiento.objects.create(nombre='EMP_Prueba', latitud=45.12, longitud=8.25,
-                                                   provincia=self.create_provincia())
 
     def create_actuacion_direccion(self, nombre='Test1', direccion='Toledo, 97', codigo_postal=28005, tipo_via='Calle'):
         """
@@ -46,12 +185,12 @@ class ActuacionTestCase(TestCase):
         :return: actuacion object
         """
 
-        provincia = self.create_provincia()
-        estado = self.create_estado()
-        cliente = self.create_cliente()
-        prioridad = self.create_prioridad()
-        severidad = self.create_severidad()
-        alerta = self.create_alerta()
+        provincia = create_provincia()
+        estado = create_estado()
+        cliente = create_cliente()
+        prioridad = create_prioridad()
+        severidad = create_severidad()
+        alerta = create_alerta()
 
         return models.Actuacion.objects.create(
             nombre=nombre,
@@ -73,12 +212,12 @@ class ActuacionTestCase(TestCase):
         :return: actuacion object
         """
 
-        estado = self.create_estado()
-        cliente = self.create_cliente()
-        prioridad = self.create_prioridad()
-        severidad = self.create_severidad()
-        alerta = self.create_alerta()
-        emplazamiento = self.create_emplazamiento()
+        estado = create_estado()
+        cliente = create_cliente()
+        prioridad = create_prioridad()
+        severidad = create_severidad()
+        alerta = create_alerta()
+        emplazamiento = create_emplazamiento()
 
         return models.Actuacion.objects.create(
             nombre=nombre,
@@ -99,11 +238,11 @@ class ActuacionTestCase(TestCase):
         :return: actuacion object
         """
 
-        estado = self.create_estado()
-        cliente = self.create_cliente()
-        prioridad = self.create_prioridad()
-        severidad = self.create_severidad()
-        alerta = self.create_alerta()
+        estado = create_estado()
+        cliente = create_cliente()
+        prioridad = create_prioridad()
+        severidad = create_severidad()
+        alerta = create_alerta()
 
         return models.Actuacion.objects.create(
             nombre=nombre,
