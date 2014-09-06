@@ -2,4 +2,5 @@
 hat/settings.py
 hatter/admin.py
 *.pyc
+.coverage
 
