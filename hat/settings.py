@@ -84,6 +84,9 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 # Database
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
 
+print(os.getenv('SERVER_SOFTWARE'))
+exit(1)
+
 if os.getenv('SERVER_SOFTWARE', '').startswith('Google App Engine'):
     DATABASES = {
         'default': {
