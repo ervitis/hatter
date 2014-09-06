@@ -10,8 +10,7 @@ env:
 
 
 install:
-  - pip install -q Django==$DJANGO_VERSION --index-url
-  - pip install -q -e . --use-mirrors
+  - pip install -q Django==$DJANGO_VERSION
 
 script: python setup.py test
 
