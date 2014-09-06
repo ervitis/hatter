@@ -1,5 +1,4 @@
 BeautifulSoup==3.2.1
-Brlapi==0.6.0
 CherryPy==3.2.2
 Django==1.6.7
 Jinja2==2.7.3
