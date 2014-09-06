@@ -21,9 +21,6 @@ factory-boy==2.4.1
 gcs-oauth2-boto-plugin==1.7
 google-api-python-client==1.2
 
-gyp==0.1
-httplib2==0.9
-logilab-common==0.62.1
 
 mock==1.0.1
 model-mommy==1.2.1
