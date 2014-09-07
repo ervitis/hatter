@@ -14,7 +14,7 @@ DEFAULT_ERROR_MESSAGES_NON_REQUIRED = {
     'invalid':  'Compruebe este campo'
 }
 
-INPUT_FORMAT_DATETIME = '%d/%m/%Y %H:%M:%S'
+INPUT_FORMAT_DATETIME = '%d/%m/%Y %H:%M'
 
 
 class ActuacionForm(forms.ModelForm):

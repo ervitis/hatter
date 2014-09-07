@@ -47,7 +47,7 @@ def actuaciones_new_view(request):
     if request.method == 'POST':
         form_actuacion = forms.ActuacionForm(request.POST, instance=models.Actuacion())
         form_detalle_actuacion = forms.DetalleActuacionForm(
-            request.POST, instance=models.DetalleActuacion(), prefix='detalle'
+            request.POST, instance=models.DetalleActuacion()
         )
 
         if form_actuacion.is_valid() and form_detalle_actuacion.is_valid():
@@ -60,7 +60,7 @@ def actuaciones_new_view(request):
             return redirect('listado_actuaciones')
     else:
         form_actuacion = forms.ActuacionForm(instance=models.Actuacion())
-        form_detalle_actuacion = forms.DetalleActuacionForm(instance=models.DetalleActuacion(), prefix='detalle')
+        form_detalle_actuacion = forms.DetalleActuacionForm(instance=models.DetalleActuacion())
 
     return render_to_response('layout/actuaciones/crear.html', {
         'form_actuacion':           form_actuacion,
