@@ -8,14 +8,16 @@ from hatter.tests import test_models
 
 from google.appengine.api import users
 
+
 import os
 
 
-def set_current_user_testing(email, user_id, is_admin=False):
+def set_current_user_testing(email='test@gmail.com', user_id='1', is_admin=False):
     os.environ['USER_EMAIL'] = email
     os.environ['USER_ID'] = user_id
     os.environ['USER_IS_ADMIN'] = '1' if is_admin else '0'
     os.environ['AUTH_DOMAIN'] = 'testing'
+
 
 def create_comunidad():
     return models.Comunidad.objects.create(nombre='Madrid')
@@ -77,7 +79,7 @@ class ViewsTestCase(TestCase):
     Views test case
     """
     def setUp(self):
-        set_current_user_testing('test@gmail.com', '1')
+        set_current_user_testing(email='test@gmail.com', user_id='1')
         self.factory= RequestFactory()
         self.user = users.get_current_user()
 
@@ -94,4 +96,4 @@ class ViewsTestCase(TestCase):
         response = self.client.get('/actuaciones/')
         self.assertEqual(response.status_code, 200)
         self.assertTrue('listado_actuaciones' in response.context)
-        self.assertEqual([actuacion.pk for actuacion in response.context['listado_actuaciones']], [1])
+        self.assertEqual([actuacion.pk for actuacion in response.context['listado_actuaciones']], [4L])
