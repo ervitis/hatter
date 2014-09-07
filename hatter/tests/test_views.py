@@ -3,8 +3,7 @@
 from django.test import TestCase
 from django.test.client import RequestFactory
 
-from hatter import models
-from hatter.tests import test_models
+from hatter import models, forms
 
 from google.appengine.api import users
 
@@ -92,8 +91,49 @@ class ViewsTestCase(TestCase):
 
     def test_list_actuaciones(self):
         actuacion = create_actuacion_coordinates()
+        actuacion.save()
 
-        response = self.client.get('/actuaciones/')
+        response = self.client.get('/actuaciones/', follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertTrue('listado_actuaciones' in response.context)
         self.assertEqual([actuacion.pk for actuacion in response.context['listado_actuaciones']], [4L])
+
+    def test_list_tecnicos(self):
+        response = self.client.get('/tecnicos/')
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue('listado_tecnicos' in response.context)
+
+    def test_new_tecnico_valid(self):
+        tecnico1 = models.Tecnico(nombre='Pepe', apellidos='Garcia Fili', dni='33186203D')
+
+        data = {
+            'nombre':    tecnico1.nombre,
+            'apellidos': tecnico1.apellidos,
+            'dni':       tecnico1.dni,
+        }
+
+        form = forms.TecnicoForm(data=data, instance=tecnico1)
+
+        self.assertTrue(form.is_valid())
+
+    def test_new_tecnico_invalid(self):
+        tecnico2 = models.Tecnico(nombre='Pepa', apellidos='Garcias Feliz', dni='31234584F')
+        tecnico3 = models.Tecnico(nombre='Pepas', apellidos='Garcias Felice', dni='3123458F')
+
+        data = {
+            'nombre':    tecnico2.nombre,
+            'apellidos': tecnico2.apellidos,
+            'dni':       tecnico2.dni,
+        }
+
+        form = forms.TecnicoForm(data=data)
+        self.assertFalse(form.is_valid())
+
+        data = {
+            'nombre':    tecnico3.nombre,
+            'apellidos': tecnico3.apellidos,
+            'dni':       tecnico3.dni,
+        }
+
+        form = forms.TecnicoForm(data=data)
+        self.assertFalse(form.is_valid())
