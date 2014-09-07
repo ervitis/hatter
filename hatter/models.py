@@ -226,7 +226,7 @@ class Instrumentacion(models.Model):
 
     nombre = models.CharField('nombre', max_length=150)
     tecnologia = models.ForeignKey(Tecnologia, db_column='tecnologia_id')
-    solucion = models.ManyToManyField(Actuacion, db_table='solucion')
+    solucion = models.ManyToManyField(Actuacion, db_table='solucion', null=True, blank=True)
 
     class Meta:
         db_table = 'instrumentacion'

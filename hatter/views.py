@@ -5,7 +5,6 @@ from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic.list import ListView
 from django.views.generic.base import TemplateView
 from django.utils.decorators import method_decorator
-from django.http import HttpResponseRedirect
 from django.template import RequestContext
 
 from functions.log import check_user
@@ -39,22 +38,29 @@ class ActuacionesView(ListView):
 
 
 def actuaciones_new_view(request):
+    """
+    For the view new actuacion
+    :param request:
+    :return: post redirect to listado_actuaciones or create one
+    """
+
     if request.method == 'POST':
         form_actuacion = forms.ActuacionForm(request.POST, instance=models.Actuacion())
         form_detalle_actuacion = forms.DetalleActuacionForm(
-            request.POST, instance=models.DetalleActuacion(), prefix='detalle'
+            request.POST, instance=models.DetalleActuacion()
         )
 
         if form_actuacion.is_valid() and form_detalle_actuacion.is_valid():
             actuacion = form_actuacion.save()
             detalle_actuacion = form_detalle_actuacion.save(commit=False)
             detalle_actuacion.actuacion = actuacion
+            detalle_actuacion.utc = '+0200'
             detalle_actuacion.save()
 
             return redirect('listado_actuaciones')
     else:
         form_actuacion = forms.ActuacionForm(instance=models.Actuacion())
-        form_detalle_actuacion = forms.DetalleActuacionForm(instance=models.DetalleActuacion(), prefix='detalle')
+        form_detalle_actuacion = forms.DetalleActuacionForm(instance=models.DetalleActuacion())
 
     return render_to_response('layout/actuaciones/crear.html', {
         'form_actuacion':           form_actuacion,
@@ -64,6 +70,13 @@ def actuaciones_new_view(request):
 
 
 def actuaciones_update_view(request, actuacion_id):
+    """
+    Update an actuacion
+    :param request:
+    :param actuacion_id: the id of the actuacion
+    :return: post redirect to listado_actuacion or update one
+    """
+
     if request.method == 'POST':
         form_actuacion = forms.ActuacionForm(
             request.POST, instance=get_object_or_404(models.Actuacion, pk=actuacion_id)
@@ -95,10 +108,18 @@ def actuaciones_update_view(request, actuacion_id):
 
 
 class MapaView(TemplateView):
+    """
+    MapaView template
+    """
+
     template_name = 'layout/mapa/mapa.html'
 
 
 class TecnicosView(ListView):
+    """
+    TecnicosView list
+    """
+
     template_name = 'layout/tecnicos/listado.html'
     context_object_name = 'listado_tecnicos'
     paginate_by = 20
@@ -106,6 +127,10 @@ class TecnicosView(ListView):
 
 
 class TecnicosNewView(CreateView):
+    """
+    Create new tecnico
+    """
+
     template_name = 'layout/tecnicos/crear.html'
     models = models.Tecnico
     form_class = forms.TecnicoForm
@@ -126,6 +151,10 @@ class TecnicosNewView(CreateView):
 
 
 class TecnicosUpdateView(UpdateView):
+    """
+    Update tecnico
+    """
+
     template_name = 'layout/tecnicos/actualizar.html'
     form_class = forms.TecnicoForm
     model = models.Tecnico

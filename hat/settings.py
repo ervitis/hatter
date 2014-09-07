@@ -58,6 +58,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'hatter',
+    #'django_nose',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -180,3 +181,12 @@ LOGGING = {
 
 import sys
 sys.path.insert(0, 'libs')
+
+TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
+
+NOSE_ARGS = [
+    '--with-coverage',
+    '--cover-package=hatter',
+    '--cover-inclusive',
+    '--verbosity=3'
+]
