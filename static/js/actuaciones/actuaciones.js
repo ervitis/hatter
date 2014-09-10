@@ -65,13 +65,13 @@ $(function(){
 
     $('#id_fecha_inicio').datetimepicker({
         'language': 'es-ES',
-        'format': 'DD/MM/YYYY HH:mm',
+        'format': 'DD/MM/YYYY HH:mm:ss',
         'pickTime': true
     });
 
     $('#id_fecha_fin').datetimepicker({
         'language': 'es-ES',
-        'format': 'DD/MM/YYYY HH:mm',
+        'format': 'DD/MM/YYYY HH:mm:ss',
         'pickTime': true
     });
 });
