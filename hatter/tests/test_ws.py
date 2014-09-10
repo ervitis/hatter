@@ -133,6 +133,16 @@ class AgendaTest(TestCase):
 
         self.assertEqual(response.status_code, 200)
 
+    def test_json_turno(self):
+        tecnico1 = create_tecnico()
+        tecnico2 = create_tecnico()
+        tecnico1.save()
+        tecnico2.save()
+
+        params = {
+
+        }
+
 
 class MapaTest(TestCase):
     """
