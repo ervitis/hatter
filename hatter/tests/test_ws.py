@@ -140,8 +140,19 @@ class AgendaTest(TestCase):
         tecnico2.save()
 
         params = {
-
+            'sDni': '65',
+            'sName': 'Test'
         }
+
+        data = {
+            'jsonrpc': '2.0',
+            'method': 'post',
+            'params': params
+        }
+
+        response = self.client.post('/getturnotecnico/', json.dumps(data), 'text/json', follow=True)
+
+        self.assertEqual(response.status_code, 200)
 
 
 class MapaTest(TestCase):
