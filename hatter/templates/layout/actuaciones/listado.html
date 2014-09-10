@@ -28,13 +28,13 @@
                         {% else %}
                             <td>Sin técnico</td>
                         {% endif %}
-                        {% if actuacion.detalle_actuacion.fecha_inicio %}
-                            <td>{{ actuacion.detalle_actuacion.fecha_inicio }}</td>
+                        {% if actuacion.detalleactuacion.fecha_inicio %}
+                            <td>{{ actuacion.detalleactuacion.fecha_inicio|date:'d/m/Y' }}</td>
                         {% else %}
                             <td>Sin fecha</td>
                         {% endif %}
-                        {% if actuacion.detalle_actuacion.fecha_inicio %}
-                            <td>{{ actuacion.detalle_actuacion.fecha_fin }}</td>
+                        {% if actuacion.detalleactuacion.fecha_fin %}
+                            <td>{{ actuacion.detalleactuacion.fecha_fin|date:'d/m/Y' }}</td>
                         {% else %}
                             <td>Sin fecha</td>
                         {% endif %}

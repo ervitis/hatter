@@ -20,4 +20,5 @@ urlpatterns = patterns('',
 
     url(r'^getagendatecnico/$', agenda.search_agenda_tecnico, name='listado_agenda'),
     url(r'^getactuaciones/$', map.get_actuaciones, name='get_actuaciones_ws'),
+    url(r'^getturnotecnico/$', agenda.search_turnos_tecnico, name='listado_turno'),
 )

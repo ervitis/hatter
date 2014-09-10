@@ -1,6 +1,7 @@
 # coding=utf-8
 
 from django.db import models
+from django.db.models import Q
 
 
 class Estado(models.Model):
@@ -254,6 +255,33 @@ class Tecnico(models.Model):
 
     def __unicode__(self):
         return self.nombre
+
+    def get_eventos_by_tecnico_data(self, nombre, dni):
+        """
+        :param nombre del técnico
+        :param dni del técnico
+        :return array evento__actuacion
+        """
+        return self.__class__.objects.select_related('evento__actuacion').filter(
+            Q(evento__tecnico__nombre__contains=nombre) |
+            Q(evento__tecnico__dni__contains=dni)
+        ).values(
+            'id', 'nombre', 'apellidos',
+            'evento__detalleactuacion__fecha_inicio', 'evento__detalleactuacion__fecha_fin',
+            'evento__id'
+        )[:5]
+
+    def get_turnos_by_tecnico(self, nombre, dni):
+        """
+        :param nombre del técnico
+        :param dni del técnico
+        :return array agenda__tecnico
+        """
+        return self.__class__.objects.select_related('agenda').filter(
+            Q(evento__tecnico__nombre__contains=nombre) |
+            Q(evento__tecnico__dni__contains=dni) |
+            Q(evento__isnull=True)
+        ).values('id', 'agenda__id', 'agenda__hora_inicio', 'agenda__hora_fin')
 
 
 class DetalleActuacion(models.Model):
