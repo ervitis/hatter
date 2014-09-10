@@ -2,11 +2,11 @@
 
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.http import HttpResponse
-from django.db.models import Q
 
 from hatter import models
 
 import json
+from datetime import datetime, time
 
 
 @ensure_csrf_cookie
@@ -17,36 +17,71 @@ def search_agenda_tecnico(request):
     :return: json
     """
 
-    json_tecnicos = []
+    json_tecnico = []
 
     if request.is_ajax() and request.method == 'POST':
         dni = request.POST.get('sDni')
         nombre = request.POST.get('sName')
 
-        results = models.Tecnico.objects.select_related('agenda__evento__actuacion__detalle_actuacion').filter(
-            Q(evento__isnull=True) | Q(evento__tecnico__nombre__contains=nombre) | Q(evento__tecnico__dni__contains=dni)
-        )[:5]
+        tecnico = models.Tecnico()
 
-        for result in results:
-            json_evento = []
-            json_agenda = []
+        result_eventos = tecnico.get_eventos_by_tecnico_data(nombre=nombre, dni=dni)
 
-            for evento in result.evento.all():
-                json_evento = {
-                    'evento_id':        evento.id
-                }
+        json_eventos = []
 
-            for agenda in result.agenda.all():
-                json_agenda = {
-                    'agenda_id':        agenda.id
-                }
+        for result in result_eventos:
+            json_evento = {
+                'evento_id':    result['evento__id'],
+                'hora_inicio':  datetime.strftime(result['evento__detalleactuacion__fecha_inicio'], '%H:%M')
+            }
+
+            if result['evento__detalleactuacion__fecha_fin']:
+                json_evento['hora_fin'] = datetime.strftime(result['evento__detalleactuacion__fecha_fin'], '%H:%M')
+
+            json_eventos.append(json_evento)
 
             json_tecnico = {
-                'tecnico_id':       result.id,
-                'tecnico_nom_ape':  result.nombre + ' ' + result.apellidos,
-                'eventos':          json_evento,
-                'agenda':           json_agenda
+                'tecnico_id':       result['id'],
+                'tecnico_nom_ape':  result['nombre'] + ' ' + result['apellidos'],
+                'eventos':          json_eventos
             }
-            json_tecnicos.append(json_tecnico)
 
-    return HttpResponse(json.dumps(json_tecnicos), content_type='application/json')
+    return HttpResponse(json.dumps(json_tecnico), content_type='application/json')
+
+
+@ensure_csrf_cookie
+def search_turnos_tecnico(request):
+    """
+    Get the schedule of a technician
+    :param request:
+    :return: json_tecnico
+    """
+
+    json_tecnico = []
+
+    if request.is_ajax() and request.method == 'POST':
+        dni = request.POST.get('sDni')
+        nombre = request.POST.get('sName')
+
+        tecnico = models.Tecnico()
+
+        result_agenda = tecnico.get_turnos_by_tecnico(nombre=nombre, dni=dni)
+
+        json_agendas = []
+
+        for result in result_agenda:
+            json_agenda = {
+                'tecnico_id':   result['id'],
+                'agenda_id':    result['agenda__id'],
+                'turno_inicio': time.strftime(result['agenda__hora_inicio'], '%H:%M'),
+                'turno_fin':    time.strftime(result['agenda__hora_fin'], '%H:%M')
+            }
+
+            json_agendas.append(json_agenda)
+
+            json_tecnico = {
+                'tecnico_id':   result['id'],
+                'agendas':      json_agendas
+            }
+
+    return HttpResponse(json.dumps(json_tecnico), content_type='application/json')
