@@ -1,6 +1,11 @@
 $(function(){
 
     var $agenda;
+    var $agendas;
+
+    $(window).load(function(){
+        $agendas = new ArrayCollection();
+    });
 
     $(document).on('click', '#bSearch', function(){
 
@@ -12,21 +17,20 @@ $(function(){
         };
 
         $.post(url, params, function(response){
+            for(var i in response) {
+                $agenda = new Agenda(response[i]);
+                $agendas._add_element($agenda);
+            }
+        });
+
+        url = $('#hListadoTurno').val();
+
+        $.post(url, params, function(response){
             console.log(response);
         });
     });
 
-    function create_table() {
-        var table = $agenda._draw_table($agenda._get_n_elements());
-        $('#resultados').empty().html(table);
+    function create_table_turnos() {
+
     }
-
-    function populate_data(data) {
-        for (var i in data) {
-            $agenda._add(data[i].eventos, i);
-        }
-
-        console.log($agenda._get_eventos());
-    }
-
 });

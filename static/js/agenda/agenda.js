@@ -1,12 +1,16 @@
 /**
  *
- * @param arrAgenda ['nombre_tecnico', 'arrEventos']
  * @constructor
  */
-var Agenda = function(arrAgenda) {
-    this.$nombre = arrAgenda[0];
-    this.$eventos = new Evento(arrAgenda[1]);
-    this.$count = 0;
+var Agenda = function(elements) {
+    if ('' !== elements) {
+        this.$actuacion = elements.actuacion_id;
+        this.$estado = elements.estado_id;
+        this.$hora_fin = elements.hora_fin || null;
+        this.$hora_inicio = elements.hora_inicio;
+        this.$tecnico = elements.tecnico_id;
+        this.$nombre = elements.tecnico_nom_ape;
+    }
 };
 
 /**
@@ -46,63 +50,13 @@ Agenda.prototype._get_eventos = function() {
 }
 
 /**
- * add eventos
- * @param key
- * @param item
- * @returns {*}
- * @private
- */
-Agenda.prototype._add = function(key, item) {
-    if (typeof this.$eventos[key] != 'undefined') {
-        return undefined;
-    }
-
-    this.$eventos[key] = item;
-    return ++this.$count;
-}
-
-/**
- * remove eventos
- * @param key
- * @returns {*}
- * @private
- */
-Agenda.prototype._remove = function(key) {
-    if (typeof this.$eventos[key] == 'undefined') {
-        return undefined;
-    }
-
-    delete this.$eventos[key];
-    return --this.$count;
-}
-
-/**
- * get item via key
- * @param key
- * @returns {*}
- * @private
- */
-Agenda.prototype._item = function(key) {
-    return this.$eventos[key];
-}
-
-/**
- * get count elements
- * @returns {Number}
- * @private
- */
-Agenda.prototype._get_n_elements = function() {
-    return parseInt(this.$count);
-}
-
-/**
  * draw table
  * @param nElementos
  * @returns {string}
  * @private
  */
 Agenda.prototype._draw_table = function(nElementos) {
-    var html = '<table>';
+    var html = '<table class="table">';
     for (var i = 0; i<nElementos;i++) {
         html += '<tr>';
         for (var j = 0; j < 20; j++) {
@@ -124,3 +78,41 @@ Agenda.prototype._draw_table = function(nElementos) {
 Agenda.prototype._get_estado_evento = function(evento) {
     return evento.estado.nombre;
 }
+
+/**
+ * setter tecnico
+ * @param tecnico
+ * @private
+ */
+Agenda.prototype._set_tecnico = function(tecnico) {
+    this.$tecnico = tecnico;
+}
+
+/**
+ * getter tecnico
+ * @returns {*}
+ * @private
+ */
+Agenda.prototype._get_tecnico = function() {
+    return this.$tecnico;
+}
+
+/**
+ * setter actuacion
+ * @param actuacion
+ * @private
+ */
+Agenda.prototype._set_actuacion = function(actuacion) {
+    this.$actuacion = actuacion;
+}
+
+/**
+ * getter actuacion
+ * @returns {*}
+ * @private
+ */
+Agenda.prototype._get_actuacion = function() {
+    return this.$actuacion;
+}
+
+Agenda.prototype = new ArrayCollection;

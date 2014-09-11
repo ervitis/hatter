@@ -247,7 +247,6 @@ class Tecnico(models.Model):
     nombre = models.CharField('nombre', max_length=50)
     apellidos = models.CharField('apellidos', max_length=150, null=True)
     dni = models.CharField('dni', max_length=9)
-    agenda = models.ManyToManyField(Turno, db_table='agenda', blank=True)
     evento = models.ManyToManyField(Actuacion, db_table='evento', blank=True)
 
     class Meta:
@@ -267,21 +266,9 @@ class Tecnico(models.Model):
             Q(evento__tecnico__dni__contains=dni)
         ).values(
             'id', 'nombre', 'apellidos',
-            'evento__detalleactuacion__fecha_inicio', 'evento__detalleactuacion__fecha_fin',
-            'evento__id'
+            'evento__detalleactuacion__fecha_inicio', 'evento__detalleactuacion__fecha_fin', 'evento__id',
+            'evento__estado__id'
         )[:5]
-
-    def get_turnos_by_tecnico(self, nombre, dni):
-        """
-        :param nombre del técnico
-        :param dni del técnico
-        :return array agenda__tecnico
-        """
-        return self.__class__.objects.select_related('agenda').filter(
-            Q(evento__tecnico__nombre__contains=nombre) |
-            Q(evento__tecnico__dni__contains=dni) |
-            Q(evento__isnull=True)
-        ).values('id', 'agenda__id', 'agenda__hora_inicio', 'agenda__hora_fin')
 
 
 class DetalleActuacion(models.Model):
@@ -297,3 +284,30 @@ class DetalleActuacion(models.Model):
 
     class Meta:
         db_table = 'detalle_actuacion'
+
+
+class Agenda(models.Model):
+    """
+    Clase agenda
+    """
+
+    tecnico = models.ForeignKey(Tecnico, blank=True, null=True)
+    turno = models.ForeignKey(Turno, blank=True, null=True)
+    fecha = models.DateField('fecha')
+
+    class Meta:
+        db_table = 'agenda'
+
+    def get_turnos_by_tecnico(self, nombre, dni, fecha):
+        """
+        :param nombre del técnico
+        :param dni del técnico
+        :return array agenda__tecnico
+        """
+
+        return self.__class__.objects.select_related('tecnico').filter(
+            Q(tecnico__nombre__contains=nombre) |
+            Q(tecnico__dni__contains=dni)
+        ).filter(
+            fecha=fecha
+        ).values('id', 'turno__hora_inicio', 'turno__hora_fin')

@@ -6,6 +6,7 @@ from django.views.generic.list import ListView
 from django.views.generic.base import TemplateView
 from django.utils.decorators import method_decorator
 from django.template import RequestContext
+from django.core.exceptions import ObjectDoesNotExist
 
 from functions.log import check_user
 
@@ -82,9 +83,16 @@ def actuaciones_update_view(request, actuacion_id):
         form_actuacion = forms.ActuacionForm(
             request.POST, instance=get_object_or_404(models.Actuacion, pk=actuacion_id)
         )
-        form_detalle_actuacion = forms.DetalleActuacionForm(
-            request.POST, instance=models.DetalleActuacion.objects.get(actuacion=actuacion_id)
-        )
+        form_detalle_actuacion = ''
+
+        try:
+            form_detalle_actuacion = forms.DetalleActuacionForm(
+                request.POST, instance=models.DetalleActuacion.objects.get(actuacion=actuacion_id)
+            )
+        except ObjectDoesNotExist:
+            form_detalle_actuacion = forms.DetalleActuacionForm(
+                request.POST, instance=models.DetalleActuacion()
+            )
 
         if form_actuacion.is_valid() and form_detalle_actuacion.is_valid():
             actuacion = form_actuacion.save()
@@ -96,9 +104,15 @@ def actuaciones_update_view(request, actuacion_id):
             return redirect('listado_actuaciones')
     else:
         form_actuacion = forms.ActuacionForm(instance=get_object_or_404(models.Actuacion, pk=actuacion_id))
-        form_detalle_actuacion = forms.DetalleActuacionForm(
-            instance=models.DetalleActuacion.objects.get(actuacion=actuacion_id)
-        )
+        form_detalle_actuacion = ''
+
+        try:
+            models.DetalleActuacion.objects.get(actuacion=actuacion_id)
+            form_detalle_actuacion = forms.DetalleActuacionForm(
+                instance=models.DetalleActuacion.objects.get(actuacion=actuacion_id)
+            )
+        except ObjectDoesNotExist:
+            form_detalle_actuacion = forms.DetalleActuacionForm(instance=models.DetalleActuacion())
 
     return render_to_response('layout/actuaciones/actualizar.html', {
         'form_actuacion':           form_actuacion,
