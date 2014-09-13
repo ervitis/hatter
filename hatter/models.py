@@ -1,7 +1,10 @@
 # coding=utf-8
 
 from django.db import models
-from django.db.models import Q
+from django.db.models import Q, Count
+from django.db import DEFAULT_DB_ALIAS
+
+import logging
 
 
 class Estado(models.Model):
@@ -247,7 +250,6 @@ class Tecnico(models.Model):
     nombre = models.CharField('nombre', max_length=50)
     apellidos = models.CharField('apellidos', max_length=150, null=True)
     dni = models.CharField('dni', max_length=9)
-    agenda = models.ManyToManyField(Turno, db_table='agenda', blank=True)
     evento = models.ManyToManyField(Actuacion, db_table='evento', blank=True)
 
     class Meta:
@@ -256,32 +258,26 @@ class Tecnico(models.Model):
     def __unicode__(self):
         return self.nombre
 
-    def get_eventos_by_tecnico_data(self, nombre, dni):
+    def get_eventos_by_tecnico_data(self, nombre, fecha):
         """
         :param nombre del técnico
         :param dni del técnico
         :return array evento__actuacion
         """
-        return self.__class__.objects.select_related('evento__actuacion').filter(
+
+        query = self.__class__.objects.select_related('evento__actuacion').filter(
             Q(evento__tecnico__nombre__contains=nombre) |
-            Q(evento__tecnico__dni__contains=dni)
+            Q(evento__tecnico__apellidos__contains=nombre) &
+            Q(evento__detalleactuacion__fecha_inicio__lte=fecha) &
+            Q(evento__detalleactuacion__fecha_fin__gte=fecha) &
+            Q(evento__isnull=False)
         ).values(
             'id', 'nombre', 'apellidos',
-            'evento__detalleactuacion__fecha_inicio', 'evento__detalleactuacion__fecha_fin',
-            'evento__id'
-        )[:5]
+            'evento__detalleactuacion__fecha_inicio', 'evento__detalleactuacion__fecha_fin', 'evento__id',
+            'evento__estado__id'
+        )[:3]
 
-    def get_turnos_by_tecnico(self, nombre, dni):
-        """
-        :param nombre del técnico
-        :param dni del técnico
-        :return array agenda__tecnico
-        """
-        return self.__class__.objects.select_related('agenda').filter(
-            Q(evento__tecnico__nombre__contains=nombre) |
-            Q(evento__tecnico__dni__contains=dni) |
-            Q(evento__isnull=True)
-        ).values('id', 'agenda__id', 'agenda__hora_inicio', 'agenda__hora_fin')
+        return query
 
 
 class DetalleActuacion(models.Model):
@@ -297,3 +293,51 @@ class DetalleActuacion(models.Model):
 
     class Meta:
         db_table = 'detalle_actuacion'
+
+
+class Agenda(models.Model):
+    """
+    Clase agenda
+    """
+
+    tecnico = models.ForeignKey(Tecnico, blank=True, null=True)
+    turno = models.ForeignKey(Turno, blank=True, null=True)
+    fecha = models.DateField('fecha')
+
+    class Meta:
+        db_table = 'agenda'
+
+    def get_tecnico_in_agenda(self, nombre, fecha):
+        """
+        :param nombre del técnico
+        :param dni del técnico
+        :return array agenda__tecnico
+        """
+
+        nombre = '%' + nombre + '%'
+
+        query = self.__class__.objects.raw('''
+            select ag.id, tec.id as tecnico__id
+            from tecnico tec
+            inner join agenda ag on ag.tecnico_id = tec.id
+            where tec.nombre like %s or tec.apellidos like %s and ag.fecha = %s
+            group by tec.id
+        ''', [nombre, nombre, fecha])
+
+        return query
+
+    def get_turnos_by_tecnico(self, tecnico_id, fecha):
+        """
+        :param tecnico_id:
+        :param fecha:
+        :return:
+        """
+        query = self.__class__.objects.raw('''
+            select tu.id, tu.hora_inicio as turno__hora_inicio, tu.hora_fin as turno__hora_fin
+            from turno tu
+            inner join agenda ag on ag.turno_id = tu.id
+            inner join tecnico tec on tec.id = ag.tecnico_id
+            where ag.fecha = %s and tec.id = %s
+        ''', [fecha, tecnico_id])
+
+        return query
