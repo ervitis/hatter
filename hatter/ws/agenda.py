@@ -6,8 +6,9 @@ from django.http import HttpResponse
 from hatter import models
 
 import json
+from hatter.functions import horario
 from datetime import datetime, time
-
+import logging
 
 @ensure_csrf_cookie
 def search_agenda_tecnico(request):
@@ -20,12 +21,13 @@ def search_agenda_tecnico(request):
     json_tecnicos = []
 
     if request.is_ajax() and request.method == 'POST':
-        dni = request.POST.get('sDni')
         nombre = request.POST.get('sName')
 
         tecnico = models.Tecnico()
 
-        result_eventos = tecnico.get_eventos_by_tecnico_data(nombre=nombre, dni=dni)
+        fecha = horario.spain_timezone()
+
+        result_eventos = tecnico.get_eventos_by_tecnico_data(nombre=nombre, fecha=fecha)
 
         for result in result_eventos:
             json_evento = {
@@ -56,23 +58,32 @@ def search_turnos_tecnico(request):
     json_agendas = []
 
     if request.is_ajax() and request.method == 'POST':
-        dni = request.POST.get('sDni')
         nombre = request.POST.get('sName')
-        fecha = datetime.now()
+        fecha = horario.spain_timezone()
         fecha = '%s-%s-%s' % (fecha.year, fecha.month, fecha.day)
 
         agenda = models.Agenda()
 
-        result_agenda = agenda.get_turnos_by_tecnico(nombre=nombre, dni=dni, fecha=fecha)
+        result_agenda = agenda.get_tecnico_in_agenda(nombre=nombre, fecha=fecha)
 
         json_agendas = []
 
         for result in result_agenda:
             json_agenda = {
-                'tecnico_id':   result['id'],
-                'turno_inicio': time.strftime(result['turno__hora_inicio'], '%H:%M'),
-                'turno_fin':    time.strftime(result['turno__hora_fin'], '%H:%M')
+                'tecnico_id':   result.tecnico__id
             }
+
+            result_turnos = agenda.get_turnos_by_tecnico(tecnico_id=result.tecnico__id, fecha=fecha)
+
+            i = 0
+
+            for turno in result_turnos:
+                indice = 'turno_inicio%s' % i
+                json_agenda[indice] = time.strftime(turno.turno__hora_inicio, '%H:%M')
+                indice = 'turno_fin%s' % i
+                json_agenda[indice] = time.strftime(turno.turno__hora_fin, '%H:%M')
+
+                i += 1
 
             json_agendas.append(json_agenda)
 

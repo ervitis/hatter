@@ -3,13 +3,20 @@
  * @constructor
  */
 var Agenda = function(elements) {
-    if ('' !== elements) {
+    if (typeof elements !== 'undefined') {
         this.$actuacion = elements.actuacion_id;
         this.$estado = elements.estado_id;
         this.$hora_fin = elements.hora_fin || null;
         this.$hora_inicio = elements.hora_inicio;
         this.$tecnico = elements.tecnico_id;
         this.$nombre = elements.tecnico_nom_ape;
+    } else {
+        this.$actuacion = '';
+        this.$estado = '';
+        this.$hora_fin = '';
+        this.$hora_inicio = '';
+        this.$tecnico = '';
+        this.$nombre = '';
     }
 };
 
@@ -116,3 +123,7 @@ Agenda.prototype._get_actuacion = function() {
 }
 
 Agenda.prototype = new ArrayCollection;
+
+Agenda.prototype._search_element = function(key, element) {
+
+}
