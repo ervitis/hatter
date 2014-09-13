@@ -1,13 +1,15 @@
 
 {% include 'layout/agenda/filtro.html' %}
 
-<div class="col-xs-12">
-    <div id="resultados"></div>
+<div class="schedule col-xs-12">
+    <div class="col-xs-12 margin-between-elements" id="resultados"></div>
 </div>
 
 {% load static %}
 {% block javascript %}
     <script type="text/javascript" src="{% static 'js/cookie.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/agenda/arrayCollection.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/agenda/evento.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/agenda/agenda.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/agenda/agendas.js' %}"></script>
 {% endblock %}
