@@ -2,7 +2,7 @@ $(function(){
     var $mapa;
     var $datos;
     var $opcionesMapa = {
-        zoom: 5,
+        zoom: 6,
         center: new google.maps.LatLng(40.4378271,-3.6795366),
         disableDefaultUI: true,
         mapTypeId: google.maps.MapTypeId.ROADMAP

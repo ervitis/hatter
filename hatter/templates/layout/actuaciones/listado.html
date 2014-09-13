@@ -28,13 +28,13 @@
                         {% else %}
                             <td>Sin técnico</td>
                         {% endif %}
-                        {% if actuacion.detalle_actuacion.fecha_inicio %}
-                            <td>{{ actuacion.detalle_actuacion.fecha_inicio }}</td>
+                        {% if actuacion.detalleactuacion.fecha_inicio %}
+                            <td>{{ actuacion.detalleactuacion.fecha_inicio|date:'d/m/Y' }}</td>
                         {% else %}
                             <td>Sin fecha</td>
                         {% endif %}
-                        {% if actuacion.detalle_actuacion.fecha_inicio %}
-                            <td>{{ actuacion.detalle_actuacion.fecha_fin }}</td>
+                        {% if actuacion.detalleactuacion.fecha_fin %}
+                            <td>{{ actuacion.detalleactuacion.fecha_fin|date:'d/m/Y' }}</td>
                         {% else %}
                             <td>Sin fecha</td>
                         {% endif %}
@@ -51,7 +51,7 @@
     </div>
 
     <div class="col-xs-12">
-        <div class="text-center">
+        <div class="col-xs-8 text-center">
             <div class="pagination">
                 {% if page_obj.has_previous %}
                     <a class="btn btn-sm btn-info" href="?page={{ page_obj.previous_page_number }}">Ant</a>
@@ -64,12 +64,9 @@
                 {% endif %}
             </div>
         </div>
-    </div>
-
-    <div class="col-xs-12 text-right margin-between-divs">
-        <a class="btn btn-default" href="{% url 'new_actuacion' %}">Crear actuación</a>
+        <div class="col-xs-4 text-right">
+            <a class="btn btn-default" href="{% url 'new_actuacion' %}">Crear actuación</a>
+        </div>
     </div>
 
 </div>
-
-{% include 'layout/frontdown.html' %}

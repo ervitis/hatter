@@ -11,8 +11,8 @@ def get_horas_minutos_utc(var_utc):
     :return: dict
     """
 
-    horas = int(var_utc.utc[1:3])
-    minutos = int(var_utc.utc[3:])
+    horas = int(var_utc['utc'][1:3])
+    minutos = int(var_utc['utc'][3:])
 
     return {
         'horas':    horas,

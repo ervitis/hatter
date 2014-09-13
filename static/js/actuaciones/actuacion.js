@@ -1,3 +1,7 @@
+/**
+ * Actuacion
+ * @constructor
+ */
 function Actuacion() {
     this.$nombre         = $('#id_nombre');
     this.$tipo_via       = $('#id_tipo_via');
@@ -12,11 +16,13 @@ function Actuacion() {
     this.$prioridad      = $('#id_prioridad');
     this.$severidad      = $('#id_severidad');
     this.$alerta         = $('#id_alerta');
+    this.$detalle        = $('#id_detalle');
+    this.$fecha_inicio   = $('#id_fecha_inicio');
+    this.$fecha_fin      = $('#id_fecha_fin');
 }
 
 /**
  * Reset require property of address
- *
  * @private
  */
 Actuacion.prototype._reset_required_address = function() {
@@ -38,7 +44,6 @@ Actuacion.prototype._reset_required_coordinates = function() {
 
 /**
  * Reset require property of placement
- *
  * @private
  */
 Actuacion.prototype._reset_required_placement = function() {
@@ -47,7 +52,6 @@ Actuacion.prototype._reset_required_placement = function() {
 
 /**
  * Set require property
- *
  * @param elemento
  * @private
  */
@@ -76,7 +80,6 @@ Actuacion.prototype._set_required = function (elemento) {
 
 /**
  * Return which element should be shown in the form
- *
  * @returns {string}
  * @private
  */
@@ -93,37 +96,37 @@ Actuacion.prototype._show_element_address = function() {
 }
 
 /**
- *
+ * title is written
  * @returns {boolean}
  * @private
  */
 Actuacion.prototype._has_name = function() {
-    return '' !== this.$nombre.val() ? true : false;
+    return '' !== this.$nombre.val();
 }
 
 /**
- *
+ * placement is written
  * @returns {boolean}
  * @private
  */
 Actuacion.prototype._has_placement = function() {
-    return '' !== this.$emplazamiento.val() ? true : false;
+    return '' !== this.$emplazamiento.val();
 }
 
 /**
- *
+ * coordinates are written
  * @returns {boolean}
  * @private
  */
 Actuacion.prototype._has_coordinates = function() {
-    return ('' !== this.$latitud.val() && '' !== this.$longitud.val()) ? true : false;
+    return ('' !== this.$latitud.val() && '' !== this.$longitud.val());
 }
 
 /**
- *
+ * address is written
  * @returns {boolean}
  * @private
  */
 Actuacion.prototype._has_address = function() {
-    return ('' !== this.$direccion.val() && '' !== this.$provincia.val() && '' !== this.$codigo_postal.val()) ? true : false;
+    return ('' !== this.$direccion.val() && '' !== this.$provincia.val() && '' !== this.$codigo_postal.val());
 }

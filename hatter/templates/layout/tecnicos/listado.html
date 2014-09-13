@@ -1,0 +1,53 @@
+{% include 'index.html' %}
+
+<div class="container-main container-top">
+    <div class="col-xs-12">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th class="text-center">DNI</th>
+                    <th class="text-center">Nombre</th>
+                    <th class="text-center">Apellidos</th>
+                    <th class="text-center">Opciones</th>
+                </tr>
+            </thead>
+
+            {% if listado_tecnicos %}
+                {% for tecnico in listado_tecnicos %}
+                    <tr>
+                        <td class="text-center">{{ tecnico.dni }}</td>
+                        <td class="text-center">{{ tecnico.nombre }}</td>
+                        <td class="text-center">{{ tecnico.apellidos }}</td>
+                        <td class="text-center"><a class="btn btn-sm btn-info" href="{% url 'update_tecnico' tecnico.id %}">Ver</a></td>
+                    </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="4" class="alert alert-warning text-center">Aún no hay técnicos</td>
+                </tr>
+            {% endif %}
+
+        </table>
+    </div>
+
+    <div class="col-xs-12">
+        <div class="text-center">
+            <div class="pagination">
+                {% if page_obj.has_previous %}
+                    <a class="btn btn-sm btn-info" href="?page={{ page_obj.previous_page_number }}">Ant</a>
+                {% endif %}
+                <span>
+                    Página {{ page_obj.number }} de {{ paginator.num_pages }}
+                </span>
+                {% if page_obj.has_next %}
+                    <a class="btn btn-sm btn-info" href="?page={{ page_obj.next_page_number }}">Sig</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xs-12 text-right margin-between-divs">
+        <a class="btn btn-default" href="{% url 'new_tecnico' %}">Crear técnico</a>
+    </div>
+
+</div>

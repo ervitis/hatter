@@ -58,6 +58,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'hatter',
+    'django_nose',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -116,9 +117,11 @@ LANGUAGE_CODE = 'es-ES'
 
 TIME_ZONE = 'Europe/Madrid'
 
-DATETIME_FORMAT = 'd/m/Y H:i:sO'
+DATETIME_FORMAT = 'd/m/Y H:i'
 
 DATE_FORMAT = 'd/m/Y'
+
+DATETIME_INPUT_FORMATS = '%d/%m/%Y %H:%M'
 
 DEFAULT_CHARSET = 'utf-8'
 
@@ -126,7 +129,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = False
+USE_TZ = True
 
 SITE_ID = 1
 
@@ -153,6 +156,11 @@ SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
+    'formatters': {
+        'simple': {
+            'format': '%(levelname)s %(message)s'
+        },
+    },
     'filters': {
         'require_debug_false': {
             '()': 'django.utils.log.RequireDebugFalse'
@@ -163,14 +171,27 @@ LOGGING = {
             'level': 'ERROR',
             'filters': ['require_debug_false'],
             'class': 'django.utils.log.AdminEmailHandler'
+        },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple'
         }
     },
     'loggers': {
         'django.request': {
-            'handlers': ['mail_admins'],
-            'level': 'ERROR',
-            'propagate': True,
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': False,
         },
+        'core.handlers': {
+            'level': 'DEBUG',
+            'handlers': ['console']
+        },
+        'root': {
+            'level': 'DEBUG',
+            'handlers': ['console']
+        }
     }
 }
 
@@ -178,3 +199,12 @@ LOGGING = {
 
 import sys
 sys.path.insert(0, 'libs')
+
+TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
+
+NOSE_ARGS = [
+    '--with-coverage',
+    '--cover-package=hatter',
+    '--cover-inclusive',
+    '--verbosity=3'
+]

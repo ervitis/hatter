@@ -3,6 +3,7 @@
 from django import forms
 
 from hatter import models
+from hatter.functions import validators
 
 DEFAULT_ERROR_MESSAGES_REQUIRED = {
     'required': 'Este campo es obligatorio',
@@ -13,13 +14,13 @@ DEFAULT_ERROR_MESSAGES_NON_REQUIRED = {
     'invalid':  'Compruebe este campo'
 }
 
+INPUT_FORMAT_DATETIME = '%d/%m/%Y %H:%M:%S'
+
 
 class ActuacionForm(forms.ModelForm):
     """
     Clase formulario actuacion
     """
-
-    from hatter.functions import validators
 
     VOID = ''
     CALLE = 'Calle'
@@ -93,3 +94,40 @@ class ActuacionForm(forms.ModelForm):
 
     class Meta:
         model = models.Actuacion
+
+
+class TecnicoForm(forms.ModelForm):
+    nombre = forms.CharField(label='Nombre', max_length=50, widget=forms.TextInput(attrs={
+        'class': 'form-control'
+    }), error_messages=DEFAULT_ERROR_MESSAGES_REQUIRED)
+
+    apellidos = forms.CharField(label='Apellidos', max_length=150, required=False, widget=forms.TextInput(attrs={
+        'class': 'form-control'
+    }), error_messages=DEFAULT_ERROR_MESSAGES_NON_REQUIRED)
+
+    dni = forms.CharField(label='DNI', max_length=9, widget=forms.TextInput(attrs={
+        'class': 'form-control'
+    }), validators=[validators.validate_dni], error_messages=DEFAULT_ERROR_MESSAGES_REQUIRED)
+
+    class Meta:
+        model = models.Tecnico
+
+
+class DetalleActuacionForm(forms.ModelForm):
+    fecha_inicio = forms.DateTimeField(input_formats=(INPUT_FORMAT_DATETIME,), label='Fecha de inicio', required=True, widget=forms.DateTimeInput(attrs={
+        'class': 'form-control only-delete',
+    }), error_messages=DEFAULT_ERROR_MESSAGES_REQUIRED)
+
+    fecha_fin = forms.DateTimeField(input_formats=(INPUT_FORMAT_DATETIME,), label='Fecha de fin', required=False, widget=forms.DateTimeInput(attrs={
+        'class': 'form-control only-delete',
+    }), error_messages=DEFAULT_ERROR_MESSAGES_REQUIRED)
+
+    detalle = forms.CharField(label='Comentarios', required=False, max_length=1024, widget=forms.Textarea(attrs={
+        'class':    'form-control',
+        'rows':     '4',
+        'cols':     '20',
+        'style':    'resize:none;',
+    }))
+
+    class Meta:
+        model = models.DetalleActuacion
