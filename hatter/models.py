@@ -275,7 +275,7 @@ class Tecnico(models.Model):
             'id', 'nombre', 'apellidos',
             'evento__detalleactuacion__fecha_inicio', 'evento__detalleactuacion__fecha_fin', 'evento__id',
             'evento__estado__id'
-        )[:5]
+        )[:3]
 
         return query
 

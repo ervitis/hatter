@@ -37,7 +37,6 @@ $(function(){
         var url = $('#hListadoTurno').val();
 
         $.post(url, params, function(response){
-            console.log(response);
             create_data_turnos(response)
         });
     }
@@ -63,8 +62,6 @@ $(function(){
 
     function draw_table(arrElements, turnos) {
         $results = $('#resultados');
-
-        console.log(turnos);
 
         var hini0, hini1, hfin0, hfin1;
 

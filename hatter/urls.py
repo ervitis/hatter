@@ -7,7 +7,7 @@ from hatter.ws import map, agenda
 
 urlpatterns = patterns('',
     url(r'^$', check_user(views.IndexView.as_view(template_name='index.html')), name='index'),
-    url(r'^actuaciones/$', check_user(views.ActuacionesView.as_view(template_name='layout/actuaciones/listado.html')),
+    url(r'^actuaciones/$', check_user(views.ActuacionesView.as_view(template_name='layout/actuaciones/actuaciones.html')),
         name='listado_actuaciones'),
     url(r'^newactuacion/$', views.actuaciones_new_view, name='new_actuacion'),
     url(r'^(?P<actuacion_id>\d+)/updateactuacion/$', views.actuaciones_update_view, name='update_actuacion'),
