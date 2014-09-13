@@ -1,10 +1,10 @@
 {% block agenda %}
 
     <div class="col-xs-12 margin-between-elements">
-        <label for="sName">Nombre:</label> <input class="form-horizontal" type="text" name="sDni" id="sDni">
-        <label for="sDni">DNI:</label> <input class="form-horizontal" type="text" name="sName" id="sName">
+        <label for="sName">Nombre:</label> <input class="form-horizontal" type="text" name="sName" id="sName">
         <button type="button" class="btn btn-default" id="bSearch">Buscar</button>
         <input type="hidden" value="{% url 'listado_agenda' %}" id="hListado">
+        <input type="hidden" value="{% url 'listado_turno' %}" id="hListadoTurno">
         {% csrf_token %}
     </div>
 
