@@ -8,7 +8,7 @@ from hatter import models
 import json
 from hatter.functions import horario
 from datetime import datetime, time
-import logging
+
 
 @ensure_csrf_cookie
 def search_agenda_tecnico(request):

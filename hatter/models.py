@@ -2,9 +2,6 @@
 
 from django.db import models
 from django.db.models import Q, Count
-from django.db import DEFAULT_DB_ALIAS
-
-import logging
 
 
 class Estado(models.Model):
