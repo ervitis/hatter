@@ -94,6 +94,7 @@ class ActuacionForm(forms.ModelForm):
 
     class Meta:
         model = models.Actuacion
+        exclude = []
 
 
 class TecnicoForm(forms.ModelForm):
@@ -111,6 +112,7 @@ class TecnicoForm(forms.ModelForm):
 
     class Meta:
         model = models.Tecnico
+        exclude = []
 
 
 class DetalleActuacionForm(forms.ModelForm):
@@ -131,3 +133,4 @@ class DetalleActuacionForm(forms.ModelForm):
 
     class Meta:
         model = models.DetalleActuacion
+        exclude = []
