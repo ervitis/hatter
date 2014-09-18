@@ -12,8 +12,6 @@ from functions.log import check_user
 
 from hatter import models, forms
 
-import logging
-
 
 class IndexView(TemplateView):
     """

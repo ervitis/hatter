@@ -8,7 +8,7 @@ from hatter import models
 import json
 from hatter.functions import horario
 from datetime import datetime, time
-import logging
+
 
 @ensure_csrf_cookie
 def search_agenda_tecnico(request):
@@ -35,12 +35,9 @@ def search_agenda_tecnico(request):
                 'tecnico_nom_ape':  result['nombre'] + ' ' + result['apellidos'],
                 'actuacion_id':     result['evento__id'],
                 'estado_id':        result['evento__estado__id'],
-                'hora_inicio':      datetime.strftime(result['evento__detalleactuacion__fecha_inicio'], '%H:%M'),
+                'hora_inicio':      datetime.strftime(result['evento__detalleactuacion__fecha'], '%H:%M'),
 
             }
-
-            if result['evento__detalleactuacion__fecha_fin']:
-                json_evento['hora_fin'] = datetime.strftime(result['evento__detalleactuacion__fecha_fin'], '%H:%M')
 
             json_tecnicos.append(json_evento)
 

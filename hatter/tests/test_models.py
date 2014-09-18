@@ -3,6 +3,8 @@
 from django.test import TestCase
 
 from hatter import models
+from hatter.functions.horario import spain_timezone
+import datetime
 
 
 def create_comunidad():
@@ -48,6 +50,41 @@ def create_tecnologia():
 
 def create_instrumentacion():
     return models.Instrumentacion.objects.create(nombre='instrumentación1', tecnologia=create_tecnologia())
+
+
+def create_detalle_actuacion(actuacion):
+    return models.DetalleActuacion.objects.create(
+        actuacion=actuacion,
+        fecha=spain_timezone(),
+        utc='+0200',
+        detalle='Un test')
+
+
+def create_agenda(tecnico):
+    return models.Agenda.objects.create(tecnico=tecnico, turno=create_turno(), fecha=datetime.date.today())
+
+
+def create_tecnico(nombre='Ana', apellidos='Belén Carro', dni='23278078P'):
+    return models.Tecnico.objects.create(nombre=nombre, apellidos=apellidos, dni=dni)
+
+
+def create_actuacion_emplazamiento(nombre='Test2'):
+        estado = create_estado()
+        cliente = create_cliente()
+        prioridad = create_prioridad()
+        severidad = create_severidad()
+        alerta = create_alerta()
+        emplazamiento = create_emplazamiento()
+
+        return models.Actuacion.objects.create(
+            nombre=nombre,
+            emplazamiento=emplazamiento,
+            estado=estado,
+            cliente=cliente,
+            prioridad=prioridad,
+            severidad=severidad,
+            alerta=alerta
+        )
 
 
 class EstadoTestCase(TestCase):
@@ -205,30 +242,6 @@ class ActuacionTestCase(TestCase):
             alerta=alerta
         )
 
-    def create_actuacion_emplazamiento(self, nombre='Test2'):
-        """
-        actuacion test by placement
-        :param nombre:
-        :return: actuacion object
-        """
-
-        estado = create_estado()
-        cliente = create_cliente()
-        prioridad = create_prioridad()
-        severidad = create_severidad()
-        alerta = create_alerta()
-        emplazamiento = create_emplazamiento()
-
-        return models.Actuacion.objects.create(
-            nombre=nombre,
-            emplazamiento=emplazamiento,
-            estado=estado,
-            cliente=cliente,
-            prioridad=prioridad,
-            severidad=severidad,
-            alerta=alerta
-        )
-
     def create_actuacion_coordinates(self, nombre='Test3', longitud=34.12345, latitud=8.456123):
         """
         actuacion test by coordinates
@@ -262,7 +275,7 @@ class ActuacionTestCase(TestCase):
         self.assertEqual(act1.__str__(), act1.nombre)
 
     def test_actuacion_creation_emplazamiento(self):
-        act2 = self.create_actuacion_emplazamiento()
+        act2 = create_actuacion_emplazamiento()
         self.assertTrue(isinstance(act2, models.Actuacion))
         self.assertTrue(act2.__unicode__(), act2.nombre)
         self.assertTrue(act2.__str__(), act2.nombre)
@@ -279,18 +292,35 @@ class TecnicoTestCase(TestCase):
     Tecnico test case
     """
 
-    def create_tecnico(self, nombre='Ana', apellidos='Belén Carro', dni='23278078P'):
-        """
-        tecnico test
-        :param nombre:
-        :param apellidos:
-        :param dni:
-        :return: tecnico
-        """
-        return models.Tecnico.objects.create(nombre=nombre, apellidos=apellidos, dni=dni)
-
     def test_tecnico_creation(self):
-        tec = self.create_tecnico()
+        tec = create_tecnico()
         self.assertTrue(isinstance(tec, models.Tecnico))
         self.assertEqual(tec.__unicode__(), tec.nombre)
         self.assertEqual(tec.__str__(), tec.nombre)
+
+
+class DetalleActuacionTestCase(TestCase):
+    """
+    Detalle actuación test case
+    """
+
+    def test_detalle_actuacion(self):
+        actuacion = create_actuacion_emplazamiento()
+        detalle_actuacion = create_detalle_actuacion(actuacion=actuacion)
+
+        self.assertTrue(isinstance(detalle_actuacion, models.DetalleActuacion))
+        self.assertTrue(isinstance(actuacion, models.Actuacion))
+        self.assertTrue(isinstance(detalle_actuacion.fecha, datetime.datetime))
+
+
+class AgendaTestCase(TestCase):
+    """
+    Agenda test case
+    """
+
+    def test_agenda(self):
+        tecnico = create_tecnico()
+        agenda = create_agenda(tecnico=tecnico)
+
+        self.assertTrue(isinstance(agenda, models.Agenda))
+        self.assertTrue(isinstance(agenda.fecha, datetime.date))

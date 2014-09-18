@@ -1,10 +1,9 @@
 # coding=utf-8
 
 from django.test import TestCase, Client
-from django.test.client import RequestFactory
 
 from hatter.models import Tecnico
-from hatter.tests.test_models import create_provincia, create_estado, create_alerta, create_cliente, create_comunidad
+from hatter.tests.test_models import create_provincia, create_estado, create_alerta, create_cliente
 from hatter.tests.test_models import create_prioridad, create_severidad, create_emplazamiento
 from hatter.models import Actuacion
 
