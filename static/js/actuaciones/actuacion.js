@@ -17,8 +17,7 @@ function Actuacion() {
     this.$severidad      = $('#id_severidad');
     this.$alerta         = $('#id_alerta');
     this.$detalle        = $('#id_detalle');
-    this.$fecha_inicio   = $('#id_fecha_inicio');
-    this.$fecha_fin      = $('#id_fecha_fin');
+    this.$fecha_inicio   = $('#id_fecha');
 }
 
 /**

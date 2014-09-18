@@ -11,8 +11,7 @@
                     <th>Nombre</th>
                     <th>Estado</th>
                     <th>Técnico asignado</th>
-                    <th>Fecha inicio</th>
-                    <th>Fecha fin</th>
+                    <th>Fecha</th>
                     <th>Opciones</th>
                 </tr>
             </thead>
@@ -28,13 +27,8 @@
                         {% else %}
                             <td>Sin técnico</td>
                         {% endif %}
-                        {% if actuacion.detalleactuacion.fecha_inicio %}
-                            <td>{{ actuacion.detalleactuacion.fecha_inicio|date:'d/m/Y' }}</td>
-                        {% else %}
-                            <td>Sin fecha</td>
-                        {% endif %}
-                        {% if actuacion.detalleactuacion.fecha_fin %}
-                            <td>{{ actuacion.detalleactuacion.fecha_fin|date:'d/m/Y' }}</td>
+                        {% if actuacion.detalleactuacion.fecha %}
+                            <td>{{ actuacion.detalleactuacion.fecha|date:'d/m/Y' }}</td>
                         {% else %}
                             <td>Sin fecha</td>
                         {% endif %}

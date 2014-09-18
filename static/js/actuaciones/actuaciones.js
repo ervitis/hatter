@@ -52,24 +52,18 @@ $(function(){
         $previous = $arrDireccion[$this.val()];
     });
 
-    $(document).on('mouseover', '#id_fecha_inicio,#id_fecha_fin', function(){
+    $(document).on('mouseover', '#id_fecha', function(){
         $(this).css({
             'cursor': 'pointer'
         });
     });
 
-    $(document).on('click', '#id_fecha_inicio,#id_fecha_fin', function(event){
+    $(document).on('click', '#id_fecha', function(event){
         $(this).val('');
         event.preventDefault();
     });
 
-    $('#id_fecha_inicio').datetimepicker({
-        'language': 'es-ES',
-        'format': 'DD/MM/YYYY HH:mm:ss',
-        'pickTime': true
-    });
-
-    $('#id_fecha_fin').datetimepicker({
+    $('#id_fecha').datetimepicker({
         'language': 'es-ES',
         'format': 'DD/MM/YYYY HH:mm:ss',
         'pickTime': true

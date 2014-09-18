@@ -265,12 +265,11 @@ class Tecnico(models.Model):
         query = self.__class__.objects.select_related('evento__actuacion').filter(
             Q(evento__tecnico__nombre__contains=nombre) |
             Q(evento__tecnico__apellidos__contains=nombre) &
-            Q(evento__detalleactuacion__fecha_inicio__lte=fecha) &
-            Q(evento__detalleactuacion__fecha_fin__gte=fecha) &
+            Q(evento__detalleactuacion__fecha=fecha) &
             Q(evento__isnull=False)
         ).values(
             'id', 'nombre', 'apellidos',
-            'evento__detalleactuacion__fecha_inicio', 'evento__detalleactuacion__fecha_fin', 'evento__id',
+            'evento__detalleactuacion__fecha', 'evento__id',
             'evento__estado__id'
         )[:3]
 
@@ -282,8 +281,7 @@ class DetalleActuacion(models.Model):
     Clase detalle actuacion
     """
 
-    fecha_inicio = models.DateTimeField('fecha_inicio')
-    fecha_fin = models.DateTimeField('fecha_fin', blank=True, null=True)
+    fecha = models.DateTimeField('fecha')
     actuacion = models.OneToOneField(Actuacion, blank=True, null=True)
     utc = models.CharField('utc', max_length=75, blank=True, null=True)
     detalle = models.CharField('detalle', max_length=1023, blank=True, null=True)

@@ -80,15 +80,20 @@ $(function(){
         for (var i = 0; i < arrElements._get_total_elements(); i++) {
             var $agenda = arrElements._get_item_by_key(i);
 
-            hini0 = parseInt(turnos[i].turno_inicio0.substr(0, 2));
-            hfin0 = parseInt(turnos[i].turno_fin0.substr(0, 2));
+            if (turnos[i].turno_inicio0) {
+                hini0 = parseInt(turnos[i].turno_inicio0.substr(0, 2));
+                hfin0 = parseInt(turnos[i].turno_fin0.substr(0, 2));
 
-            if (turnos[i].turno_inicio1) {
-                hini1 = parseInt(turnos[i].turno_inicio1.substr(0, 2));
-                hfin1 = parseInt(turnos[i].turno_fin1.substr(0, 2));
+                if (turnos[i].turno_inicio1) {
+                    hini1 = parseInt(turnos[i].turno_inicio1.substr(0, 2));
+                    hfin1 = parseInt(turnos[i].turno_fin1.substr(0, 2));
+                } else {
+                    hini1 = -1;
+                    hfin1 = -1;
+                }
             } else {
+                hini0 = -1;
                 hini1 = -1;
-                hfin1 = -1;
             }
 
             html += '<tr id="tec_' + $agenda.$tecnico + '">';
@@ -97,7 +102,7 @@ $(function(){
                 if (j === 0) {
                     html += '<td class="cell-schedule-name">' + $agenda.$nombre + '</td>';
                 } else {
-                    if (j >= hini0 && j <= hfin0 || (hini1 !== -1 && j >= hini1 && j <= hfin1)) {
+                    if (hini0 !== -1 && j >= hini0 && j <= hfin0 || (hini1 !== -1 && j >= hini1 && j <= hfin1)) {
                         html += '<td id="act_' + i + (j-1) + '" class="success cell-schedule"></td>';
                     } else {
                         html += '<td id="dis_' + i + (j-1) + '" class="cell-schedule"></td>';

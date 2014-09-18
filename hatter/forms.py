@@ -116,11 +116,7 @@ class TecnicoForm(forms.ModelForm):
 
 
 class DetalleActuacionForm(forms.ModelForm):
-    fecha_inicio = forms.DateTimeField(input_formats=(INPUT_FORMAT_DATETIME,), label='Fecha de inicio', required=True, widget=forms.DateTimeInput(attrs={
-        'class': 'form-control only-delete',
-    }), error_messages=DEFAULT_ERROR_MESSAGES_REQUIRED)
-
-    fecha_fin = forms.DateTimeField(input_formats=(INPUT_FORMAT_DATETIME,), label='Fecha de fin', required=False, widget=forms.DateTimeInput(attrs={
+    fecha = forms.DateTimeField(input_formats=(INPUT_FORMAT_DATETIME,), label='Fecha', required=True, widget=forms.DateTimeInput(attrs={
         'class': 'form-control only-delete',
     }), error_messages=DEFAULT_ERROR_MESSAGES_REQUIRED)
 
