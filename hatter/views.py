@@ -30,7 +30,7 @@ class ActuacionesView(ListView):
 
     context_object_name = 'listado_actuaciones'
     paginate_by = 3
-    queryset = models.Actuacion.objects.select_related().order_by('-id')
+    queryset = models.Actuacion.objects.select_related('actuacion__tecnico__evento').order_by('-id')
 
     @method_decorator(check_user)
     def dispatch(self, request, *args, **kwargs):

@@ -11,7 +11,7 @@
                     <th>Nombre</th>
                     <th>Estado</th>
                     <th>Técnico asignado</th>
-                    <th>Fecha</th>
+                    <th>Fecha y hora</th>
                     <th>Opciones</th>
                 </tr>
             </thead>
@@ -19,16 +19,24 @@
             {% if listado_actuaciones %}
                 {% for actuacion in listado_actuaciones %}
                     <tr>
-                        <td><img src="{% static 'img/hand.jpg' %}" width="30px" height="30px"></td>
+                        {% if actuacion.estado_id == 1 %}
+                            <td>
+                                <div class="ui-widget-content draggable" id="asig_{{ actuacion.id }}">
+                                    <img class="img-assign" src="{% static 'img/hand.jpg' %}" width="30px" height="30px">
+                                </div>
+                            </td>
+                        {% else %}
+                            <td><i class="fa fa-times fa-2x"></i></td>
+                        {% endif %}
                         <td>{{ actuacion.nombre }}</td>
                         <td>{{ actuacion.estado }}</td>
-                        {% if actuacion.tecnico %}
-                            <td>{{ actuacion.tecnico.nombre }}</td>
-                        {% else %}
+                        {% for tecnico in actuacion.tecnico_set.all %}
+                            <td>{{ tecnico.apellidos }}, {{ tecnico.nombre }}</td>
+                        {% empty %}
                             <td>Sin técnico</td>
-                        {% endif %}
+                        {% endfor %}
                         {% if actuacion.detalleactuacion.fecha %}
-                            <td>{{ actuacion.detalleactuacion.fecha|date:'d/m/Y' }}</td>
+                            <td>{{ actuacion.detalleactuacion.fecha|date:'d/m/Y H:i' }}</td>
                         {% else %}
                             <td>Sin fecha</td>
                         {% endif %}

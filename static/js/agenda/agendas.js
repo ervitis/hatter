@@ -3,6 +3,10 @@ $(function(){
 
     $(window).load(function(){
         $agendas = new ArrayCollection();
+
+        $('.draggable').draggable({
+            revert: 'invalid'
+        });
     });
 
     $(document).on('click', '#bSearch', function(){
@@ -58,6 +62,11 @@ $(function(){
 
         draw_table($arrAgendas, response);
 
+        $('.droppable').droppable({
+            accept: '.draggable',
+            tolerance: 'pointer'
+        });
+
     }
 
     function draw_table(arrElements, turnos) {
@@ -71,7 +80,7 @@ $(function(){
 
         for(var i=0;i<24;i++) {
             var hora = (i<10) ? '0' + i : i;
-            html += '<th class="active cell-schedule">' + hora + '</th>';
+            html += '<th class="active cell-schedule-hour">' + hora + '</th>';
         }
 
         html += '</tr></thead>';
@@ -103,9 +112,9 @@ $(function(){
                     html += '<td class="cell-schedule-name">' + $agenda.$nombre + '</td>';
                 } else {
                     if (hini0 !== -1 && j >= hini0 && j <= hfin0 || (hini1 !== -1 && j >= hini1 && j <= hfin1)) {
-                        html += '<td id="act_' + i + (j-1) + '" class="success cell-schedule"></td>';
+                        html += '<td id="tur_' + j + '" class="droppable cell-schedule success"></td>';
                     } else {
-                        html += '<td id="dis_' + i + (j-1) + '" class="cell-schedule"></td>';
+                        html += '<td id="dis_' + j + '" class="cell-schedule"></td>';
                     }
                 }
             }
@@ -116,10 +125,5 @@ $(function(){
         html += '</tbody></table>';
 
         $results.append(html);
-
     }
-
-    $(document).on('click', '.cell-schedule', function(e) {
-        alert('has hecho click en la celda ' + $(this).attr('id'));
-    });
 });
