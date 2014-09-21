@@ -123,7 +123,3 @@ Agenda.prototype._get_actuacion = function() {
 }
 
 Agenda.prototype = new ArrayCollection;
-
-Agenda.prototype._search_element = function(key, element) {
-
-}

@@ -247,13 +247,24 @@ class Tecnico(models.Model):
     nombre = models.CharField('nombre', max_length=50)
     apellidos = models.CharField('apellidos', max_length=150, null=True)
     dni = models.CharField('dni', max_length=9)
-    evento = models.ManyToManyField(Actuacion, db_table='evento', blank=True)
 
     class Meta:
         db_table = 'tecnico'
 
     def __unicode__(self):
         return self.nombre
+
+
+class Evento(models.Model):
+    """
+    Clase evento
+    """
+    actuacion = models.ForeignKey(Actuacion, db_column='actuacion_id', blank=True, null=True)
+    tecnico = models.ForeignKey(Tecnico, db_column='tecnico_id', blank=True, null=True)
+    fecha = models.DateTimeField('fecha')
+
+    class Meta:
+        db_table = 'evento'
 
     def get_eventos_by_tecnico_data(self, nombre, fecha):
         """
@@ -262,15 +273,14 @@ class Tecnico(models.Model):
         :return array evento__actuacion
         """
 
-        query = self.__class__.objects.select_related('evento__actuacion').filter(
-            Q(evento__tecnico__nombre__contains=nombre) |
-            Q(evento__tecnico__apellidos__contains=nombre) &
-            Q(evento__detalleactuacion__fecha=fecha) &
-            Q(evento__isnull=False)
+        query = self.__class__.objects.select_related('tecnico__actuacion').filter(
+            Q(tecnico__nombre__contains=nombre) |
+            Q(tecnico__apellidos__contains=nombre) &
+            Q(fecha=fecha)
         ).values(
-            'id', 'nombre', 'apellidos',
-            'evento__detalleactuacion__fecha', 'evento__id',
-            'evento__estado__id'
+            'tecnico__id', 'tecnico__nombre', 'tecnico__apellidos',
+            'actuacion__detalleactuacion__fecha', 'actuacion__id',
+            'actuacion__estado__id'
         )[:3]
 
         return query

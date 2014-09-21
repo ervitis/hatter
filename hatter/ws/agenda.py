@@ -23,19 +23,19 @@ def search_agenda_tecnico(request):
     if request.is_ajax() and request.method == 'POST':
         nombre = request.POST.get('sName')
 
-        tecnico = models.Tecnico()
+        evento = models.Evento()
 
         fecha = horario.spain_timezone()
 
-        result_eventos = tecnico.get_eventos_by_tecnico_data(nombre=nombre, fecha=fecha)
+        result_eventos = evento.get_eventos_by_tecnico_data(nombre=nombre, fecha=fecha)
 
         for result in result_eventos:
             json_evento = {
-                'tecnico_id':       result['id'],
-                'tecnico_nom_ape':  result['nombre'] + ' ' + result['apellidos'],
-                'actuacion_id':     result['evento__id'],
-                'estado_id':        result['evento__estado__id'],
-                'hora_inicio':      datetime.strftime(result['evento__detalleactuacion__fecha'], '%H:%M'),
+                'tecnico_id':       result['tecnico__id'],
+                'tecnico_nom_ape':  result['tecnico__nombre'] + ' ' + result['tecnico__apellidos'],
+                'actuacion_id':     result['actuacion__id'],
+                'estado_id':        result['actuacion__estado__id'],
+                'hora_inicio':      datetime.strftime(result['actuacion__detalleactuacion__fecha'], '%H:%M'),
 
             }
 
