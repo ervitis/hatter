@@ -64,13 +64,38 @@ $(function(){
 
         $('.droppable').droppable({
             accept: '.draggable',
-            tolerance: 'pointer'
+            tolerance: 'pointer',
+            drop: function(event, ui) {
+                var params = {
+                    'turno': parseInt(event.target.id.split('_')[1]),
+                    'turno_hora': parseInt(event.target.id.split('_')[2]) - 1,
+                    'tecnico': event.target.parentElement.attributes['id'].value.split('_')[1],
+                    'actuacion': ui.draggable.attr('id').split('_')[1]
+                };
+
+                asigna_actuacion_tecnico(params);
+            }
         });
 
         $('.ayuda').tooltip({
             container: 'body'
         });
 
+    }
+
+    function asigna_actuacion_tecnico(params) {
+        var url = $('#resultados').attr('data-url');
+
+        $.post(url, params, function(response) {
+            if (response.ok) {
+                alert('Se ha asignado la actuación al técnico');
+                location.reload(true);
+            } else {
+                alert('Ha ocurrido un error en la asignación');
+                console.log(response);
+                return;
+            }
+        });
     }
 
     function draw_table(arrElements, turnos) {
@@ -92,14 +117,18 @@ $(function(){
 
         for (var i = 0; i < arrElements._get_total_elements(); i++) {
             var $agenda = arrElements._get_item_by_key(i);
+            var hora_actuacion = parseInt($agenda.$hora_inicio) + 1;
+            var turno0, turno1;
 
             if (turnos[i].turno_inicio0) {
-                hini0 = parseInt(turnos[i].turno_inicio0.substr(0, 2));
-                hfin0 = parseInt(turnos[i].turno_fin0.substr(0, 2));
+                hini0 = parseInt(turnos[i].turno_inicio0.substr(0, 2)) + 1;
+                hfin0 = parseInt(turnos[i].turno_fin0.substr(0, 2)) + 1;
+                turno0 = turnos[i].turno_id0;
 
                 if (turnos[i].turno_inicio1) {
-                    hini1 = parseInt(turnos[i].turno_inicio1.substr(0, 2));
-                    hfin1 = parseInt(turnos[i].turno_fin1.substr(0, 2));
+                    hini1 = parseInt(turnos[i].turno_inicio1.substr(0, 2)) + 1;
+                    hfin1 = parseInt(turnos[i].turno_fin1.substr(0, 2)) + 1;
+                    turno1 = turnos[i].turno_id1;
                 } else {
                     hini1 = -1;
                     hfin1 = -1;
@@ -118,11 +147,11 @@ $(function(){
                     if (hini0 !== -1 && j >= hini0 && j <= hfin0 ||
                         (hini1 !== -1 && j >= hini1 && j <= hfin1)) {
 
-                        var hora_actuacion = parseInt($agenda.$hora_inicio);
+
                         if (hora_actuacion === j) {
                             html += '<td id="act_' + j + '" class="ayuda cell-schedule danger" data-toggle="tooltip" data-placement="top" title="' + $agenda.$nombre_act + '"></td>';
                         } else {
-                            html += '<td id="tur_' + j + '" class="droppable cell-schedule success"></td>';
+                            html += '<td id="tur_' + turno0 + '_' + j + '" class="droppable cell-schedule success"></td>';
                         }
                     } else {
                         html += '<td id="dis_' + j + '" class="cell-schedule"></td>';

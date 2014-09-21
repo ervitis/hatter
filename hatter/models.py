@@ -2,6 +2,9 @@
 
 from django.db import models
 from django.db.models import Q, Count
+from django.db import DatabaseError, transaction
+
+from functions import horario
 
 
 class Estado(models.Model):
@@ -219,6 +222,25 @@ class Actuacion(models.Model):
     def __unicode__(self):
         return self.nombre
 
+    @transaction.commit_on_success
+    def guarda_asignacion(self, actuacion, turno, tecnico, turno_hora):
+        try:
+            evento = Evento()
+            evento.actuacion = Actuacion.objects.get(pk=actuacion)
+            evento.tecnico = Tecnico.objects.get(pk=tecnico)
+            fecha = horario.spain_timezone()
+            fecha_evento = '%s-%s-%s %s:00:00' % (
+                fecha.year, fecha.month, fecha.day, turno_hora
+            )
+            evento.fecha = fecha_evento
+
+            Actuacion.objects.filter(pk=actuacion).update(estado=Estado.objects.get(nombre='Asignado'))
+
+            evento.save()
+            return 'ok'
+        except DatabaseError as e:
+            return e.args[1]
+
 
 class Instrumentacion(models.Model):
     """
@@ -281,7 +303,7 @@ class Evento(models.Model):
             'tecnico__id', 'tecnico__nombre', 'tecnico__apellidos',
             'actuacion__estado__id', 'actuacion__id', 'actuacion__nombre',
             'fecha'
-        )[:3]
+        ).order_by('fecha')[:5]
 
         return query
 
@@ -338,7 +360,7 @@ class Agenda(models.Model):
         :return:
         """
         query = self.__class__.objects.raw('''
-            select tu.id, tu.hora_inicio as turno__hora_inicio, tu.hora_fin as turno__hora_fin
+            select tu.id, tu.id as tu_id, tu.hora_inicio as turno__hora_inicio, tu.hora_fin as turno__hora_fin
             from turno tu
             inner join agenda ag on ag.turno_id = tu.id
             inner join tecnico tec on tec.id = ag.tecnico_id

@@ -80,9 +80,43 @@ def search_turnos_tecnico(request):
                 json_agenda[indice] = time.strftime(turno.turno__hora_inicio, '%H:%M')
                 indice = 'turno_fin%s' % i
                 json_agenda[indice] = time.strftime(turno.turno__hora_fin, '%H:%M')
+                indice = 'turno_id%s' % i
+                json_agenda[indice] = turno.tu_id
 
                 i += 1
 
             json_agendas.append(json_agenda)
 
     return HttpResponse(json.dumps(json_agendas), content_type='application/json')
+
+
+@ensure_csrf_cookie
+def asigna_actuacion_tecnico(request):
+    """
+    Saves the new event
+    :param request:
+    :return: resultado json
+    """
+
+    if request.is_ajax() and request.method == 'POST':
+        resultado = []
+
+        actuacion = request.POST.get('actuacion')
+        turno = request.POST.get('turno')
+        tecnico = request.POST.get('tecnico')
+        turno_hora = request.POST.get('turno_hora')
+
+        act = models.Actuacion()
+        r = act.guarda_asignacion(actuacion=actuacion, turno_hora=turno_hora, tecnico=tecnico, turno=turno)
+
+        if 'ok' == r:
+            resultado = {
+                'ok': True
+            }
+        else:
+            resultado = {
+                'ok':       False,
+                'mensaje':  r
+            }
+
+        return HttpResponse(json.dumps(resultado), content_type='application/json')
