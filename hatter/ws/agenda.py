@@ -35,7 +35,8 @@ def search_agenda_tecnico(request):
                 'tecnico_nom_ape':  result['tecnico__nombre'] + ' ' + result['tecnico__apellidos'],
                 'actuacion_id':     result['actuacion__id'],
                 'estado_id':        result['actuacion__estado__id'],
-                'hora_inicio':      datetime.strftime(result['actuacion__detalleactuacion__fecha'], '%H:%M'),
+                'hora_inicio':      datetime.strftime(result['fecha'], '%H'),
+                'nom_actuacion':    result['actuacion__nombre']
 
             }
 

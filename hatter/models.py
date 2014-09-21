@@ -279,8 +279,8 @@ class Evento(models.Model):
             Q(fecha=fecha)
         ).values(
             'tecnico__id', 'tecnico__nombre', 'tecnico__apellidos',
-            'actuacion__detalleactuacion__fecha', 'actuacion__id',
-            'actuacion__estado__id'
+            'actuacion__estado__id', 'actuacion__id', 'actuacion__nombre',
+            'fecha'
         )[:3]
 
         return query

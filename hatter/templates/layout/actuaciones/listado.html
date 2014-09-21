@@ -30,8 +30,8 @@
                         {% endif %}
                         <td>{{ actuacion.nombre }}</td>
                         <td>{{ actuacion.estado }}</td>
-                        {% for tecnico in actuacion.tecnico_set.all %}
-                            <td>{{ tecnico.apellidos }}, {{ tecnico.nombre }}</td>
+                        {% for evento in actuacion.evento_set.all %}
+                            <td>{{ evento.tecnico.apellidos }}, {{ evento.tecnico.nombre }}</td>
                         {% empty %}
                             <td>Sin técnico</td>
                         {% endfor %}

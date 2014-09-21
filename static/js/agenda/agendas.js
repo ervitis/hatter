@@ -67,6 +67,10 @@ $(function(){
             tolerance: 'pointer'
         });
 
+        $('.ayuda').tooltip({
+            container: 'body'
+        });
+
     }
 
     function draw_table(arrElements, turnos) {
@@ -111,8 +115,15 @@ $(function(){
                 if (j === 0) {
                     html += '<td class="cell-schedule-name">' + $agenda.$nombre + '</td>';
                 } else {
-                    if (hini0 !== -1 && j >= hini0 && j <= hfin0 || (hini1 !== -1 && j >= hini1 && j <= hfin1)) {
-                        html += '<td id="tur_' + j + '" class="droppable cell-schedule success"></td>';
+                    if (hini0 !== -1 && j >= hini0 && j <= hfin0 ||
+                        (hini1 !== -1 && j >= hini1 && j <= hfin1)) {
+
+                        var hora_actuacion = parseInt($agenda.$hora_inicio);
+                        if (hora_actuacion === j) {
+                            html += '<td id="act_' + j + '" class="ayuda cell-schedule danger" data-toggle="tooltip" data-placement="top" title="' + $agenda.$nombre_act + '"></td>';
+                        } else {
+                            html += '<td id="tur_' + j + '" class="droppable cell-schedule success"></td>';
+                        }
                     } else {
                         html += '<td id="dis_' + j + '" class="cell-schedule"></td>';
                     }

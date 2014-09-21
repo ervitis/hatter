@@ -10,6 +10,7 @@ var Agenda = function(elements) {
         this.$hora_inicio = elements.hora_inicio;
         this.$tecnico = elements.tecnico_id;
         this.$nombre = elements.tecnico_nom_ape;
+        this.$nombre_act = elements.nom_actuacion;
     } else {
         this.$actuacion = '';
         this.$estado = '';
@@ -17,6 +18,7 @@ var Agenda = function(elements) {
         this.$hora_inicio = '';
         this.$tecnico = '';
         this.$nombre = '';
+        this.$nombre_act = '';
     }
 };
 
