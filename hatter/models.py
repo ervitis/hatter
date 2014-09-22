@@ -222,7 +222,7 @@ class Actuacion(models.Model):
     def __unicode__(self):
         return self.nombre
 
-    @transaction.commit_on_success
+    @transaction.commit_manually
     def guarda_asignacion(self, actuacion, turno, tecnico, turno_hora):
         try:
             evento = Evento()
@@ -237,8 +237,13 @@ class Actuacion(models.Model):
             Actuacion.objects.filter(pk=actuacion).update(estado=Estado.objects.get(nombre='Asignado'))
 
             evento.save()
+
+            transaction.commit()
+
             return 'ok'
         except DatabaseError as e:
+            transaction.rollback()
+
             return e.args[1]
 
 

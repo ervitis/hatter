@@ -10,7 +10,6 @@ $(function(){
     });
 
     $(document).on('click', '#bSearch', function(){
-
         var url = $('#hListado').val();
 
         var params = {
@@ -18,16 +17,19 @@ $(function(){
         };
 
         $.post(url, params, function(response){
-            console.log(response);
-
             $('#resultados').empty();
             if (response.length == 0) {
                 $('#resultados').append('<p class="alert alert-info text-center">No hay turnos para los filtros escogidos</p>');
                 return;
             }
 
-            for(var i in response) {
+            var i = 0;
+            for(i in response) {
+                
+                
                 var $agenda = new Agenda(response[i]);
+                
+                
                 $agendas._add_element($agenda);
             }
 
@@ -51,7 +53,11 @@ $(function(){
         var i = 0;
         for (i in response) {
             var $agenda = new Agenda();
+            
+            
             $agenda = $agendas._search_element($agenda, 'tecnico', response[i].tecnico_id);
+            
+            
             if (!$agenda) {
                 console.log('Error');
                 return;
@@ -60,7 +66,7 @@ $(function(){
             }
         }
 
-        draw_table($arrAgendas, response);
+        draw_table($agendas, $arrAgendas, response);
 
         $('.droppable').droppable({
             accept: '.draggable',
@@ -98,7 +104,7 @@ $(function(){
         });
     }
 
-    function draw_table(arrElements, turnos) {
+    function draw_table(arrElements, arrAgendas, turnos) {
         $results = $('#resultados');
 
         var hini0, hini1, hfin0, hfin1;
@@ -115,9 +121,9 @@ $(function(){
         html += '</tr></thead>';
         html += '<tbody>';
 
-        for (var i = 0; i < arrElements._get_total_elements(); i++) {
-            var $agenda = arrElements._get_item_by_key(i);
-            var hora_actuacion = parseInt($agenda.$hora_inicio) + 1;
+        for (var i = 0; i < arrAgendas._get_total_elements(); i++) {
+            var $agenda = arrAgendas._get_item_by_key(i);
+            var arrActuaciones = arrElements._get_actuaciones_groupby_tecnico($agenda.$tecnico);
             var turno0, turno1;
 
             if (turnos[i].turno_inicio0) {
@@ -147,10 +153,18 @@ $(function(){
                     if (hini0 !== -1 && j >= hini0 && j <= hfin0 ||
                         (hini1 !== -1 && j >= hini1 && j <= hfin1)) {
 
+                        var hasActuacion = false;
 
-                        if (hora_actuacion === j) {
-                            html += '<td id="act_' + j + '" class="ayuda cell-schedule danger" data-toggle="tooltip" data-placement="top" title="' + $agenda.$nombre_act + '"></td>';
-                        } else {
+                        for (var k=0; k<arrActuaciones.length; k++) {
+                            var hora_actuacion = parseInt(arrActuaciones[k].$hora_inicio);
+                            if (hora_actuacion === j) {
+                                html += '<td id="act_' + j + '" class="ayuda cell-schedule danger" data-toggle="tooltip" data-placement="top" title="' + arrActuaciones[k].$nombre_act + '"></td>';
+                                hasActuacion = true;
+                                break;
+                            }
+                        }
+
+                        if (!hasActuacion) {
                             html += '<td id="tur_' + turno0 + '_' + j + '" class="droppable cell-schedule success"></td>';
                         }
                     } else {
@@ -162,6 +176,7 @@ $(function(){
             html += '</tr>';
 
         }
+
         html += '</tbody></table>';
 
         $results.append(html);

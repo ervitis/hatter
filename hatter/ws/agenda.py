@@ -64,8 +64,6 @@ def search_turnos_tecnico(request):
 
         result_agenda = agenda.get_tecnico_in_agenda(nombre=nombre, fecha=fecha)
 
-        json_agendas = []
-
         for result in result_agenda:
             json_agenda = {
                 'tecnico_id':   result.tecnico__id
@@ -99,8 +97,6 @@ def asigna_actuacion_tecnico(request):
     """
 
     if request.is_ajax() and request.method == 'POST':
-        resultado = []
-
         actuacion = request.POST.get('actuacion')
         turno = request.POST.get('turno')
         tecnico = request.POST.get('tecnico')

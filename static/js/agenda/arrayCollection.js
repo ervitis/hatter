@@ -61,3 +61,15 @@ ArrayCollection.prototype._search_element = function(object, key, element) {
 ArrayCollection.prototype._get_keys = function(element) {
     return Object.keys(element);
 }
+
+ArrayCollection.prototype._get_actuaciones_groupby_tecnico = function(tecnico_id) {
+    var arrElementos = [];
+
+    for (var i=0; i<this.$count; i++) {
+        if (this.$element[i].$tecnico === tecnico_id) {
+            arrElementos.push(this.$element[i]);
+        }
+    }
+
+    return arrElementos;
+}
