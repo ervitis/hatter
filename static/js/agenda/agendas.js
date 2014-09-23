@@ -18,18 +18,10 @@ $(function(){
 
         $.post(url, params, function(response){
             $('#resultados').empty();
-            if (response.length == 0) {
-                $('#resultados').append('<p class="alert alert-info text-center">No hay turnos para los filtros escogidos</p>');
-                return;
-            }
-
             var i = 0;
             for(i in response) {
-                
-                
                 var $agenda = new Agenda(response[i]);
-                
-                
+
                 $agendas._add_element($agenda);
             }
 
@@ -43,6 +35,11 @@ $(function(){
         var url = $('#hListadoTurno').val();
 
         $.post(url, params, function(response){
+            if (response.length == 0) {
+                $('#resultados').append('<p class="alert alert-info text-center">No hay turnos para los filtros escogidos</p>');
+                return;
+            }
+
             create_data_turnos(response)
         });
     }
@@ -54,14 +51,13 @@ $(function(){
         for (i in response) {
             var $agenda = new Agenda();
             
-            
-            $agenda = $agendas._search_element($agenda, 'tecnico', response[i].tecnico_id);
-            
-            
-            if (!$agenda) {
-                console.log('Error');
-                return;
+            if ($agendas._get_total_elements() === 0) {
+                break;
             } else {
+                $agenda = $agendas._search_element($agenda, 'tecnico', response[i].tecnico_id);
+            }
+
+            if ($agenda !== false) {
                 $arrAgendas._add_element($agenda);
             }
         }
@@ -74,7 +70,7 @@ $(function(){
             drop: function(event, ui) {
                 var params = {
                     'turno': parseInt(event.target.id.split('_')[1]),
-                    'turno_hora': parseInt(event.target.id.split('_')[2]) - 1,
+                    'turno_hora': parseInt(event.target.id.split('_')[2]),
                     'tecnico': event.target.parentElement.attributes['id'].value.split('_')[1],
                     'actuacion': ui.draggable.attr('id').split('_')[1]
                 };
@@ -121,9 +117,14 @@ $(function(){
         html += '</tr></thead>';
         html += '<tbody>';
 
-        for (var i = 0; i < arrAgendas._get_total_elements(); i++) {
+        for (var i = 0; i < turnos.length; i++) {
             var $agenda = arrAgendas._get_item_by_key(i);
-            var arrActuaciones = arrElements._get_actuaciones_groupby_tecnico($agenda.$tecnico);
+            var arrActuaciones = [];
+
+            if (arrElements._get_total_elements() !== 0 && typeof $agenda != 'undefined') {
+                arrActuaciones = arrElements._get_actuaciones_groupby_tecnico($agenda.$tecnico);
+            }
+
             var turno0, turno1;
 
             if (turnos[i].turno_inicio0) {
@@ -144,11 +145,11 @@ $(function(){
                 hini1 = -1;
             }
 
-            html += '<tr id="tec_' + $agenda.$tecnico + '">';
+            html += '<tr id="tec_' + turnos[i].tecnico_id + '">';
 
             for (var j = 0; j < 25; j++) {
                 if (j === 0) {
-                    html += '<td class="cell-schedule-name">' + $agenda.$nombre + '</td>';
+                    html += '<td class="cell-schedule-name">' + turnos[i].tecnico_nombre + '</td>';
                 } else {
                     if (hini0 !== -1 && j >= hini0 && j <= hfin0 ||
                         (hini1 !== -1 && j >= hini1 && j <= hfin1)) {

@@ -6,7 +6,7 @@ from django.http import HttpResponse
 from hatter import models
 
 import json
-from hatter.functions import horario
+from hatter.functions import horario, db_utils
 from datetime import datetime, time
 
 
@@ -28,6 +28,7 @@ def search_agenda_tecnico(request):
         fecha = horario.spain_timezone()
 
         result_eventos = evento.get_eventos_by_tecnico_data(nombre=nombre, fecha=fecha)
+        db_utils.flush_transaction()
 
         for result in result_eventos:
             json_evento = {
@@ -63,10 +64,12 @@ def search_turnos_tecnico(request):
         agenda = models.Agenda()
 
         result_agenda = agenda.get_tecnico_in_agenda(nombre=nombre, fecha=fecha)
+        db_utils.flush_transaction()
 
         for result in result_agenda:
             json_agenda = {
-                'tecnico_id':   result.tecnico__id
+                'tecnico_id':       result.tecnico__id,
+                'tecnico_nombre':   result.tecnico__nombre + ' ' + result.tecnico__apellidos
             }
 
             result_turnos = agenda.get_turnos_by_tecnico(tecnico_id=result.tecnico__id, fecha=fecha)
@@ -104,6 +107,7 @@ def asigna_actuacion_tecnico(request):
 
         act = models.Actuacion()
         r = act.guarda_asignacion(actuacion=actuacion, turno_hora=turno_hora, tecnico=tecnico, turno=turno)
+        db_utils.flush_transaction()
 
         if 'ok' == r:
             resultado = {

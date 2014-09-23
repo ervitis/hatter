@@ -4,6 +4,12 @@ from django.db import models
 from django.db.models import Q, Count
 from django.db import DatabaseError, transaction
 
+import logging
+import django
+
+log = logging.getLogger('root')
+log.setLevel(logging.DEBUG)
+
 from functions import horario
 
 
@@ -300,6 +306,7 @@ class Evento(models.Model):
         :return array evento__actuacion
         """
 
+        django.db.connection.close()
         query = self.__class__.objects.select_related('tecnico__actuacion').filter(
             Q(tecnico__nombre__contains=nombre) |
             Q(tecnico__apellidos__contains=nombre) &
@@ -308,7 +315,7 @@ class Evento(models.Model):
             'tecnico__id', 'tecnico__nombre', 'tecnico__apellidos',
             'actuacion__estado__id', 'actuacion__id', 'actuacion__nombre',
             'fecha'
-        ).order_by('fecha')[:5]
+        ).order_by('fecha')
 
         return query
 
@@ -348,8 +355,9 @@ class Agenda(models.Model):
 
         nombre = '%' + nombre + '%'
 
+        django.db.connection.close()
         query = self.__class__.objects.raw('''
-            select ag.id, tec.id as tecnico__id
+            select ag.id, tec.id as tecnico__id, tec.nombre as tecnico__nombre, tec.apellidos as tecnico__apellidos
             from tecnico tec
             inner join agenda ag on ag.tecnico_id = tec.id
             where tec.nombre like %s or tec.apellidos like %s and ag.fecha = %s
@@ -364,8 +372,11 @@ class Agenda(models.Model):
         :param fecha:
         :return:
         """
+
+        django.db.connection.close()
         query = self.__class__.objects.raw('''
-            select tu.id, tu.id as tu_id, tu.hora_inicio as turno__hora_inicio, tu.hora_fin as turno__hora_fin
+            select tu.id, tu.id as tu_id,
+              tu.hora_inicio as turno__hora_inicio, tu.hora_fin as turno__hora_fin
             from turno tu
             inner join agenda ag on ag.turno_id = tu.id
             inner join tecnico tec on tec.id = ag.tecnico_id
