@@ -2,6 +2,15 @@
 
 from django.db import models
 from django.db.models import Q, Count
+from django.db import DatabaseError, transaction
+
+import logging
+import django
+
+log = logging.getLogger('root')
+log.setLevel(logging.DEBUG)
+
+from functions import horario
 
 
 class Estado(models.Model):
@@ -219,6 +228,30 @@ class Actuacion(models.Model):
     def __unicode__(self):
         return self.nombre
 
+    @transaction.commit_manually
+    def guarda_asignacion(self, actuacion, turno, tecnico, turno_hora):
+        try:
+            evento = Evento()
+            evento.actuacion = Actuacion.objects.get(pk=actuacion)
+            evento.tecnico = Tecnico.objects.get(pk=tecnico)
+            fecha = horario.spain_timezone()
+            fecha_evento = '%s-%s-%s %s:00:00' % (
+                fecha.year, fecha.month, fecha.day, turno_hora
+            )
+            evento.fecha = fecha_evento
+
+            Actuacion.objects.filter(pk=actuacion).update(estado=Estado.objects.get(nombre='Asignado'))
+
+            evento.save()
+
+            transaction.commit()
+
+            return 'ok'
+        except DatabaseError as e:
+            transaction.rollback()
+
+            return e.args[1]
+
 
 class Instrumentacion(models.Model):
     """
@@ -247,13 +280,24 @@ class Tecnico(models.Model):
     nombre = models.CharField('nombre', max_length=50)
     apellidos = models.CharField('apellidos', max_length=150, null=True)
     dni = models.CharField('dni', max_length=9)
-    evento = models.ManyToManyField(Actuacion, db_table='evento', blank=True)
 
     class Meta:
         db_table = 'tecnico'
 
     def __unicode__(self):
         return self.nombre
+
+
+class Evento(models.Model):
+    """
+    Clase evento
+    """
+    actuacion = models.ForeignKey(Actuacion, db_column='actuacion_id', blank=True, null=True)
+    tecnico = models.ForeignKey(Tecnico, db_column='tecnico_id', blank=True, null=True)
+    fecha = models.DateTimeField('fecha')
+
+    class Meta:
+        db_table = 'evento'
 
     def get_eventos_by_tecnico_data(self, nombre, fecha):
         """
@@ -262,16 +306,16 @@ class Tecnico(models.Model):
         :return array evento__actuacion
         """
 
-        query = self.__class__.objects.select_related('evento__actuacion').filter(
-            Q(evento__tecnico__nombre__contains=nombre) |
-            Q(evento__tecnico__apellidos__contains=nombre) &
-            Q(evento__detalleactuacion__fecha=fecha) &
-            Q(evento__isnull=False)
+        django.db.connection.close()
+        query = self.__class__.objects.select_related('tecnico__actuacion').filter(
+            Q(tecnico__nombre__contains=nombre) |
+            Q(tecnico__apellidos__contains=nombre) &
+            Q(fecha=fecha)
         ).values(
-            'id', 'nombre', 'apellidos',
-            'evento__detalleactuacion__fecha', 'evento__id',
-            'evento__estado__id'
-        )[:3]
+            'tecnico__id', 'tecnico__nombre', 'tecnico__apellidos',
+            'actuacion__estado__id', 'actuacion__id', 'actuacion__nombre',
+            'fecha'
+        ).order_by('fecha')
 
         return query
 
@@ -311,8 +355,9 @@ class Agenda(models.Model):
 
         nombre = '%' + nombre + '%'
 
+        django.db.connection.close()
         query = self.__class__.objects.raw('''
-            select ag.id, tec.id as tecnico__id
+            select ag.id, tec.id as tecnico__id, tec.nombre as tecnico__nombre, tec.apellidos as tecnico__apellidos
             from tecnico tec
             inner join agenda ag on ag.tecnico_id = tec.id
             where tec.nombre like %s or tec.apellidos like %s and ag.fecha = %s
@@ -327,8 +372,11 @@ class Agenda(models.Model):
         :param fecha:
         :return:
         """
+
+        django.db.connection.close()
         query = self.__class__.objects.raw('''
-            select tu.id, tu.hora_inicio as turno__hora_inicio, tu.hora_fin as turno__hora_fin
+            select tu.id, tu.id as tu_id,
+              tu.hora_inicio as turno__hora_inicio, tu.hora_fin as turno__hora_fin
             from turno tu
             inner join agenda ag on ag.turno_id = tu.id
             inner join tecnico tec on tec.id = ag.tecnico_id
