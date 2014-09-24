@@ -179,3 +179,40 @@ class TecnicosUpdateView(UpdateView):
 
     def form_invalid(self, form):
         return super(TecnicosUpdateView, self).form_invalid(form)
+
+
+class ToolsView(TemplateView):
+    """
+    Tools template
+    """
+
+    template_name = 'layout/tools/tools.html'
+
+
+def listado_tecnicos(request):
+    if request.method == 'POST':
+        nombre = request.POST.get('turnoNombre')
+        dni = request.POST.get('turnoDni')
+
+        tecnico = models.Tecnico()
+        tecnicos = tecnico.get_tecnicos_by_nombre_dni(nombre=nombre, dni=dni)
+
+        turnos = forms.TurnoForm()
+
+        return render_to_response('layout/tools/tools.html', {
+            'tecnicos': tecnicos,
+            'turnos':   turnos,
+        }, context_instance=RequestContext(request))
+
+
+def save_turnos(request):
+    if request.method == 'POST':
+        lista = request.POST.getlist
+
+        import logging
+        log = logging.getLogger('root')
+        log.setLevel(logging.DEBUG)
+
+        log.debug(lista)
+
+        return render_to_response('layout/tools/tools.html', context_instance=RequestContext(request))

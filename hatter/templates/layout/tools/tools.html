@@ -1,0 +1,29 @@
+{% include 'index.html' %}
+
+<div class="container-main container-top">
+    <ul class="nav nav-tabs" role="tablist" id="toolTabs">
+        <li class="active">
+            <a href="#turnos" role="tab" data-toggle="tab">Turnos</a>
+        </li>
+        <li>
+            <a href="#emplazamientos" role="tab" data-toggle="tab">Emplazamientos</a>
+        </li>
+    </ul>
+
+    <div class="tab-content">
+        <div class="tab-pane fade in active" id="turnos">
+            {% include 'layout/tools/turnos/turnos.html' %}
+        </div>
+
+        <div class="tab-pane fade" id="emplazamientos">
+            {% include 'layout/tools/emplazamientos/emplazamientos.html' %}
+        </div>
+    </div>
+
+</div>
+
+{% load static %}
+
+{% block javascript %}
+    <script type="text/javascript" src="{% static 'js/tools/tools.js' %}"></script>
+{% endblock %}

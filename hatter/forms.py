@@ -15,6 +15,7 @@ DEFAULT_ERROR_MESSAGES_NON_REQUIRED = {
 }
 
 INPUT_FORMAT_DATETIME = '%d/%m/%Y %H:%M:%S'
+INPUT_FORMAT_DATE = '%d/%m/%Y'
 
 
 class ActuacionForm(forms.ModelForm):
@@ -129,4 +130,22 @@ class DetalleActuacionForm(forms.ModelForm):
 
     class Meta:
         model = models.DetalleActuacion
+        exclude = []
+
+
+class TurnoForm(forms.ModelForm):
+    fecha_inicio = forms.DateField(input_formats=INPUT_FORMAT_DATE, required=False, widget=forms.DateInput(attrs={
+        'class': 'form-control only-delete mouse-pointer datetimepicker-input',
+    }), error_messages=DEFAULT_ERROR_MESSAGES_REQUIRED)
+
+    fecha_fin = forms.DateField(input_formats=INPUT_FORMAT_DATE, required=False, widget=forms.DateInput(attrs={
+        'class': 'form-control only-delete mouse-pointer datetimepicker-input',
+    }), error_messages=DEFAULT_ERROR_MESSAGES_REQUIRED)
+
+    turnos = forms.ModelChoiceField(empty_label='Escoja turno', required=False, queryset=models.Turno.objects.all(), widget=forms.Select(attrs={
+        'class': 'form-control'
+    }), error_messages=DEFAULT_ERROR_MESSAGES_REQUIRED)
+
+    class Meta:
+        model = models.Turno
         exclude = []

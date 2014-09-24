@@ -1,0 +1,53 @@
+<div class="col-xs-12 margin-between-divs">
+    <form method="post" action="{% url 'tools_save_turnos' %}" name="edita_turnos" id="fEditaTurnos">
+        {% csrf_token %}
+
+        <table class="table">
+
+        <tr class="text-center">
+            <th>Selección</th>
+            <th>Nombre y apellidos</th>
+            <th>Fecha inicio</th>
+            <th>Fecha fin</th>
+            <th>Turnos</th>
+        </tr>
+
+        {% for tecnico in tecnicos %}
+            <tr>
+                <td>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" id="tec_{{ tecnico.id }}">
+                        </label>
+                    </div>
+                </td>
+                <td>
+                    {{ tecnico.nombre }} {{ tecnico.apellidos }}
+                </td>
+                <td>
+                    <div id="fecha_inicio_{{ tecnico.id }}">
+                        {{ turnos.fecha_inicio }}
+                    </div>
+                </td>
+                <td>
+                    <div id="fecha_fin_{{ tecnico.id }}">
+                        {{ turnos.fecha_fin }}
+                    </div>
+                </td>
+                <td>
+                    <div id="turnos_{{ tecnico.id }}">
+                        {{ turnos.turnos }}
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+
+        </table>
+
+        <div class="col-xs-12">
+            <div class="text-right">
+                <button type="submit" class="btn btn-default">Aplicar turnos&nbsp;<i class="fa fa-edit"></i></button>
+            </div>
+        </div>
+    </form>
+</div>

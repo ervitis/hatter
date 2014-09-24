@@ -1,0 +1,9 @@
+<div class="col-xs-12 margin-between-divs">
+    <div class="col-xs-12 margin-between-elements">
+        {% include 'layout/tools/turnos/filtro.html' %}
+    </div>
+
+    {% if tecnicos %}
+        {% include 'layout/tools/turnos/listado.html' with tecnicos=tecnicos turnos=turnos %}
+    {% endif %}
+</div>

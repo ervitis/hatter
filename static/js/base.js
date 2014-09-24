@@ -16,4 +16,22 @@ $(function(){
 
         return (8 === key);
     });
+
+    $('.mouse-pointer').mouseover(function() {
+        $(this).css({
+            'cursor': 'pointer'
+        })
+    });
+
+    $(document).on('click', '.datetimepicker-input', function(event) {
+        $(this).val('');
+        event.preventDefault();
+
+    });
+
+    $('.datetimepicker-input').datetimepicker({
+        'language': 'es-ES',
+        'format': 'DD/MM/YYYY',
+        'pickTime': false
+    });
 });

@@ -287,6 +287,22 @@ class Tecnico(models.Model):
     def __unicode__(self):
         return self.nombre
 
+    def get_tecnicos_by_nombre_dni(self, nombre, dni):
+        """
+        :param nombre
+        :param dni
+        :return tecnicos
+        """
+
+        django.db.connection.close()
+        query = self.__class__.objects.filter(
+            (Q(nombre__icontains=nombre) |
+            Q(apellidos__icontains=nombre)) &
+            Q(dni__icontains=dni)
+        )
+
+        return query
+
 
 class Evento(models.Model):
     """

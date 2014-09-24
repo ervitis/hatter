@@ -18,6 +18,10 @@ urlpatterns = patterns('',
     url(r'^newtecnico/$', check_user(views.TecnicosNewView.as_view()), name='new_tecnico'),
     url(r'^(?P<pk>\d+)/updatetecnico/$', check_user(views.TecnicosUpdateView.as_view()), name='update_tecnico'),
 
+    url(r'^tools/$', check_user(views.ToolsView.as_view()), name='tools_view'),
+    url(r'^tools/searchtecnico', views.listado_tecnicos, name='tools_listado_tecnicos'),
+    url(r'^tools/saveturnos', views.save_turnos, name='tools_save_turnos'),
+
     url(r'^getagendatecnico/$', agenda.search_agenda_tecnico, name='listado_agenda'),
     url(r'^getactuaciones/$', map.get_actuaciones, name='get_actuaciones_ws'),
     url(r'^getturnotecnico/$', agenda.search_turnos_tecnico, name='listado_turno'),
