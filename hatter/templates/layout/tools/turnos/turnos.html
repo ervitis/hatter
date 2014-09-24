@@ -6,4 +6,12 @@
     {% if tecnicos %}
         {% include 'layout/tools/turnos/listado.html' with tecnicos=tecnicos turnos=turnos %}
     {% endif %}
+
+    {% if saved %}
+        <div class="col-xs-12 margin-between-divs">
+            <div class="alert alert-success">
+                Se han guardado los turnos
+            </div>
+        </div>
+    {% endif %}
 </div>

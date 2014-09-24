@@ -215,4 +215,6 @@ def save_turnos(request):
 
         log.debug(lista)
 
-        return render_to_response('layout/tools/tools.html', context_instance=RequestContext(request))
+        return render_to_response('layout/tools/tools.html', {
+            'saved': True,
+        }, context_instance=RequestContext(request))

@@ -134,6 +134,10 @@ class DetalleActuacionForm(forms.ModelForm):
 
 
 class TurnoForm(forms.ModelForm):
+    turno_check = forms.BooleanField(widget=forms.CheckboxInput(attrs={
+        'class': 'checkbox'
+    }))
+
     fecha_inicio = forms.DateField(input_formats=INPUT_FORMAT_DATE, required=False, widget=forms.DateInput(attrs={
         'class': 'form-control only-delete mouse-pointer datetimepicker-input',
     }), error_messages=DEFAULT_ERROR_MESSAGES_REQUIRED)

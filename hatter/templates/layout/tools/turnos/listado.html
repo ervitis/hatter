@@ -15,9 +15,9 @@
         {% for tecnico in tecnicos %}
             <tr>
                 <td>
-                    <div class="checkbox">
+                    <div id="turno_check{{ tecnico.id }}">
                         <label>
-                            <input type="checkbox" id="tec_{{ tecnico.id }}">
+                            {{ turnos.turno_check }}
                         </label>
                     </div>
                 </td>
