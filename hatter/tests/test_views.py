@@ -96,7 +96,7 @@ class ViewsTestCase(TestCase):
         response = self.client.get('/actuaciones/', follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertTrue('listado_actuaciones' in response.context)
-        self.assertEqual([actuacion.pk for actuacion in response.context['listado_actuaciones']], [4L])
+        self.assertEqual([actuacion.pk for actuacion in response.context['listado_actuaciones']], [5L])
 
     def test_list_tecnicos(self):
         response = self.client.get('/tecnicos/')
