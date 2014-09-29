@@ -322,7 +322,7 @@ class Evento(models.Model):
         :return array evento__actuacion
         """
 
-        django.db.connection.close()
+        #django.db.connection.close()
         query = self.__class__.objects.select_related('tecnico__actuacion').filter(
             Q(tecnico__nombre__contains=nombre) |
             Q(tecnico__apellidos__contains=nombre) &
@@ -371,7 +371,7 @@ class Agenda(models.Model):
 
         nombre = '%' + nombre + '%'
 
-        django.db.connection.close()
+        #django.db.connection.close()
         query = self.__class__.objects.raw('''
             select ag.id, tec.id as tecnico__id, tec.nombre as tecnico__nombre, tec.apellidos as tecnico__apellidos
             from tecnico tec
@@ -389,7 +389,7 @@ class Agenda(models.Model):
         :return:
         """
 
-        django.db.connection.close()
+        #django.db.connection.close()
         query = self.__class__.objects.raw('''
             select tu.id, tu.id as tu_id,
               tu.hora_inicio as turno__hora_inicio, tu.hora_fin as turno__hora_fin
