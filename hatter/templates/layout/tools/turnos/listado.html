@@ -13,13 +13,11 @@
         </tr>
 
         {% for tecnico in tecnicos %}
-            <tr>
+            <tr id="tec_{{ tecnico.id }}">
                 <td>
-                    <div id="turno_check{{ tecnico.id }}">
-                        <label>
-                            {{ turnos.turno_check }}
-                        </label>
-                    </div>
+                    <label>
+                        {{ turnos.turno_check }}
+                    </label>
                 </td>
                 <td>
                     {{ tecnico.nombre }} {{ tecnico.apellidos }}
@@ -46,7 +44,7 @@
 
         <div class="col-xs-12">
             <div class="text-right">
-                <button type="submit" class="btn btn-default">Aplicar turnos&nbsp;<i class="fa fa-edit"></i></button>
+                <button type="button" class="btn btn-default">Aplicar turnos&nbsp;<i class="fa fa-edit"></i></button>
             </div>
         </div>
     </form>

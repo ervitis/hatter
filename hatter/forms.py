@@ -135,7 +135,7 @@ class DetalleActuacionForm(forms.ModelForm):
 
 class TurnoForm(forms.ModelForm):
     turno_check = forms.BooleanField(widget=forms.CheckboxInput(attrs={
-        'class': 'checkbox'
+        'class': 'checkbox',
     }))
 
     fecha_inicio = forms.DateField(input_formats=INPUT_FORMAT_DATE, required=False, widget=forms.DateInput(attrs={
