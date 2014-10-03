@@ -9,6 +9,7 @@ from django.template import RequestContext
 from django.core.exceptions import ObjectDoesNotExist
 
 from functions.log import check_user
+from functions.horario import parse_spain_format_to_sql, date_range
 
 from hatter import models, forms
 
@@ -207,14 +208,37 @@ def listado_tecnicos(request):
 
 def save_turnos(request):
     if request.method == 'POST':
-        lista = request.POST.getlist
+        listas = request.POST
 
-        import logging
-        log = logging.getLogger('root')
-        log.setLevel(logging.DEBUG)
+        dict_listas = dict(listas)
+        if 'turno_check' in dict_listas:
+            for v in range(0, len(dict_listas['turno_check'])):
+                tecnico = models.Tecnico.objects.get(pk=dict_listas['hidden_tec'][v])
+                turno = models.Turno.objects.get(pk=dict_listas['turnos'][v])
 
-        log.debug(lista)
+                if '' == dict_listas['fecha_inicio'][v] or '' == dict_listas['fecha_fin'][v]:
+                    return render_to_response('layout/tools/tools.html', {
+                        'executed': True,
+                        'success': False,
+                    }, context_instance=RequestContext(request))
+
+                fecha_inicio = parse_spain_format_to_sql(dict_listas['fecha_inicio'][v])
+                fecha_fin = parse_spain_format_to_sql(dict_listas['fecha_fin'][v])
+
+                for fecha in date_range(start=fecha_inicio, end=fecha_fin):
+                    agenda = models.Agenda()
+
+                    agenda.fecha = fecha
+                    agenda.tecnico = tecnico
+                    agenda.turno = turno
+                    agenda.save()
+
+            return render_to_response('layout/tools/tools.html', {
+                'executed': True,
+                'success': True,
+            }, context_instance=RequestContext(request))
 
         return render_to_response('layout/tools/tools.html', {
-            'saved': True,
+            'executed': True,
+            'success': False,
         }, context_instance=RequestContext(request))

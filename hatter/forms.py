@@ -139,11 +139,11 @@ class TurnoForm(forms.ModelForm):
     }))
 
     fecha_inicio = forms.DateField(input_formats=INPUT_FORMAT_DATE, required=False, widget=forms.DateInput(attrs={
-        'class': 'form-control only-delete mouse-pointer datetimepicker-input',
+        'class': 'form-control only-delete mouse-pointer datetimepicker-input input-inicio',
     }), error_messages=DEFAULT_ERROR_MESSAGES_REQUIRED)
 
     fecha_fin = forms.DateField(input_formats=INPUT_FORMAT_DATE, required=False, widget=forms.DateInput(attrs={
-        'class': 'form-control only-delete mouse-pointer datetimepicker-input',
+        'class': 'form-control only-delete mouse-pointer datetimepicker-input input-fin',
     }), error_messages=DEFAULT_ERROR_MESSAGES_REQUIRED)
 
     turnos = forms.ModelChoiceField(empty_label='Escoja turno', required=False, queryset=models.Turno.objects.all(), widget=forms.Select(attrs={

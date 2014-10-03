@@ -22,7 +22,9 @@ $(function(){
             for(i in response) {
                 var $agenda = new Agenda(response[i]);
 
-                $agendas._add_element($agenda);
+                if (typeof $agenda !== 'undefined') {
+                    $agendas._add_element($agenda);
+                }
             }
 
             get_turnos(params);
@@ -57,7 +59,7 @@ $(function(){
                 $agenda = $agendas._search_element($agenda, 'tecnico', response[i].tecnico_id);
             }
 
-            if ($agenda !== false) {
+            if ($agenda !== false && typeof $agenda !== 'undefined') {
                 $arrAgendas._add_element($agenda);
             }
         }

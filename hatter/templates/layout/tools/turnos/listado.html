@@ -4,48 +4,56 @@
 
         <table class="table">
 
-        <tr class="text-center">
-            <th>Selección</th>
-            <th>Nombre y apellidos</th>
-            <th>Fecha inicio</th>
-            <th>Fecha fin</th>
-            <th>Turnos</th>
-        </tr>
-
-        {% for tecnico in tecnicos %}
-            <tr id="tec_{{ tecnico.id }}">
-                <td>
-                    <label>
-                        {{ turnos.turno_check }}
-                    </label>
-                </td>
-                <td>
-                    {{ tecnico.nombre }} {{ tecnico.apellidos }}
-                </td>
-                <td>
-                    <div id="fecha_inicio_{{ tecnico.id }}">
-                        {{ turnos.fecha_inicio }}
-                    </div>
-                </td>
-                <td>
-                    <div id="fecha_fin_{{ tecnico.id }}">
-                        {{ turnos.fecha_fin }}
-                    </div>
-                </td>
-                <td>
-                    <div id="turnos_{{ tecnico.id }}">
-                        {{ turnos.turnos }}
-                    </div>
-                </td>
+            <tr class="text-center">
+                <th>Selección</th>
+                <th>Nombre y apellidos</th>
+                <th>Fecha inicio</th>
+                <th>Fecha fin</th>
+                <th>Turnos</th>
             </tr>
-        {% endfor %}
+
+            {% for tecnico in tecnicos %}
+                <tr id="tec_{{ tecnico.id }}">
+                    <input type="hidden" name="hidden_tec" value="{{ tecnico.id }}">
+                    <td>
+                        <label>
+                            {{ turnos.turno_check }}
+                        </label>
+                    </td>
+                    <td>
+                        {{ tecnico.nombre }} {{ tecnico.apellidos }}
+                    </td>
+                    <td>
+                        <div class="fecha-inicio" id="fecha_inicio_{{ tecnico.id }}">
+                            {{ turnos.fecha_inicio }}
+                        </div>
+                    </td>
+                    <td>
+                        <div class="fecha-fin" id="fecha_fin_{{ tecnico.id }}">
+                            {{ turnos.fecha_fin }}
+                        </div>
+                    </td>
+                    <td>
+                        <div id="turnos_{{ tecnico.id }}">
+                            {{ turnos.turnos }}
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
 
         </table>
 
         <div class="col-xs-12">
             <div class="text-right">
-                <button type="button" class="btn btn-default">Aplicar turnos&nbsp;<i class="fa fa-edit"></i></button>
+                <button type="submit" id="aplica_turnos" class="btn btn-default">Aplicar turnos&nbsp;<i class="fa fa-edit"></i></button>
             </div>
         </div>
     </form>
+
+    <div class="col-xs-12 margin-between-divs">
+        <div id="error_messages" class="alert alert-danger text-center hidden">
+
+        </div>
+    </div>
+
 </div>

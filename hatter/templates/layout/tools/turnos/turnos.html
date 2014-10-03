@@ -7,11 +7,25 @@
         {% include 'layout/tools/turnos/listado.html' with tecnicos=tecnicos turnos=turnos %}
     {% endif %}
 
-    {% if saved %}
+    {% if executed %}
+        {% if success %}
         <div class="col-xs-12 margin-between-divs">
             <div class="alert alert-success">
                 Se han guardado los turnos
             </div>
         </div>
+        {% else %}
+        <div class="col-xs-12 margin-between-divs">
+            <div class="alert alert-danger">
+                No ha seleccionado ningún turno o no ha rellenado los datos necesarios y no se ha guardado nada
+            </div>
+        </div>
+        {% endif %}
     {% endif %}
 </div>
+
+{% load static %}
+
+{% block javascript %}
+    <script type="text/javascript" src="{% static 'js/tools/turnos/turnos.js' %}"></script>
+{% endblock %}
