@@ -1,8 +1,10 @@
 from pytz import timezone
-from datetime import datetime
+from datetime import datetime, timedelta
 
 # date time format
 fmt_wo_utc = '%Y-%m-%d %H:%M:%S'
+fmt_spain = '%d/%m/%Y'
+fmt_sql = '%Y-%m-%d'
 
 
 def get_horas_minutos_utc(var_utc):
@@ -72,3 +74,25 @@ def get_datetime_utc(time):
         'v_utc':        utc,
         'v_horamin':    datetime.strptime(date_time, fmt_wo_utc),
     }
+
+
+def parse_spain_format_to_sql(fecha):
+    """
+    Returns spain format to sql date format
+    :param fecha: string
+    :return: datetime object
+    """
+
+    v = datetime.strptime(fecha, fmt_spain).strftime(fmt_sql)
+    return datetime.strptime(v, fmt_sql).date()
+
+
+def date_range(start, end):
+    """
+    Returns a date between a start and an end
+    :param start: date object
+    :param end: date object
+    :return: date object
+    """
+    for n in range((end - start).days + 1):
+        yield start + timedelta(n)

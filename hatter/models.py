@@ -5,12 +5,12 @@ from django.db.models import Q, Count
 from django.db import DatabaseError, transaction
 
 import logging
-import django
 
 log = logging.getLogger('root')
 log.setLevel(logging.DEBUG)
 
 from functions import horario
+from functions import db_utils
 
 
 class Estado(models.Model):
@@ -287,6 +287,20 @@ class Tecnico(models.Model):
     def __unicode__(self):
         return self.nombre
 
+    def get_tecnicos_by_nombre_dni(self, nombre, dni):
+        """
+        :param nombre
+        :param dni
+        :return tecnicos
+        """
+
+        query = self.__class__.objects.filter(
+            (Q(nombre__icontains=nombre) | Q(apellidos__icontains=nombre)) &
+            Q(dni__icontains=dni)
+        )
+
+        return query
+
 
 class Evento(models.Model):
     """
@@ -306,10 +320,9 @@ class Evento(models.Model):
         :return array evento__actuacion
         """
 
-        #django.db.connection.close()
+        db_utils.flush_transaction()
         query = self.__class__.objects.select_related('tecnico__actuacion').filter(
-            Q(tecnico__nombre__contains=nombre) |
-            Q(tecnico__apellidos__contains=nombre) &
+            (Q(tecnico__nombre__contains=nombre) | Q(tecnico__apellidos__contains=nombre)) &
             Q(fecha=fecha)
         ).values(
             'tecnico__id', 'tecnico__nombre', 'tecnico__apellidos',
@@ -339,8 +352,8 @@ class Agenda(models.Model):
     Clase agenda
     """
 
-    tecnico = models.ForeignKey(Tecnico, blank=True, null=True)
-    turno = models.ForeignKey(Turno, blank=True, null=True)
+    tecnico = models.ForeignKey(Tecnico, blank=True, null=True, db_column='tecnico_id')
+    turno = models.ForeignKey(Turno, blank=True, null=True, db_column='turno_id')
     fecha = models.DateField('fecha')
 
     class Meta:
@@ -355,7 +368,7 @@ class Agenda(models.Model):
 
         nombre = '%' + nombre + '%'
 
-        #django.db.connection.close()
+        db_utils.flush_transaction()
         query = self.__class__.objects.raw('''
             select ag.id, tec.id as tecnico__id, tec.nombre as tecnico__nombre, tec.apellidos as tecnico__apellidos
             from tecnico tec
@@ -373,7 +386,7 @@ class Agenda(models.Model):
         :return:
         """
 
-        #django.db.connection.close()
+        db_utils.flush_transaction()
         query = self.__class__.objects.raw('''
             select tu.id, tu.id as tu_id,
               tu.hora_inicio as turno__hora_inicio, tu.hora_fin as turno__hora_fin
