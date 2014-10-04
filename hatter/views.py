@@ -214,6 +214,13 @@ def save_turnos(request):
         if 'turno_check' in dict_listas:
             for v in range(0, len(dict_listas['turno_check'])):
                 tecnico = models.Tecnico.objects.get(pk=dict_listas['hidden_tec'][v])
+
+                if '' == dict_listas['turnos'][v]:
+                    return render_to_response('layout/tools/tools.html', {
+                        'executed': True,
+                        'success': False,
+                    }, context_instance=RequestContext(request))
+
                 turno = models.Turno.objects.get(pk=dict_listas['turnos'][v])
 
                 if '' == dict_listas['fecha_inicio'][v] or '' == dict_listas['fecha_fin'][v]:
@@ -226,12 +233,20 @@ def save_turnos(request):
                 fecha_fin = parse_spain_format_to_sql(dict_listas['fecha_fin'][v])
 
                 for fecha in date_range(start=fecha_inicio, end=fecha_fin):
-                    agenda = models.Agenda()
+                    try:
+                        agenda = models.Agenda.objects.get(fecha=fecha, tecnico=tecnico.pk)
 
-                    agenda.fecha = fecha
-                    agenda.tecnico = tecnico
-                    agenda.turno = turno
-                    agenda.save()
+                        # Update
+                        agenda.turno = turno
+                        agenda.fecha = fecha
+                        agenda.save()
+                    except ObjectDoesNotExist:
+                        # Create
+                        ag = models.Agenda()
+                        ag.fecha = fecha
+                        ag.tecnico = tecnico
+                        ag.turno = turno
+                        ag.save()
 
             return render_to_response('layout/tools/tools.html', {
                 'executed': True,

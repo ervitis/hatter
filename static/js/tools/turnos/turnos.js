@@ -25,6 +25,19 @@ $(function(){
         }
     });
 
+    $(document).on('change', '.chk-tecnico', function() {
+        var $this = $(this);
+        var $tr = $this.closest('tr');
+
+        if ($this.is(':checked')) {
+            $tr.find('td input').prop('required', true);
+            $tr.find('td select').prop('required', true);
+        } else {
+            $tr.find('td input').prop('required', false);
+            $tr.find('td select').prop('required', false);
+        }
+    });
+
     function validate_dates(since, end) {
         var s = parse_date_to_object(since);
         var e = parse_date_to_object(end);
@@ -35,6 +48,8 @@ $(function(){
             display_error_message(message);
         } else {
             $('#aplica_turnos').prop('disabled', false);
+
+            hide_message();
         }
     }
 
@@ -59,6 +74,12 @@ $(function(){
             }, 10000);
         });
 
+    }
+
+    function hide_message() {
+        var $id = $('#error_messages');
+
+        $id.slideUp('fast');
     }
 
 });

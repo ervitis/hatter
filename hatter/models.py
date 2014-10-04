@@ -352,8 +352,8 @@ class Agenda(models.Model):
     Clase agenda
     """
 
-    tecnico = models.ForeignKey(Tecnico, blank=True, null=True)
-    turno = models.ForeignKey(Turno, blank=True, null=True)
+    tecnico = models.ForeignKey(Tecnico, blank=True, null=True, db_column='tecnico_id')
+    turno = models.ForeignKey(Turno, blank=True, null=True, db_column='turno_id')
     fecha = models.DateField('fecha')
 
     class Meta:
