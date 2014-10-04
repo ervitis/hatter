@@ -1,6 +1,5 @@
 # coding=utf-8
 
-from django.views.decorators.csrf import ensure_csrf_cookie
 from django.http import HttpResponse
 
 from hatter import models
@@ -10,7 +9,6 @@ from hatter.functions import horario, db_utils
 from datetime import datetime, time
 
 
-@ensure_csrf_cookie
 def search_agenda_tecnico(request):
     """
     Get tecnicos and filter them
@@ -46,7 +44,6 @@ def search_agenda_tecnico(request):
     return HttpResponse(json.dumps(json_tecnicos), content_type='application/json')
 
 
-@ensure_csrf_cookie
 def search_turnos_tecnico(request):
     """
     Get the schedule of a technician
@@ -91,13 +88,14 @@ def search_turnos_tecnico(request):
     return HttpResponse(json.dumps(json_agendas), content_type='application/json')
 
 
-@ensure_csrf_cookie
 def asigna_actuacion_tecnico(request):
     """
     Saves the new event
     :param request:
     :return: resultado json
     """
+
+    resultado = {'ok': False}
 
     if request.is_ajax() and request.method == 'POST':
         actuacion = request.POST.get('actuacion')
@@ -107,7 +105,6 @@ def asigna_actuacion_tecnico(request):
 
         act = models.Actuacion()
         r = act.guarda_asignacion(actuacion=actuacion, turno_hora=turno_hora, tecnico=tecnico, turno=turno)
-        db_utils.flush_transaction()
 
         if 'ok' == r:
             resultado = {
@@ -119,4 +116,4 @@ def asigna_actuacion_tecnico(request):
                 'mensaje':  r
             }
 
-        return HttpResponse(json.dumps(resultado), content_type='application/json')
+    return HttpResponse(json.dumps(resultado), content_type='application/json')

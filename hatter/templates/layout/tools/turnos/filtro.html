@@ -1,0 +1,8 @@
+<form class="form-group" id="fFiltroTurno" name="filtro_turno" method="post" action="{% url 'tools_listado_tecnicos' %}">
+    {% csrf_token %}
+    <div class="col-xs-12">
+        <input type="text" class="form-inline" placeholder="Nombre del técnico" id="turnoNombre" name="turnoNombre">
+        <input type="text" class="form-inline" placeholder="DNI del técnico" id="turnoDni" name="turnoDni">
+        <button type="submit" class="btn btn-info" id="btnSearch">Buscar&nbsp;<i class="fa fa-search"></i></button>
+    </div>
+</form>

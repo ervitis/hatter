@@ -294,6 +294,7 @@ class TecnicoTestCase(TestCase):
 
     def test_tecnico_creation(self):
         tec = create_tecnico()
+        tec.save()
         self.assertTrue(isinstance(tec, models.Tecnico))
         self.assertEqual(tec.__unicode__(), tec.nombre)
         self.assertEqual(tec.__str__(), tec.nombre)
