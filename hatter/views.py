@@ -215,22 +215,19 @@ def save_turnos(request):
             for v in range(0, len(dict_listas['turno_check'])):
                 tecnico = models.Tecnico.objects.get(pk=dict_listas['hidden_tec'][v])
 
-                if '' == dict_listas['turnos'][v]:
+                turno_escogido = dict_listas['turnos'][v];
+                fecha_ini_escogida = dict_listas['fecha_inicio'][v]
+                fecha_fin_escogida = dict_listas['fecha_fin'][v]
+
+                if '' == turno_escogido or '' == fecha_ini_escogida or '' == fecha_fin_escogida:
                     return render_to_response('layout/tools/tools.html', {
                         'executed': True,
                         'success': False,
                     }, context_instance=RequestContext(request))
 
-                turno = models.Turno.objects.get(pk=dict_listas['turnos'][v])
-
-                if '' == dict_listas['fecha_inicio'][v] or '' == dict_listas['fecha_fin'][v]:
-                    return render_to_response('layout/tools/tools.html', {
-                        'executed': True,
-                        'success': False,
-                    }, context_instance=RequestContext(request))
-
-                fecha_inicio = parse_spain_format_to_sql(dict_listas['fecha_inicio'][v])
-                fecha_fin = parse_spain_format_to_sql(dict_listas['fecha_fin'][v])
+                turno = models.Turno.objects.get(pk=turno_escogido)
+                fecha_inicio = parse_spain_format_to_sql(fecha_ini_escogida)
+                fecha_fin = parse_spain_format_to_sql(fecha_fin_escogida)
 
                 for fecha in date_range(start=fecha_inicio, end=fecha_fin):
                     try:
@@ -240,6 +237,7 @@ def save_turnos(request):
                         agenda.turno = turno
                         agenda.fecha = fecha
                         agenda.save()
+
                     except ObjectDoesNotExist:
                         # Create
                         ag = models.Agenda()

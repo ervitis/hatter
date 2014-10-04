@@ -1,6 +1,6 @@
 $(function(){
     $('#toolTabs a').click(function(event) {
-        e.preventDefault();
+        event.preventDefault();
 
         $(this).tab('show');
     });
