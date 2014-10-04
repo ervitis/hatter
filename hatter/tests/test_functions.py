@@ -74,3 +74,21 @@ class FunctionsTestCase(TestCase):
         r = horario.set_utc_from_dict(dict_time)
         self.assertTrue(isinstance(r, str))
         self.assertEqual(len(r), 6)
+
+    def test_parse_spain_format_to_sql(self):
+        fecha = datetime.datetime.now().strftime('%d/%m/%Y')
+
+        r = horario.parse_spain_format_to_sql(fecha)
+
+        self.assertTrue(isinstance(r, datetime.date))
+
+    def test_range_date(self):
+        start = datetime.date(year=2014, month=2, day=3)
+        end = datetime.date(year=2014, month=2, day=20)
+        n = 0
+
+        for d in horario.date_range(start=start, end=end):
+            self.assertTrue(isinstance(d, datetime.date))
+            n = n + 1
+
+        self.assertEqual(n, 18)

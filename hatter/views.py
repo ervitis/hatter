@@ -9,6 +9,7 @@ from django.template import RequestContext
 from django.core.exceptions import ObjectDoesNotExist
 
 from functions.log import check_user
+from functions.horario import parse_spain_format_to_sql, date_range
 
 from hatter import models, forms
 
@@ -30,7 +31,7 @@ class ActuacionesView(ListView):
 
     context_object_name = 'listado_actuaciones'
     paginate_by = 3
-    queryset = models.Actuacion.objects.select_related().order_by('-id')
+    queryset = models.Actuacion.objects.select_related('actuacion__tecnico__evento').order_by('-id')
 
     @method_decorator(check_user)
     def dispatch(self, request, *args, **kwargs):
@@ -179,3 +180,78 @@ class TecnicosUpdateView(UpdateView):
 
     def form_invalid(self, form):
         return super(TecnicosUpdateView, self).form_invalid(form)
+
+
+class ToolsView(TemplateView):
+    """
+    Tools template
+    """
+
+    template_name = 'layout/tools/tools.html'
+
+
+def listado_tecnicos(request):
+    if request.method == 'POST':
+        nombre = request.POST.get('turnoNombre')
+        dni = request.POST.get('turnoDni')
+
+        tecnico = models.Tecnico()
+        tecnicos = tecnico.get_tecnicos_by_nombre_dni(nombre=nombre, dni=dni)
+
+        turnos = forms.TurnoForm()
+
+        return render_to_response('layout/tools/tools.html', {
+            'tecnicos': tecnicos,
+            'turnos':   turnos,
+        }, context_instance=RequestContext(request))
+
+
+def save_turnos(request):
+    if request.method == 'POST':
+        listas = request.POST
+
+        dict_listas = dict(listas)
+        if 'turno_check' in dict_listas:
+            for v in range(0, len(dict_listas['turno_check'])):
+                tecnico = models.Tecnico.objects.get(pk=dict_listas['hidden_tec'][v])
+
+                turno_escogido = dict_listas['turnos'][v];
+                fecha_ini_escogida = dict_listas['fecha_inicio'][v]
+                fecha_fin_escogida = dict_listas['fecha_fin'][v]
+
+                if '' == turno_escogido or '' == fecha_ini_escogida or '' == fecha_fin_escogida:
+                    return render_to_response('layout/tools/tools.html', {
+                        'executed': True,
+                        'success': False,
+                    }, context_instance=RequestContext(request))
+
+                turno = models.Turno.objects.get(pk=turno_escogido)
+                fecha_inicio = parse_spain_format_to_sql(fecha_ini_escogida)
+                fecha_fin = parse_spain_format_to_sql(fecha_fin_escogida)
+
+                for fecha in date_range(start=fecha_inicio, end=fecha_fin):
+                    try:
+                        agenda = models.Agenda.objects.get(fecha=fecha, tecnico=tecnico.pk)
+
+                        # Update
+                        agenda.turno = turno
+                        agenda.fecha = fecha
+                        agenda.save()
+
+                    except ObjectDoesNotExist:
+                        # Create
+                        ag = models.Agenda()
+                        ag.fecha = fecha
+                        ag.tecnico = tecnico
+                        ag.turno = turno
+                        ag.save()
+
+            return render_to_response('layout/tools/tools.html', {
+                'executed': True,
+                'success': True,
+            }, context_instance=RequestContext(request))
+
+        return render_to_response('layout/tools/tools.html', {
+            'executed': True,
+            'success': False,
+        }, context_instance=RequestContext(request))

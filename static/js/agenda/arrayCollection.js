@@ -14,7 +14,8 @@ ArrayCollection.prototype._add_element = function(element) {
 }
 
 ArrayCollection.prototype._remove_element = function(element) {
-    for (var i in this.$element) {
+    var i = 0;
+    for (i in this.$element) {
         if (this.$element[i] == element) {
             this.$element[i].pop();
             -- this.$count;
@@ -33,7 +34,7 @@ ArrayCollection.prototype._get_item_by_key = function(key) {
 }
 
 ArrayCollection.prototype._is_empty = function() {
-    return this.$count == 0;
+    return this.$count === 0;
 }
 
 ArrayCollection.prototype._search_element = function(object, key, element) {
@@ -59,4 +60,16 @@ ArrayCollection.prototype._search_element = function(object, key, element) {
 
 ArrayCollection.prototype._get_keys = function(element) {
     return Object.keys(element);
+}
+
+ArrayCollection.prototype._get_actuaciones_groupby_tecnico = function(tecnico_id) {
+    var arrElementos = [];
+
+    for (var i=0; i<this.$count; i++) {
+        if (this.$element[i].$tecnico === tecnico_id) {
+            arrElementos.push(this.$element[i]);
+        }
+    }
+
+    return arrElementos;
 }

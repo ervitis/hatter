@@ -93,7 +93,7 @@ if os.getenv('SERVER_SOFTWARE', '').startswith('Google App Engine'):
             'USER': 'hatDev',
             'PASSWORD': 'hatDev.14',
             'OPTIONS': {
-                'init_command': 'SET storage_engine=INNODB;',
+                'init_command': 'SET storage_engine=INNODB, SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED;',
             },
         }
     }
@@ -105,7 +105,7 @@ else:
             'USER': 'root',
             'PASSWORD': 'root',
             'OPTIONS': {
-                'init_command': 'SET storage_engine=INNODB;',
+                'init_command': 'SET storage_engine=INNODB, SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED;',
             },
         }
     }

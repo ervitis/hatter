@@ -1,11 +1,12 @@
 # coding=utf-8
 
-from django.test import TestCase, Client
+from django.test import TestCase, Client, RequestFactory
 
 from hatter.models import Tecnico
 from hatter.tests.test_models import create_provincia, create_estado, create_alerta, create_cliente
 from hatter.tests.test_models import create_prioridad, create_severidad, create_emplazamiento
-from hatter.models import Actuacion
+from hatter.models import Actuacion, Turno
+from hatter.ws import agenda
 
 import json
 
@@ -104,6 +105,19 @@ def create_actuacion_coordinates(nombre='Test3', longitud=34.12345, latitud=8.45
     )
 
 
+def create_turno():
+    """
+    turno test
+    :return: turno object
+    """
+
+    nombre = 'P1'
+    hora_inicio = '12:00'
+    hora_fin = '20:00'
+
+    return Turno.objects.create(hora_inicio=hora_inicio, hora_fin=hora_fin, nombre=nombre)
+
+
 class AgendaTest(TestCase):
     """
     Agenda test case
@@ -150,6 +164,33 @@ class AgendaTest(TestCase):
         }
 
         response = self.client.post('/getturnotecnico/', json.dumps(data), 'text/json', follow=True)
+
+        self.assertEqual(response.status_code, 200)
+
+    def test_asigna_actuacion(self):
+        tecnico = create_tecnico()
+        tecnico.save()
+
+        actuacion = create_actuacion_coordinates()
+        actuacion.save()
+
+        turno = create_turno()
+        turno.save()
+
+        params = {
+            'actuacion': actuacion.pk,
+            'turno': turno.pk,
+            'tecnico': tecnico.pk,
+            'turno_hora': '15'
+        }
+
+        data = {
+            'jsonrpc': '2.0',
+            'method': 'post',
+            'params': params
+        }
+
+        response = self.client.post('/asignaactuacion/', json.dumps(params), 'text/json', follow=True)
 
         self.assertEqual(response.status_code, 200)
 
