@@ -3,10 +3,10 @@
 from django.test import TestCase
 from django.test.client import RequestFactory
 
-from hatter import models, forms
+from hatter import models, forms, views
 
 from google.appengine.api import users
-
+from datetime import datetime
 
 import os
 
@@ -137,3 +137,26 @@ class ViewsTestCase(TestCase):
 
         form = forms.TecnicoForm(data=data)
         self.assertFalse(form.is_valid())
+
+    def test_listado_turnos(self):
+        tecnico = models.Tecnico(nombre='Pepa', apellidos='Garcias Feliz', dni='31234584F')
+        tecnico.save()
+
+        turno = models.Turno(nombre='P2', hora_inicio='12:00', hora_fin='20:00')
+        turno.save()
+
+        agenda = models.Agenda.objects.create(tecnico=tecnico, turno=turno, fecha=datetime.now().date())
+        agenda.save()
+
+        data = {
+            'turnoNombre': tecnico.nombre,
+            'turnoDni': tecnico.dni
+        }
+
+        request_factory = RequestFactory()
+        request = request_factory.post(path='/getturnotecnico', data=data)
+
+        response = views.listado_tecnicos(request)
+
+        self.assertEqual(response.status_code, 200)
+
