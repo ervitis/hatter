@@ -4,8 +4,8 @@ python:
   - "2.7"
 
 before_script:
-  - wget https://storage.googleapis.com/appengine-sdks/featured/google_appengine_1.9.10.zip -nv
-  - unzip -q google_appengine_1.9.10.zip
+  - wget https://storage.googleapis.com/appengine-sdks/featured/google_appengine_1.9.12.zip -nv
+  - unzip -q google_appengine_1.9.12.zip
   - export PYTHONPATH=${PYTHONPATH}:google_appengine
   - mysql -e 'create database hat_dev;'
   - echo "USE mysql;\nUPDATE user SET password=PASSWORD('root') WHERE user='root';\nFLUSH PRIVILEGES;\n" | mysql -u root
